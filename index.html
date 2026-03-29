@@ -60,7 +60,7 @@ async function check() {
     let d1 = document.getElementById("drug1").value;
     let d2 = document.getElementById("drug2").value;
 
-    let res = await fetch(https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
+    let res = await fetch("https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
     let data = await res.json();
 
     document.getElementById("result").innerHTML =
