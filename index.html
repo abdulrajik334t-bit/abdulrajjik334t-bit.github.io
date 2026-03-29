@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drug Interaction Checker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: auto;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+button {
+    padding: 10px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 5px;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>💊 Drug Interaction Checker</h1>
+
+<div class="container">
+    <input id="drug1" placeholder="Enter Drug 1">
+    <input id="drug2" placeholder="Enter Drug 2">
+
+    <button onclick="check()">Check Interaction</button>
+
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+async function check() {
+    let d1 = document.getElementById("drug1").value;
+    let d2 = document.getElementById("drug2").value;
+
+    let res = await fetch(https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
+    let data = await res.json();
+
+    document.getElementById("result").innerHTML =
+        "<h3>" + data.severity + " Risk</h3><p>" + data.message + "</p>";
+}
+</script>
+
+</body>
+</html>
