@@ -64,31 +64,49 @@ async function check() {
     let d1 = document.getElementById("drug1").value;
     let d2 = document.getElementById("drug2").value;
 
-    let resultBox = document.getElementById("result");
-    resultBox.innerHTML = "⏳ Loading...";
+    let box = document.getElementById("result");
+    box.innerHTML = "⏳ Loading...";
 
     try {
         let res = await fetch("https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
-
         let data = await res.json();
 
-        resultBox.innerHTML =
-            "<h3>" + data.severity + " Risk</h3><p>" + data.message + "</p>";
+        // 🔥 Professional UI result
+        box.innerHTML = `<h3>${data.severity}</h3><p>${data.message}</p>`;
+
+        if(data.severity.toLowerCase().includes("high")) {
+            box.className = "result high";
+        }
+        else if(data.severity.toLowerCase().includes("moderate")) {
+            box.className = "result moderate";
+        }
+        else if(data.severity.toLowerCase().includes("low")) {
+            box.className = "result low";
+        }
+        else {
+            box.className = "result ai";
+        }
 
     } catch (error) {
-        resultBox.innerHTML = "❌ Server error / Try again";
+        box.innerHTML = "❌ Server error / Try again";
     }
 }
-    async function send() {
+
+// 🤖 AI Chat
+async function send() {
     let input = document.getElementById("userInput").value;
     let chat = document.getElementById("chat");
 
     chat.innerHTML += "<p>🧑: " + input + "</p>";
 
-    let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
-    let data = await res.json();
+    try {
+        let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
+        let data = await res.json();
 
-    chat.innerHTML += "<p>🤖: " + data.reply + "</p>";
+        chat.innerHTML += "<p>🤖: " + data.reply + "</p>";
+    } catch (error) {
+        chat.innerHTML += "<p>❌ AI error</p>";
+    }
 }
 </script>
     <div id="chatbox" style="
