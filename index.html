@@ -109,7 +109,25 @@ async function send() {
     }
 }
 async function loadDrugs() {
-    let res = await fetch("drugs.json");
+    async function loadDrugs() {
+    try {
+        let res = await fetch("./drugs.json"); // ✅ fixed path
+        let drugs = await res.json();
+
+        let list = document.getElementById("drugs");
+
+        drugs.forEach(d => {
+            let option = document.createElement("option");
+            option.value = d;
+            list.appendChild(option);
+        });
+
+        console.log("Loaded drugs:", drugs.length);
+
+    } catch (error) {
+        console.log("Error loading drugs:", error);
+    }
+    }
     let drugs = await res.json();
 
     let list = document.getElementById("drugs");
