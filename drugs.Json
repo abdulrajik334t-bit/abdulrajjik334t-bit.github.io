@@ -98,9 +98,7 @@
     {"drug":"Theophylline","severity":"minor","case":"No significant interaction"},
     {"drug":"Beta blockers","severity":"moderate","case":"May reduce effectiveness"},
     {"drug":"Diuretics","severity":"minor","case":"Monitor potassium levels"}
-  ]
-}
-{
+  ],
   "Losartan": [
     {"drug":"Lisinopril","severity":"moderate","case":"May increase risk of hyperkalemia"},
     {"drug":"Furosemide","severity":"minor","case":"May reduce antihypertensive effect"},
@@ -195,9 +193,7 @@
     {"drug":"NSAIDs","severity":"moderate","case":"Increased GI risk"},
     {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
     {"drug":"Diabetic drugs","severity":"moderate","case":"May increase glucose"}
-  ]
-}
-{
+  ],
   "Alprazolam": [
     {"drug":"Cimetidine","severity":"moderate","case":"May increase alprazolam levels"},
     {"drug":"Omeprazole","severity":"minor","case":"Slight increase in serum levels"},
@@ -297,8 +293,7 @@
     {"drug":"Statins","severity":"major","case":"Risk of myopathy"},
     {"drug":"Theophylline","severity":"moderate","case":"May increase serum levels"},
     {"drug":"Warfarin","severity":"minor","case":"Monitor INR"}
-  ]
-}{
+  ],
   "Amoxicillin": [
     {"drug":"Methotrexate","severity":"moderate","case":"May increase toxicity"},
     {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
@@ -398,8 +393,7 @@
     {"drug":"NSAIDs","severity":"moderate","case":"Increased GI risk"},
     {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
     {"drug":"Diabetic drugs","severity":"moderate","case":"May increase glucose"}
-  ]
-}{
+  ],
   "Allopurinol": [
     {"drug":"Azathioprine","severity":"major","case":"Increased risk of bone marrow suppression"},
     {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
