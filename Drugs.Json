@@ -100,3 +100,100 @@
     {"drug":"Diuretics","severity":"minor","case":"Monitor potassium levels"}
   ]
 }
+{
+  "Losartan": [
+    {"drug":"Lisinopril","severity":"moderate","case":"May increase risk of hyperkalemia"},
+    {"drug":"Furosemide","severity":"minor","case":"May reduce antihypertensive effect"},
+    {"drug":"NSAIDs","severity":"moderate","case":"May decrease efficacy"}
+  ],
+  "Lisinopril": [
+    {"drug":"Losartan","severity":"moderate","case":"May increase hyperkalemia risk"},
+    {"drug":"Potassium supplements","severity":"major","case":"High hyperkalemia risk"},
+    {"drug":"Diuretics","severity":"minor","case":"Monitor blood pressure"}
+  ],
+  "Hydrochlorothiazide": [
+    {"drug":"Digoxin","severity":"major","case":"Increased digoxin toxicity risk"},
+    {"drug":"Lithium","severity":"moderate","case":"May increase lithium levels"},
+    {"drug":"NSAIDs","severity":"minor","case":"May reduce diuretic effect"}
+  ],
+  "Amlodipine": [
+    {"drug":"Simvastatin","severity":"minor","case":"May increase statin levels"},
+    {"drug":"Grapefruit juice","severity":"moderate","case":"Monitor blood pressure"},
+    {"drug":"Beta blockers","severity":"minor","case":"No significant interaction"}
+  ],
+  "Metoprolol": [
+    {"drug":"Verapamil","severity":"major","case":"May cause bradycardia or heart block"},
+    {"drug":"Digoxin","severity":"moderate","case":"Monitor heart rate"},
+    {"drug":"Albuterol","severity":"minor","case":"May reduce effectiveness"}
+  ],
+  "Verapamil": [
+    {"drug":"Metoprolol","severity":"major","case":"Bradycardia risk"},
+    {"drug":"Digoxin","severity":"moderate","case":"Monitor serum levels"},
+    {"drug":"Simvastatin","severity":"minor","case":"May increase statin levels"}
+  ],
+  "Atorvastatin": [
+    {"drug":"Grapefruit juice","severity":"major","case":"High risk of myopathy"},
+    {"drug":"Amiodarone","severity":"minor","case":"May increase statin levels"},
+    {"drug":"Warfarin","severity":"moderate","case":"May affect INR"}
+  ],
+  "Rosuvastatin": [
+    {"drug":"Cyclosporine","severity":"major","case":"High myopathy risk"},
+    {"drug":"Gemfibrozil","severity":"moderate","case":"May increase statin levels"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"}
+  ],
+  "Levothyroxine": [
+    {"drug":"Calcium supplements","severity":"moderate","case":"May reduce absorption"},
+    {"drug":"Iron supplements","severity":"moderate","case":"Take 4 hours apart"},
+    {"drug":"Warfarin","severity":"minor","case":"May increase anticoagulant effect"}
+  ],
+  "Calcium carbonate": [
+    {"drug":"Levothyroxine","severity":"moderate","case":"May reduce absorption"},
+    {"drug":"Tetracyclines","severity":"major","case":"Reduced antibiotic absorption"},
+    {"drug":"Fluoroquinolones","severity":"moderate","case":"May reduce efficacy"}
+  ],
+  "Iron sulfate": [
+    {"drug":"Levothyroxine","severity":"moderate","case":"Take 4 hours apart"},
+    {"drug":"Tetracyclines","severity":"major","case":"Reduced antibiotic absorption"},
+    {"drug":"Fluoroquinolones","severity":"moderate","case":"May reduce efficacy"}
+  ],
+  "Tetracycline": [
+    {"drug":"Calcium carbonate","severity":"major","case":"Reduced absorption"},
+    {"drug":"Iron supplements","severity":"major","case":"Reduced absorption"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"}
+  ],
+  "Fluoroquinolones": [
+    {"drug":"Calcium carbonate","severity":"moderate","case":"May reduce efficacy"},
+    {"drug":"Iron supplements","severity":"moderate","case":"May reduce efficacy"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"}
+  ],
+  "Amoxicillin": [
+    {"drug":"Methotrexate","severity":"moderate","case":"May increase toxicity"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"Allopurinol","severity":"minor","case":"May increase rash risk"}
+  ],
+  "Clavulanate": [
+    {"drug":"Amoxicillin","severity":"minor","case":"Usually combined, monitor side effects"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"Allopurinol","severity":"minor","case":"May increase rash risk"}
+  ],
+  "Azithromycin": [
+    {"drug":"Simvastatin","severity":"moderate","case":"May increase myopathy risk"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"QT-prolonging drugs","severity":"major","case":"Risk of arrhythmia"}
+  ],
+  "Ciprofloxacin": [
+    {"drug":"Calcium supplements","severity":"major","case":"Reduced absorption"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"QT-prolonging drugs","severity":"major","case":"Risk of arrhythmia"}
+  ],
+  "Prednisone": [
+    {"drug":"NSAIDs","severity":"moderate","case":"Increased risk of GI ulcer"},
+    {"drug":"Warfarin","severity":"minor","case":"May affect INR"},
+    {"drug":"Diabetic drugs","severity":"moderate","case":"May raise blood glucose"}
+  ],
+  "Hydrocortisone": [
+    {"drug":"NSAIDs","severity":"moderate","case":"Increased GI risk"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"Diabetic drugs","severity":"moderate","case":"May increase glucose"}
+  ]
+}
