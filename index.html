@@ -60,11 +60,20 @@ async function check() {
     let d1 = document.getElementById("drug1").value;
     let d2 = document.getElementById("drug2").value;
 
-    let res = await fetch("https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
-    let data = await res.json();
+    let resultBox = document.getElementById("result");
+    resultBox.innerHTML = "⏳ Loading...";
 
-    document.getElementById("result").innerHTML =
-        "<h3>" + data.severity + " Risk</h3><p>" + data.message + "</p>";
+    try {
+        let res = await fetch("https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
+
+        let data = await res.json();
+
+        resultBox.innerHTML =
+            "<h3>" + data.severity + " Risk</h3><p>" + data.message + "</p>";
+
+    } catch (error) {
+        resultBox.innerHTML = "❌ Server error / Try again";
+    }
 }
 </script>
 
