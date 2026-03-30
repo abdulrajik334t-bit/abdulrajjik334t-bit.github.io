@@ -75,7 +75,36 @@ async function check() {
         resultBox.innerHTML = "❌ Server error / Try again";
     }
 }
+    async function send() {
+    let input = document.getElementById("userInput").value;
+    let chat = document.getElementById("chat");
+
+    chat.innerHTML += "<p>🧑: " + input + "</p>";
+
+    let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
+    let data = await res.json();
+
+    chat.innerHTML += "<p>🤖: " + data.reply + "</p>";
+}
 </script>
+    <div id="chatbox" style="
+position: fixed;
+right: 20px;
+bottom: 20px;
+width: 250px;
+background: #1e293b;
+padding: 10px;
+border-radius: 10px;
+">
+
+<h3>🤖 AI Assistant</h3>
+
+<div id="chat" style="height:150px; overflow:auto; font-size:14px;"></div>
+
+<input id="userInput" placeholder="Ask something..." style="width:100%; padding:5px;">
+<button onclick="send()">Send</button>
+
+</div>
 
 </body>
 </html>
