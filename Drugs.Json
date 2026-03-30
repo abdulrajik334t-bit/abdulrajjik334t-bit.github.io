@@ -1,28 +1,102 @@
-[
-"aspirin","warfarin","paracetamol","ibuprofen","metformin","amoxicillin","atorvastatin","omeprazole","losartan","azithromycin",
-"clopidogrel","simvastatin","pantoprazole","amlodipine","lisinopril","hydrochlorothiazide","furosemide","metoprolol","atenolol","ramipril",
-"enalapril","telmisartan","valsartan","glimepiride","glibenclamide","insulin","levothyroxine","prednisone","dexamethasone","salbutamol",
-"montelukast","cetirizine","loratadine","diphenhydramine","ranitidine","famotidine","cimetidine","ondansetron","domperidone","metoclopramide",
-"tramadol","codeine","morphine","diclofenac","naproxen","ketorolac","celecoxib","etoricoxib","meloxicam","indomethacin",
-"ciprofloxacin","levofloxacin","ofloxacin","norfloxacin","doxycycline","tetracycline","clindamycin","linezolid","vancomycin","rifampicin",
-"isoniazid","ethambutol","pyrazinamide","fluconazole","itraconazole","ketoconazole","amphotericin","acyclovir","valacyclovir","oseltamivir",
-"lopinavir","ritonavir","efavirenz","tenofovir","lamivudine","zidovudine","sertraline","fluoxetine","paroxetine","citalopram",
-"escitalopram","venlafaxine","duloxetine","amitriptyline","nortriptyline","clonazepam","diazepam","alprazolam","lorazepam","zolpidem",
-"buspirone","haloperidol","risperidone","olanzapine","quetiapine","aripiprazole","lithium","carbamazepine","valproate","phenytoin",
-"levetiracetam","topiramate","gabapentin","pregabalin","baclofen","cyclobenzaprine","methocarbamol","allopurinol","colchicine","febuxostat",
-"methotrexate","azathioprine","cyclophosphamide","hydroxychloroquine","chloroquine","sulfasalazine","mesalamine","insulin glargine","insulin lispro","insulin aspart",
-"glargine","detemir","pioglitazone","rosiglitazone","sitagliptin","vildagliptin","linagliptin","canagliflozin","dapagliflozin","empagliflozin",
-"glucagon","epinephrine","norepinephrine","dopamine","dobutamine","digoxin","amiodarone","verapamil","diltiazem","nitroglycerin",
-"isosorbide","heparin","enoxaparin","fondaparinux","apixaban","rivaroxaban","dabigatran","clindamycin","aztreonam","meropenem",
-"imipenem","ertapenem","ceftriaxone","cefixime","cephalexin","cefuroxime","ceftazidime","cefepime","penicillin","ampicillin",
-"piperacillin","tazobactam","amoxiclav","co-trimoxazole","trimethoprim","sulfamethoxazole","nitrofurantoin","fosfomycin","linezolid","daptomycin",
-"gentamicin","amikacin","tobramycin","streptomycin","chloramphenicol","tigecycline","colistin","isoniazid","rifabutin","rifapentine",
-"ethionamide","cycloserine","capreomycin","bedaquiline","delamanid","sofosbuvir","ledipasvir","velpatasvir","ribavirin","interferon",
-"etanercept","infliximab","adalimumab","ustekinumab","secukinumab","tocilizumab","rituximab","omalizumab","dupilumab","mepolizumab",
-"filgrastim","pegfilgrastim","epoetin","darbepoetin","iron sucrose","ferrous sulfate","calcium carbonate","vitamin d","vitamin b12","folic acid",
-"ascorbic acid","zinc sulfate","magnesium sulfate","potassium chloride","sodium bicarbonate","oral rehydration salts","lactulose","polyethylene glycol","senna","bisacodyl",
-"loperamide","diphenoxylate","bismuth subsalicylate","omeprazole","esomeprazole","rabeprazole","pantoprazole","dexlansoprazole","misoprostol","sucralfate",
-"insulin regular","insulin nph","desmopressin","oxytocin","levonorgestrel","ethinylestradiol","medroxyprogesterone","clomiphene","letrozole","tamoxifen",
-"anastrozole","exemestane","finasteride","dutasteride","tamsulosin","silodosin","oxybutynin","tolterodine","mirabegron","phenazopyridine",
-"acetazolamide","mannitol","spironolactone","eplerenone","triamterene","amiloride","chlorthalidone","indapamide","metolazone","torsemide"
-]
+{
+  "Paracetamol": [
+    {"drug":"Ibuprofen","severity":"minor","case":"May increase stomach irritation"},
+    {"drug":"Warfarin","severity":"moderate","case":"May increase bleeding risk"},
+    {"drug":"Aspirin","severity":"minor","case":"No major interaction"}
+  ],
+  "Ibuprofen": [
+    {"drug":"Paracetamol","severity":"minor","case":"No major interaction"},
+    {"drug":"Aspirin","severity":"major","case":"May increase bleeding risk"},
+    {"drug":"Naproxen","severity":"moderate","case":"Additive stomach irritation"}
+  ],
+  "Warfarin": [
+    {"drug":"Paracetamol","severity":"moderate","case":"May increase bleeding risk"},
+    {"drug":"Aspirin","severity":"major","case":"High bleeding risk"},
+    {"drug":"Clopidogrel","severity":"major","case":"Increased risk of hemorrhage"}
+  ],
+  "Aspirin": [
+    {"drug":"Ibuprofen","severity":"major","case":"May reduce cardioprotective effect"},
+    {"drug":"Warfarin","severity":"major","case":"High bleeding risk"},
+    {"drug":"Paracetamol","severity":"minor","case":"No major interaction"}
+  ],
+  "Naproxen": [
+    {"drug":"Ibuprofen","severity":"moderate","case":"Additive GI side effects"},
+    {"drug":"Diclofenac","severity":"moderate","case":"Increased stomach irritation"},
+    {"drug":"Paracetamol","severity":"minor","case":"No significant interaction"}
+  ],
+  "Diclofenac": [
+    {"drug":"Naproxen","severity":"moderate","case":"Additive GI side effects"},
+    {"drug":"Aspirin","severity":"minor","case":"Slight increase in bleeding risk"},
+    {"drug":"Ibuprofen","severity":"moderate","case":"Additive stomach irritation"}
+  ],
+  "Clopidogrel": [
+    {"drug":"Warfarin","severity":"major","case":"Increased bleeding risk"},
+    {"drug":"Aspirin","severity":"moderate","case":"Additive antiplatelet effect"},
+    {"drug":"Prasugrel","severity":"major","case":"High bleeding risk"}
+  ],
+  "Prasugrel": [
+    {"drug":"Clopidogrel","severity":"major","case":"High bleeding risk"},
+    {"drug":"Aspirin","severity":"minor","case":"No significant interaction"},
+    {"drug":"Warfarin","severity":"moderate","case":"Monitor INR closely"}
+  ],
+  "Metformin": [
+    {"drug":"Glipizide","severity":"moderate","case":"Risk of hypoglycemia"},
+    {"drug":"Cimetidine","severity":"minor","case":"May increase metformin levels"},
+    {"drug":"Furosemide","severity":"minor","case":"May reduce metformin efficacy"}
+  ],
+  "Glipizide": [
+    {"drug":"Metformin","severity":"moderate","case":"Risk of hypoglycemia"},
+    {"drug":"Warfarin","severity":"minor","case":"May affect glucose control"},
+    {"drug":"Aspirin","severity":"moderate","case":"May increase hypoglycemia risk"}
+  ],
+  "Furosemide": [
+    {"drug":"Digoxin","severity":"major","case":"Increased risk of toxicity"},
+    {"drug":"Lithium","severity":"moderate","case":"May increase lithium levels"},
+    {"drug":"Metformin","severity":"minor","case":"May reduce efficacy"}
+  ],
+  "Digoxin": [
+    {"drug":"Furosemide","severity":"major","case":"Increased toxicity risk"},
+    {"drug":"Amiodarone","severity":"moderate","case":"May increase serum digoxin"},
+    {"drug":"Verapamil","severity":"minor","case":"Monitor closely"}
+  ],
+  "Amiodarone": [
+    {"drug":"Digoxin","severity":"moderate","case":"May increase serum digoxin"},
+    {"drug":"Warfarin","severity":"major","case":"Bleeding risk increases"},
+    {"drug":"Simvastatin","severity":"minor","case":"May increase statin levels"}
+  ],
+  "Simvastatin": [
+    {"drug":"Amiodarone","severity":"minor","case":"May increase statin levels"},
+    {"drug":"Grapefruit juice","severity":"major","case":"Risk of myopathy"},
+    {"drug":"Warfarin","severity":"moderate","case":"May affect INR"}
+  ],
+  "Omeprazole": [
+    {"drug":"Clopidogrel","severity":"moderate","case":"May reduce effectiveness"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"},
+    {"drug":"Methotrexate","severity":"major","case":"Increased toxicity risk"}
+  ],
+  "Methotrexate": [
+    {"drug":"Omeprazole","severity":"major","case":"Increased toxicity risk"},
+    {"drug":"NSAIDs","severity":"moderate","case":"May increase side effects"},
+    {"drug":"Folic acid","severity":"minor","case":"May reduce efficacy"}
+  ],
+  "Cimetidine": [
+    {"drug":"Metformin","severity":"minor","case":"May increase metformin levels"},
+    {"drug":"Warfarin","severity":"moderate","case":"Monitor INR"},
+    {"drug":"Theophylline","severity":"major","case":"Increased serum levels"}
+  ],
+  "Theophylline": [
+    {"drug":"Cimetidine","severity":"major","case":"Increased serum levels"},
+    {"drug":"Erythromycin","severity":"moderate","case":"May increase toxicity"},
+    {"drug":"Albuterol","severity":"minor","case":"No significant interaction"}
+  ],
+  "Erythromycin": [
+    {"drug":"Theophylline","severity":"moderate","case":"May increase toxicity"},
+    {"drug":"Simvastatin","severity":"major","case":"High myopathy risk"},
+    {"drug":"Warfarin","severity":"minor","case":"Monitor INR"}
+  ],
+  "Albuterol": [
+    {"drug":"Theophylline","severity":"minor","case":"No significant interaction"},
+    {"drug":"Beta blockers","severity":"moderate","case":"May reduce effectiveness"},
+    {"drug":"Diuretics","severity":"minor","case":"Monitor potassium levels"}
+  ]
+}
