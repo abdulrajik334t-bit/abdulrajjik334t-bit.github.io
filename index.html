@@ -110,6 +110,30 @@ async function send() {
         chat.innerHTML += "<p>❌ AI error</p>";
     }
 }
+    async function scan() {
+    let file = document.getElementById("camera").files[0];
+
+    if (!file) {
+        alert("Please select image");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("image", file);
+
+    let res = await fetch("https://drug-api-1-gttd.onrender.com/scan", {
+        method: "POST",
+        body: formData
+    });
+
+    let data = await res.json();
+
+    alert("Detected Drugs: " + data.drugs.join(", "));
+
+    // Auto fill input
+    document.getElementById("drug1").value = data.drugs[0] || "";
+    document.getElementById("drug2").value = data.drugs[1] || "";
+    }
 async function loadDrugs() {
     async function loadDrugs() {
     try {
