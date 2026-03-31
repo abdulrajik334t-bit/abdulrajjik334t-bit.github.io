@@ -119,6 +119,7 @@ chat.innerHTML += "<p>🧑‍💻: " + input + "</p>";
         let data = await res.json();
 
         chat.innerHTML += "<p>🥷: " + data.reply + "</p>";
+      speak(data.reply);
     } catch (error) {
         chat.innerHTML += "<p>❌ AI error</p>";
     }
