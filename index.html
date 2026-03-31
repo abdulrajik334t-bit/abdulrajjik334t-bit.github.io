@@ -199,6 +199,11 @@ window.onload = loadDrugs;
   speech.lang = "en-US";
   speechSynthesis.speak(speech);
 }
+ function speak(text) {
+  let speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-US";
+  speechSynthesis.speak(speech);
+}
 </script>
     <div id="chatbox" style="
 position: fixed;
