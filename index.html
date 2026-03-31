@@ -178,6 +178,22 @@ async function loadDrugs() {
     });
 }
 window.onload = loadDrugs;
+    function startVoice() {
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-US";
+
+  recognition.onresult = function(event) {
+    let text = event.results[0][0].transcript;
+
+    // input box में text डाल देगा
+    document.getElementById("userInput").value = text;
+
+    // auto AI को भेज देगा
+    send();
+  };
+
+  recognition.start();
+    }
 </script>
     <div id="chatbox" style="
 position: fixed;
