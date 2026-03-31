@@ -113,10 +113,8 @@ async function check() {
 async function send() {
     let input = document.getElementById("userInput").value;
     let chat = document.getElementById("chat");
-
-    chat.innerHTML += "<p>🧑: " + input + "</p>";
-
-    try {
+chat.innerHTML += "<p>🧑‍💻: " + input + "</p>";
+  try {
         let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
         let data = await res.json();
 
