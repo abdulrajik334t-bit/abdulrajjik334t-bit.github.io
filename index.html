@@ -120,7 +120,7 @@ async function send() {
         let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
         let data = await res.json();
 
-        chat.innerHTML += "<p>🤖: " + data.reply + "</p>";
+        chat.innerHTML += "<p>🥷: " + data.reply + "</p>";
     } catch (error) {
         chat.innerHTML += "<p>❌ AI error</p>";
     }
