@@ -237,6 +237,30 @@ document.getElementById("drug2").addEventListener("input", e => {
   document.getElementById("foodDrug").addEventListener("input", e => {
     fetchDrugs(e.target.value, "foodDrugList");
 });
+  // Yeh function add karo - scanPrescription
+async function scanPrescription() {
+    let fileInput = document.getElementById("camera");
+    let file = fileInput.files[0];
+    
+    if (!file) {
+        alert("Please take a photo first");
+        return;
+    }
+    
+    let formData = new FormData();
+    formData.append("image", file);
+    
+    try {
+        let res = await fetch(`${BASE}/scan`, {
+            method: "POST",
+            body: formData
+        });
+        let data = await res.json();
+        document.getElementById("scanResult").innerHTML = "📋 Detected drugs: " + (data.drugs.join(", ") || "None found");
+    } catch (error) {
+        document.getElementById("scanResult").innerHTML = "❌ Scan failed. Please try again.";
+    }
+}
 </script>
 
 </body>
