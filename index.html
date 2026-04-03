@@ -331,23 +331,39 @@ function particleBurst(element) {
     }
     
     // ========== AUTOCOMPLETE ==========
-    async function fetchDrugs(query, listId) {
-        if (query.length < 1) return;
-        try {
-            const response = await fetch(`${BASE_URL}/autocomplete?query=${encodeURIComponent(query)}`);
-            const drugs = await response.json();
-            const datalist = document.getElementById(listId);
-            datalist.innerHTML = "";
-            drugs.forEach(drug => {
-                const option = document.createElement("option");
-                option.value = drug.name;
-                datalist.appendChild(option);
-            });
-        } catch (error) {
-            console.error("Autocomplete error:", error);
-        }
-    }
+    // Autocomplete functions
+async function fetchDrugs(query, listId) {
+    if (query.length < 2) return;  // 2 characters ke baad suggest karega
     
+    try {
+        const response = await fetch(`${BASE_URL}/autocomplete?query=${encodeURIComponent(query)}`);
+        const drugs = await response.json();
+        
+        const datalist = document.getElementById(listId);
+        datalist.innerHTML = "";
+        
+        drugs.forEach(drug => {
+            const option = document.createElement("option");
+            option.value = drug.name;
+            datalist.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Autocomplete error:", error);
+    }
+}
+
+// Event listeners - yeh hone chahiye
+document.getElementById("drug1").addEventListener("input", (e) => {
+    fetchDrugs(e.target.value, "drugList");
+});
+
+document.getElementById("drug2").addEventListener("input", (e) => {
+    fetchDrugs(e.target.value, "drugList2");
+});
+
+document.getElementById("foodDrug").addEventListener("input", (e) => {
+    fetchDrugs(e.target.value, "foodDrugList");
+});
     // ========== PRESCRIPTION SCAN ==========
     async function scanPrescription() {
         const fileInput = document.getElementById("prescriptionImage");
