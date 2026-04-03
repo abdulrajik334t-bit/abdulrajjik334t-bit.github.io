@@ -1,230 +1,243 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Drug Interaction Checker</title>
+<title>Drug AI System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
-    font-family: Arial;
-    color: white;
-    text-align: center;
-    padding: 20px;
     margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    background: linear-gradient(135deg,#020617,#0f172a);
 }
 
-.container {
-    background: rgba(144, 238, 144, 0.85); /* light green */
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(5px);
+/* 🎥 Background video */
+#bgVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    object-fit: cover;
+    filter: brightness(35%);
+}
+
+/* 🔷 Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
     padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    margin: auto;
 }
 
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* 🔷 Hero Section */
+.hero {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.hero h1 {
+    font-size: 32px;
+}
+
+.hero p {
+    color: #94a3b8;
+}
+
+/* 🔷 Glass Container */
+.container {
+    margin: 30px auto;
+    width: 90%;
+    max-width: 400px;
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(12px);
+}
+
+/* Inputs */
 input {
     width: 90%;
     padding: 10px;
-    margin: 10px;
+    margin: 8px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
 }
 
+/* Buttons */
 button {
     padding: 10px;
+    margin: 5px;
     background: #38bdf8;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
+/* Result Box */
 .result {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 15px;
     border-radius: 10px;
 }
-.high { background: red; }
-.moderate { background: orange; }
-.low { background: green; }
-.ai { background: blue; }
-    #bgVideo {
-    position: fixed;   
-    right: 0;
-    bottom: 0;
-    min-width: 100%;   
-    min-height: 100%;  
-    z-index: -1;      
-    object-fit: cover; 
-    filter: brightness(40%);
-    }
+
+.high { background: #7f1d1d; }
+.moderate { background: #78350f; }
+.low { background: #14532d; }
+.ai { background: #1e40af; }
+
+/* 🤖 Chatbot */
+.chatbox {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 270px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 15px;
+}
+
+#chat {
+    height: 150px;
+    overflow-y: auto;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 
 <body>
+
 <video autoplay muted loop id="bgVideo">
 <source src="bg.mp4" type="video/mp4">
 </video>
 
-<h1>💊 Drug Interaction Checker</h1>
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo">💊 DrugAI Pro</div>
+</div>
 
+<!-- Hero -->
+<div class="hero">
+<h1>Smart Drug Interaction Checker</h1>
+<p>AI + OCR + Voice Assistant</p>
+</div>
+
+<!-- Main Box -->
 <div class="container">
-    <input list="drugs" id="drug1" placeholder="Enter Drug 1">
-<input list="drugs" id="drug2" placeholder="Enter Drug 2">
- <datalist id="drugs"></datalist> 
-    <input type="file" id="camera" accept="image/*" capture="environment">
-<button onclick="scan()">📷 Scan Prescription</button>
-<button onclick="check()">Check Interaction</button>
 
-    <div id="result" class="result"></div>
+<input list="drugs" id="drug1" placeholder="Enter Drug 1">
+<input list="drugs" id="drug2" placeholder="Enter Drug 2">
+<datalist id="drugs"></datalist>
+
+<input type="file" id="camera" accept="image/*" capture="environment">
+
+<button onclick="scan()">📷 Scan</button>
+<button onclick="check()">Check</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<!-- 🤖 Chatbot -->
+<div class="chatbox">
+<h3>🤖 AI Assistant</h3>
+
+<div id="chat"></div>
+
+<input id="userInput" placeholder="Ask anything...">
+<button onclick="send()">Send</button>
+<button onclick="startVoice()">🎤</button>
 </div>
 
 <script>
+const BASE = "https://drug-api-1-gttd.onrender.com";
+
+// 🔥 Check interaction
 async function check() {
     let d1 = document.getElementById("drug1").value;
     let d2 = document.getElementById("drug2").value;
 
     let box = document.getElementById("result");
-    box.innerHTML = "⏳ Loading...";
+    box.innerHTML = "⏳ Checking...";
 
     try {
-        let res = await fetch("https://drug-api-1-gttd.onrender.com/check?drug1=" + d1 + "&drug2=" + d2);
+        let res = await fetch(`${BASE}/check?drug1=${d1}&drug2=${d2}`);
         let data = await res.json();
 
-        // 🔥 Professional UI result
         box.innerHTML = `<h3>${data.severity}</h3><p>${data.message}</p>`;
 
-        if(data.severity.toLowerCase().includes("high")) {
-            box.className = "result high";
-        }
-        else if(data.severity.toLowerCase().includes("moderate")) {
-            box.className = "result moderate";
-        }
-        else if(data.severity.toLowerCase().includes("low")) {
-            box.className = "result low";
-        }
-        else {
-            box.className = "result ai";
-        }
+        if(data.severity.toLowerCase().includes("high")) box.className="result high";
+        else if(data.severity.toLowerCase().includes("moderate")) box.className="result moderate";
+        else if(data.severity.toLowerCase().includes("low")) box.className="result low";
+        else box.className="result ai";
 
-    } catch (error) {
-        box.innerHTML = "❌ Server error / Try again";
+    } catch {
+        box.innerHTML = "❌ Error";
     }
 }
 
 // 🤖 AI Chat
 async function send() {
-    let input = document.getElementById("userInput").value;
+    let input = document.getElementById("userInput");
     let chat = document.getElementById("chat");
-chat.innerHTML += "<p>🧑‍💻: " + input + "</p>";
-  try {
-        let res = await fetch("https://drug-api-1-gttd.onrender.com/ai?msg=" + input);
-        let data = await res.json();
 
-        chat.innerHTML += "<p>🥷: " + data.reply + "</p>";
-      speak(data.reply);
-    } catch (error) {
-        chat.innerHTML += "<p>❌ AI error</p>";
-    }
+    let msg = input.value;
+    chat.innerHTML += `<p>🧑: ${msg}</p>`;
+
+    let res = await fetch(`${BASE}/ai?msg=${msg}`);
+    let data = await res.json();
+
+    chat.innerHTML += `<p>🤖: ${data.reply}</p>`;
+    speak(data.reply);
+
+    input.value="";
 }
-    async function scan() {
+
+// 📷 Scan
+async function scan() {
     let file = document.getElementById("camera").files[0];
+    if(!file) return alert("Select image");
 
-    if (!file) {
-        alert("Please select image");
-        return;
-    }
+    let form = new FormData();
+    form.append("image", file);
 
-    let formData = new FormData();
-    formData.append("image", file);
-
-    let res = await fetch("https://drug-api-1-gttd.onrender.com/scan", {
-        method: "POST",
-        body: formData
+    let res = await fetch(`${BASE}/scan`, {
+        method:"POST",
+        body:form
     });
 
     let data = await res.json();
 
-    alert("Detected Drugs: " + data.drugs.join(", "));
-
-    // Auto fill input
-    document.getElementById("drug1").value = data.drugs[0] || "";
-    document.getElementById("drug2").value = data.drugs[1] || "";
-    }
-async function loadDrugs() {
-    async function loadDrugs() {
-    try {
-        let res = await fetch("./drugs.json"); // ✅ fixed path
-        let drugs = await res.json();
-
-        let list = document.getElementById("drugs");
-
-        drugs.forEach(d => {
-            let option = document.createElement("option");
-            option.value = d;
-            list.appendChild(option);
-        });
-
-        console.log("Loaded drugs:", drugs.length);
-
-    } catch (error) {
-        console.log("Error loading drugs:", error);
-    }
-    }
-    let drugs = await res.json();
-
-    let list = document.getElementById("drugs");
-
-    drugs.forEach(d => {
-        let option = document.createElement("option");
-        option.value = d;
-        list.appendChild(option);
-    });
+    alert("Detected: "+data.drugs.join(", "));
+    document.getElementById("drug1").value = data.drugs[0]||"";
+    document.getElementById("drug2").value = data.drugs[1]||"";
 }
-window.onload = loadDrugs;
-    function startVoice() {
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = "en-US";
 
-  recognition.onresult = function(event) {
-    let text = event.results[0][0].transcript;
-
-    // input box में text डाल देगा
-    document.getElementById("userInput").value = text;
-
-    // auto AI को भेज देगा
+// 🎤 Voice
+function startVoice() {
+  const r = new webkitSpeechRecognition();
+  r.onresult = e => {
+    document.getElementById("userInput").value = e.results[0][0].transcript;
     send();
   };
-
-  recognition.start();
-    }
-    function speak(text) {
-  let speech = new SpeechSynthesisUtterance(text);
-  speech.lang = "en-US";
-  speechSynthesis.speak(speech);
+  r.start();
 }
- function speak(text) {
-  let speech = new SpeechSynthesisUtterance(text);
-  speech.lang = "en-US";
-  speechSynthesis.speak(speech);
+
+// 🔊 Speak
+function speak(text) {
+  let s = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(s);
 }
 </script>
-    <div id="chatbox" style="
-position: fixed;
-right: 20px;
-bottom: 20px;
-width: 250px;
-background: white;  /* 👈 white color */
-color: black;       /* 👈 text visible */
-padding: 10px;
-border-radius: 10px;
-box-shadow: 0 0 10px rgba(0,0,0,0.3);
-">
-<h3>🥷 AI Ninja Assistant</h3>
-
-<div id="chat" style="height:150px; overflow:auto; font-size:14px;"></div>
-
-<input id="userInput" placeholder="Ask something..." style="width:100%; padding:5px;">
-<button onclick="send()">Send</button>
-<button onclick="startVoice()">🎤 Speak</button>
-</div>
 
 </body>
 </html>
