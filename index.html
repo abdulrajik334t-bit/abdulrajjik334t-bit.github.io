@@ -122,8 +122,11 @@ button {
 <!-- Drug Interaction -->
 <div class="box">
 <h3>Drug Interaction</h3>
-<input id="drug1" placeholder="Drug 1">
-<input id="drug2" placeholder="Drug 2">
+<input id="drug1" placeholder="Drug 1" list="drugList">
+<datalist id="drugList"></datalist>
+
+<input id="drug2" placeholder="Drug 2" list="drugList2">
+<datalist id="drugList2"></datalist>
 <button onclick="check()">Check</button>
 <div id="result"></div>
   <input type="file" id="camera" accept="image/*" capture="environment"> 
