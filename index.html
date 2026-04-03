@@ -213,6 +213,28 @@ setInterval(()=>{
  count=(count+5)%100;
  document.getElementById("counter").innerText=count+"%";
 },200);
+  // 🔹 Auto search / autocomplete
+async function fetchDrugs(query, listId){
+    if(query.length < 1) return; // kam request ke liye optional
+    const res = await fetch(`${BASE}/autocomplete?query=${query}`);
+    const data = await res.json();
+    const datalist = document.getElementById(listId);
+    datalist.innerHTML = "";
+    data.forEach(d => {
+        const option = document.createElement("option");
+        option.value = d.name;
+        datalist.appendChild(option);
+    });
+}
+
+// Event listeners for input
+document.getElementById("drug1").addEventListener("input", e => {
+    fetchDrugs(e.target.value, "drugList");
+});
+
+document.getElementById("drug2").addEventListener("input", e => {
+    fetchDrugs(e.target.value, "drugList2");
+});
 </script>
 
 </body>
