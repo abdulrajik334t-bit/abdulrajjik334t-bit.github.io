@@ -225,18 +225,6 @@ async function fetchDrugs(query, listId){
         datalist.appendChild(option);
     });
 }
-
-// Event listeners for input
-document.getElementById("drug1").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "drugList");
-});
-
-document.getElementById("drug2").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "drugList2");
-});
-  document.getElementById("foodDrug").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "foodDrugList");
-});
   // Yeh function add karo - scanPrescription
 async function scanPrescription() {
     let fileInput = document.getElementById("camera");
@@ -261,6 +249,18 @@ async function scanPrescription() {
         document.getElementById("scanResult").innerHTML = "❌ Scan failed. Please try again.";
     }
 }
+
+// Event listeners for input
+document.getElementById("drug1").addEventListener("input", e => {
+    fetchDrugs(e.target.value, "drugList");
+});
+
+document.getElementById("drug2").addEventListener("input", e => {
+    fetchDrugs(e.target.value, "drugList2");
+});
+  document.getElementById("foodDrug").addEventListener("input", e => {
+    fetchDrugs(e.target.value, "foodDrugList");
+});
 </script>
 
 </body>
