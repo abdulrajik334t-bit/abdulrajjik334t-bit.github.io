@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-/* ========== MEDICAL CROSS ANIMATED BACKGROUND (STYLE 3) ========== */
+/* ========== MEDICAL CROSS ANIMATED BACKGROUND ========== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #0f172a, #0f172a);
@@ -15,42 +15,39 @@ body {
     overflow-x: hidden;
 }
 
-/* Animated Medical Cross Background */
+/* Medical Cross Background - FIXED */
 body::before {
-    content: "💊";
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    font-size: 40px;
-    white-space: pre;
-    opacity: 0.06;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2338bdf8" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M4 12h16"/></svg>');
+    background-repeat: repeat;
+    background-size: 60px;
+    opacity: 0.1;
     pointer-events: none;
-    animation: floatCapsules 30s linear infinite;
+    animation: floatMedical 20s linear infinite;
     z-index: 0;
-    background-repeat: repeat;
-    background-size: 80px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2338bdf8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 13c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5z"/></svg>');
-    background-repeat: repeat;
 }
 
-@keyframes floatCapsules {
+@keyframes floatMedical {
     0% {
         transform: translateY(0px) rotate(0deg);
     }
-    25% {
-        transform: translateY(-10px) rotate(2deg);
-    }
     50% {
-        transform: translateY(0px) rotate(0deg);
-    }
-    75% {
-        transform: translateY(10px) rotate(-2deg);
+        transform: translateY(-20px) rotate(1deg);
     }
     100% {
         transform: translateY(0px) rotate(0deg);
     }
+}
+
+/* Make all content appear above background */
+.navbar, .hero, .box, .chatbox, .circle {
+    position: relative;
+    z-index: 1;
 }
 
 /* Navbar */
@@ -83,27 +80,14 @@ body::before {
     text-align: center;
     padding: 40px 20px;
 }
+
 .hero h1 {
-    font-size: 42px;
-    background: linear-gradient(90deg, #38bdf8, #a78bfa, #38bdf8, #818cf8);
-    background-size: 300% 100%;
+    font-size: 36px;
+    background: linear-gradient(135deg, #38bdf8, #a78bfa);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     margin-bottom: 10px;
-    animation: gradientText 4s ease infinite;
-}
-
-@keyframes gradientText {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }
 
 .hero p {
@@ -133,7 +117,7 @@ body::before {
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
 }
 
-/* Boxes *//* Boxes with Neon Glow Effect */
+/* Boxes with Glow Effect */
 .box {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -168,7 +152,6 @@ body::before {
     box-shadow: 0 0 30px rgba(56, 189, 248, 0.8);
     border-color: #38bdf8;
 }
-    
 
 .box h3 {
     margin-bottom: 15px;
@@ -199,8 +182,10 @@ input::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Buttons */
+/* Buttons with Ripple */
 button {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     padding: 12px;
     margin: 8px 0;
@@ -221,6 +206,23 @@ button:hover {
 
 button:active {
     transform: translateY(0);
+}
+
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: rippleAnimation 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 /* Result boxes */
@@ -363,47 +365,5 @@ button:active {
     #activeAlarms li {
         flex-direction: column;
         gap: 8px;
-    }
-        }
-/* Ripple Effect */
-button {
-    position: relative;
-    overflow: hidden;
-}
-
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: scale(0);
-    animation: rippleAnimation 0.6s linear;
-    pointer-events: none;
-}
-
-@keyframes rippleAnimation {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-/* Particle Burst */
-.burst-particle {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    animation: burstAnimation 1s ease-out forwards;
-}
-
-@keyframes burstAnimation {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(var(--vx), var(--vy)) scale(0);
-        opacity: 0;
     }
 }
