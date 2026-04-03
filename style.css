@@ -386,3 +386,24 @@ button {
         opacity: 0;
     }
 }
+/* Particle Burst */
+.burst-particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: burstAnimation 1s ease-out forwards;
+}
+
+@keyframes burstAnimation {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--vx), var(--vy)) scale(0);
+        opacity: 0;
+    }
+}
