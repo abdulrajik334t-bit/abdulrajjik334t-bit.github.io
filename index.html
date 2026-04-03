@@ -1,266 +1,373 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>DrugAI Ultra Pro</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI';
-  background: radial-gradient(circle at top,#0f172a,#020617);
-  color: white;
-  overflow-x: hidden;
-}
-
-/* 🔵 Animated background */
-body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle,#38bdf8,transparent);
-  animation: move 10s linear infinite;
-  opacity: 0.1;
-}
-@keyframes move {
-  0% {transform: translate(-50%,-50%);}
-  50% {transform: translate(0,0);}
-  100% {transform: translate(-50%,-50%);}
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-.logo { font-size: 22px; }
-.login {
-  border: 1px solid #38bdf8;
-  padding: 5px 15px;
-  border-radius: 20px;
-}
-
-/* Hero */
-.hero {
-  text-align: center;
-}
-.hero h1 { font-size: 40px; }
-
-/* Box */
-.box {
-  width: 90%;
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-}
-
-/* Input */
-input { width: 90%; padding: 10px; margin: 5px; }
-
-/* Button */
-button {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: #38bdf8;
-}
-
-/* Result */
-.result { padding: 10px; margin-top: 10px; border-radius: 10px; }
-
-/* Chat */
-.chatbox {
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-  width: 260px;
-  background: rgba(255,255,255,0.1);
-  padding: 10px;
-  border-radius: 10px;
-}
-#chat { height: 120px; overflow: auto; }
-
-/* Circle counter */
-.circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 8px solid #38bdf8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  font-size: 20px;
-  animation: spin 5s linear infinite;
-}
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DrugAI - Smart Medicine Assistant</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="navbar">
-  <div class="logo">💊 DrugAI Ultra</div>
-  <div class="login">Login</div>
+    <div class="logo">💊 DrugAI Assistant</div>
+    <div class="tagline">Your Smart Medicine Partner</div>
 </div>
 
 <div class="hero">
-<h1>AI Medical Assistant</h1>
-<p>24×7 Smart Drug Safety System</p>
+    <h1>AI Medical Assistant</h1>
+    <p>24×7 Smart Drug Safety & Interaction Checker</p>
 </div>
 
-<!-- 🔵 Circle counter -->
+<!-- 🔄 Loading animation -->
 <div class="circle" id="counter">0%</div>
 
-<!-- Drug Interaction -->
+<!-- 📦 DRUG-DRUG INTERACTION BOX -->
 <div class="box">
-<h3>Drug Interaction</h3>
-<input id="drug1" placeholder="Drug 1" list="drugList">
-<datalist id="drugList"></datalist>
-
-<input id="drug2" placeholder="Drug 2" list="drugList2">
-<datalist id="drugList2"></datalist>
-<button onclick="check()">Check</button>
-<div id="result"></div>
-  <input type="file" id="camera" accept="image/*" capture="environment"> 
-<button onclick="scanPrescription()">📷 Scan Prescription</button> 
-<div id="scanResult" class="result"></div>
-<!-- 🍎 Drug Food -->
-<div class="box">
-<h3>Drug + Food Interaction</h3>
- <input id="foodDrug" placeholder="Drug">
-<input id="food" placeholder="Food">
-<input id="foodDrug" placeholder="Drug" list="foodDrugList">
-<datalist id="foodDrugList"></datalist>
-<button onclick="foodCheck()">Check</button>
-<div id="foodResult"></div>
+    <h3>💊 Drug-Drug Interaction</h3>
+    <input type="text" id="drug1" placeholder="Enter first drug name" list="drugList">
+    <datalist id="drugList"></datalist>
+    
+    <input type="text" id="drug2" placeholder="Enter second drug name" list="drugList2">
+    <datalist id="drugList2"></datalist>
+    
+    <button onclick="checkInteraction()">🔍 Check Interaction</button>
+    <div id="interactionResult" class="result"></div>
 </div>
 
-<!-- ⏰ Alarm -->
+<!-- 🍎 DRUG-FOOD INTERACTION BOX -->
 <div class="box">
-<h3>Medicine Alarm</h3>
-<input type="time" id="time">
-<button onclick="setAlarm()">Set Alarm</button>
+    <h3>🍎 Drug-Food Interaction</h3>
+    <input type="text" id="foodDrug" placeholder="Enter drug name" list="foodDrugList">
+    <datalist id="foodDrugList"></datalist>
+    
+    <select id="foodSelect">
+        <option value="grapefruit">🍊 Grapefruit</option>
+        <option value="alcohol">🍺 Alcohol</option>
+        <option value="dairy">🥛 Dairy Products</option>
+        <option value="caffeine">☕ Caffeine</option>
+    </select>
+    
+    <button onclick="checkFoodInteraction()">🍽️ Check Food Interaction</button>
+    <div id="foodResult" class="result"></div>
 </div>
 
-<!-- Contact -->
+<!-- 🤖 AI CHAT BOX -->
 <div class="box">
-<h3>Contact</h3>
-<p>📞 +917999754531</p>
-<p>📧 abdulrajik334t@gmail.com</p>
-<p>🟢 24×7 Available</p>
+    <h3>🤖 AI Health Assistant</h3>
+    <div class="chat-messages" id="chatMessages">
+        <p>🤖 Hello! I'm your AI health assistant. Ask me anything about medicines, side effects, or health tips.</p>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Type your question here..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="startVoiceInput()">🎤 Voice</button>
+    </div>
 </div>
 
-<!-- Chatbot -->
-<div class="chatbox">
-<div id="chat"></div>
-<input id="msg">
-<button onclick="send()">Send</button>
-<button onclick="voice()">🎤</button>
+<!-- ⏰ MEDICINE ALARM BOX -->
+<div class="box">
+    <h3>⏰ Medicine Alarm</h3>
+    <input type="text" id="alarmMedicine" placeholder="Medicine name">
+    <input type="time" id="alarmTime">
+    <select id="alarmPeriod">
+        <option value="once">One time</option>
+        <option value="daily">Daily</option>
+    </select>
+    <button onclick="setMedicineAlarm()">🔔 Set Alarm</button>
+    <div id="alarmStatus" class="result"></div>
+    <div id="activeAlarms"></div>
+</div>
+
+<!-- 📞 CONTACT BOX -->
+<div class="box">
+    <h3>📞 Emergency Contact</h3>
+    <p>🚑 Emergency: <strong>102</strong></p>
+    <p>📞 Poison Control: <strong>1800-123-1234</strong></p>
+    <p>💬 Support: <strong>+91 7999754531</strong></p>
+    <p>📧 Email: <strong>abdulrajik334t@gmail.com</strong></p>
+</div>
+
+<!-- 📷 Prescription Scanner -->
+<div class="box">
+    <h3>📷 Scan Prescription</h3>
+    <input type="file" id="prescriptionImage" accept="image/*" capture="environment">
+    <button onclick="scanPrescription()">🔍 Scan & Detect</button>
+    <div id="scanResult" class="result"></div>
 </div>
 
 <script>
-const BASE="https://drug-api-1-gttd.onrender.com";
-
-// Interaction
-async function check(){
- let d1=drug1.value,d2=drug2.value;
- let res=await fetch(`${BASE}/check?drug1=${d1}&drug2=${d2}`);
- let data=await res.json();
- result.innerHTML=data.severity+"<br>"+data.message;
-}
-
-// Food interaction (simple AI)
-function foodCheck(){
- let d=foodDrug.value;
- let f=food.value;
- foodResult.innerHTML="⚠️ "+d+" + "+f+" may interact. Avoid alcohol & grapefruit.";
-}
-
-// Chat
-async function send(){
- let m=msg.value;
- chat.innerHTML+="<p>🧑 "+m+"</p>";
- let r=await fetch(`${BASE}/ai?msg=${m}`);
- let d=await r.json();
- chat.innerHTML+="<p>🤖 "+d.reply+"</p>";
-}
-
-// Voice
-function voice(){
- let r=new webkitSpeechRecognition();
- r.onresult=e=>{msg.value=e.results[0][0].transcript;send();}
- r.start();
-}
-
-// Alarm
-function setAlarm(){
- let t=document.getElementById("time").value;
- alert("Alarm set at "+t);
-}
-
-// Counter animation
-let count=0;
-setInterval(()=>{
- count=(count+5)%100;
- document.getElementById("counter").innerText=count+"%";
-},200);
-  // 🔹 Auto search / autocomplete
-async function fetchDrugs(query, listId){
-    if(query.length < 1) return; // kam request ke liye optional
-    const res = await fetch(`${BASE}/autocomplete?query=${query}`);
-    const data = await res.json();
-    const datalist = document.getElementById(listId);
-    datalist.innerHTML = "";
-    data.forEach(d => {
-        const option = document.createElement("option");
-        option.value = d.name;
-        datalist.appendChild(option);
-    });
-}
-  // Yeh function add karo - scanPrescription
-async function scanPrescription() {
-    let fileInput = document.getElementById("camera");
-    let file = fileInput.files[0];
+    const BASE_URL = "https://drug-api-1-gttd.onrender.com";
     
-    if (!file) {
-        alert("Please take a photo first");
-        return;
+    // Counter animation
+    let progress = 0;
+    setInterval(() => {
+        progress = (progress + 2) % 100;
+        document.getElementById("counter").innerHTML = progress + "%";
+    }, 100);
+    
+    // ========== DRUG-DRUG INTERACTION ==========
+    async function checkInteraction() {
+        const drug1 = document.getElementById("drug1").value;
+        const drug2 = document.getElementById("drug2").value;
+        const resultDiv = document.getElementById("interactionResult");
+        
+        if (!drug1 || !drug2) {
+            resultDiv.innerHTML = "❌ Please enter both drug names";
+            resultDiv.className = "result error";
+            return;
+        }
+        
+        resultDiv.innerHTML = "🔄 Checking interaction...";
+        resultDiv.className = "result loading";
+        
+        try {
+            const response = await fetch(`${BASE_URL}/check?drug1=${encodeURIComponent(drug1)}&drug2=${encodeURIComponent(drug2)}`);
+            const data = await response.json();
+            
+            let severityClass = "";
+            if (data.severity === "HIGH") severityClass = "high-severity";
+            else if (data.severity === "MODERATE") severityClass = "moderate-severity";
+            else severityClass = "low-severity";
+            
+            resultDiv.innerHTML = `<strong>⚠️ Severity: ${data.severity}</strong><br>📋 ${data.message}`;
+            resultDiv.className = `result ${severityClass}`;
+        } catch (error) {
+            resultDiv.innerHTML = "❌ Error checking interaction. Please try again.";
+            resultDiv.className = "result error";
+        }
     }
     
-    let formData = new FormData();
-    formData.append("image", file);
+    // ========== DRUG-FOOD INTERACTION ==========
+    async function checkFoodInteraction() {
+        const drug = document.getElementById("foodDrug").value;
+        const food = document.getElementById("foodSelect").value;
+        const resultDiv = document.getElementById("foodResult");
+        
+        if (!drug) {
+            resultDiv.innerHTML = "❌ Please enter a drug name";
+            resultDiv.className = "result error";
+            return;
+        }
+        
+        resultDiv.innerHTML = "🔄 Checking food interaction...";
+        resultDiv.className = "result loading";
+        
+        try {
+            const response = await fetch(`${BASE_URL}/foodcheck?drug=${encodeURIComponent(drug)}&food=${encodeURIComponent(food)}`);
+            const data = await response.json();
+            
+            resultDiv.innerHTML = `<strong>🍽️ ${food.toUpperCase()} + ${drug}</strong><br>📋 ${data.message}`;
+            resultDiv.className = "result moderate-severity";
+        } catch (error) {
+            resultDiv.innerHTML = "❌ Error checking food interaction.";
+            resultDiv.className = "result error";
+        }
+    }
     
-    try {
-        let res = await fetch(`${BASE}/scan`, {
-            method: "POST",
-            body: formData
+    // ========== AI CHATBOT ==========
+    async function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const message = input.value.trim();
+        const chatDiv = document.getElementById("chatMessages");
+        
+        if (!message) return;
+        
+        // Add user message
+        chatDiv.innerHTML += `<div class="user-message">🧑 ${message}</div>`;
+        input.value = "";
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+        
+        // Add loading indicator
+        chatDiv.innerHTML += `<div class="bot-message loading">🤖 Thinking...</div>`;
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+        
+        try {
+            const response = await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(message)}`);
+            const data = await response.json();
+            
+            // Remove loading indicator
+            const loadingMsg = chatDiv.querySelector(".bot-message.loading");
+            if (loadingMsg) loadingMsg.remove();
+            
+            // Add bot response
+            chatDiv.innerHTML += `<div class="bot-message">🤖 ${data.reply}</div>`;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        } catch (error) {
+            const loadingMsg = chatDiv.querySelector(".bot-message.loading");
+            if (loadingMsg) loadingMsg.remove();
+            chatDiv.innerHTML += `<div class="bot-message error">🤖 Sorry, I'm having trouble connecting. Please try again.</div>`;
+        }
+    }
+    
+    function startVoiceInput() {
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                document.getElementById("chatInput").value = event.results[0][0].transcript;
+                sendMessage();
+            };
+            recognition.start();
+        } else {
+            alert("Voice input not supported in this browser");
+        }
+    }
+    
+    // ========== MEDICINE ALARM ==========
+    let alarms = [];
+    
+    function setMedicineAlarm() {
+        const medicine = document.getElementById("alarmMedicine").value;
+        const time = document.getElementById("alarmTime").value;
+        const period = document.getElementById("alarmPeriod").value;
+        const statusDiv = document.getElementById("alarmStatus");
+        
+        if (!medicine || !time) {
+            statusDiv.innerHTML = "❌ Please enter medicine name and time";
+            statusDiv.className = "result error";
+            return;
+        }
+        
+        const alarm = { medicine, time, period, id: Date.now() };
+        alarms.push(alarm);
+        
+        // Save to localStorage
+        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
+        
+        statusDiv.innerHTML = `✅ Alarm set for ${medicine} at ${time} (${period})`;
+        statusDiv.className = "result low-severity";
+        
+        // Clear inputs
+        document.getElementById("alarmMedicine").value = "";
+        document.getElementById("alarmTime").value = "";
+        
+        displayAlarms();
+        scheduleNotification(alarm);
+    }
+    
+    function displayAlarms() {
+        const alarmsDiv = document.getElementById("activeAlarms");
+        if (alarms.length === 0) {
+            alarmsDiv.innerHTML = "<p>No active alarms</p>";
+            return;
+        }
+        
+        let html = "<h4>Active Alarms:</h4><ul>";
+        alarms.forEach(alarm => {
+            html += `<li>💊 ${alarm.medicine} at ${alarm.time} (${alarm.period}) 
+                     <button onclick="cancelAlarm(${alarm.id})">❌ Cancel</button></li>`;
         });
-        let data = await res.json();
-        document.getElementById("scanResult").innerHTML = "📋 Detected drugs: " + (data.drugs.join(", ") || "None found");
-    } catch (error) {
-        document.getElementById("scanResult").innerHTML = "❌ Scan failed. Please try again.";
+        html += "</ul>";
+        alarmsDiv.innerHTML = html;
     }
-}
-
-// Event listeners for input
-document.getElementById("drug1").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "drugList");
-});
-
-document.getElementById("drug2").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "drugList2");
-});
-  document.getElementById("foodDrug").addEventListener("input", e => {
-    fetchDrugs(e.target.value, "foodDrugList");
-});
+    
+    function cancelAlarm(id) {
+        alarms = alarms.filter(alarm => alarm.id !== id);
+        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
+        displayAlarms();
+        document.getElementById("alarmStatus").innerHTML = "✅ Alarm cancelled";
+    }
+    
+    function scheduleNotification(alarm) {
+        // Request permission
+        if (Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+        
+        // Simple check - in production use proper scheduling
+        const [hours, minutes] = alarm.time.split(":");
+        const now = new Date();
+        const alarmTime = new Date();
+        alarmTime.setHours(hours, minutes, 0);
+        
+        if (alarmTime > now) {
+            const delay = alarmTime - now;
+            setTimeout(() => {
+                new Notification("Medicine Reminder", {
+                    body: `Time to take your ${alarm.medicine}`,
+                    icon: "https://example.com/icon.png"
+                });
+            }, delay);
+        }
+    }
+    
+    // Load saved alarms on page load
+    function loadAlarms() {
+        const saved = localStorage.getItem("medicineAlarms");
+        if (saved) {
+            alarms = JSON.parse(saved);
+            displayAlarms();
+        }
+    }
+    
+    // ========== AUTOCOMPLETE ==========
+    async function fetchDrugs(query, listId) {
+        if (query.length < 1) return;
+        try {
+            const response = await fetch(`${BASE_URL}/autocomplete?query=${encodeURIComponent(query)}`);
+            const drugs = await response.json();
+            const datalist = document.getElementById(listId);
+            datalist.innerHTML = "";
+            drugs.forEach(drug => {
+                const option = document.createElement("option");
+                option.value = drug.name;
+                datalist.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Autocomplete error:", error);
+        }
+    }
+    
+    // ========== PRESCRIPTION SCAN ==========
+    async function scanPrescription() {
+        const fileInput = document.getElementById("prescriptionImage");
+        const file = fileInput.files[0];
+        const resultDiv = document.getElementById("scanResult");
+        
+        if (!file) {
+            resultDiv.innerHTML = "❌ Please take a photo first";
+            resultDiv.className = "result error";
+            return;
+        }
+        
+        resultDiv.innerHTML = "🔄 Scanning prescription...";
+        resultDiv.className = "result loading";
+        
+        const formData = new FormData();
+        formData.append("image", file);
+        
+        try {
+            const response = await fetch(`${BASE_URL}/scan`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            
+            if (data.drugs && data.drugs.length > 0) {
+                resultDiv.innerHTML = `📋 Detected medicines: ${data.drugs.join(", ")}<br>💡 Always consult your doctor before taking these.`;
+                resultDiv.className = "result low-severity";
+            } else {
+                resultDiv.innerHTML = "📋 No medicines detected. Please try a clearer image.";
+                resultDiv.className = "result error";
+            }
+        } catch (error) {
+            resultDiv.innerHTML = "❌ Scan failed. Please try again.";
+            resultDiv.className = "result error";
+        }
+    }
+    
+    // ========== EVENT LISTENERS ==========
+    document.getElementById("drug1").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList"));
+    document.getElementById("drug2").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList2"));
+    document.getElementById("foodDrug").addEventListener("input", (e) => fetchDrugs(e.target.value, "foodDrugList"));
+    
+    // Initialize
+    loadAlarms();
+    
+    // Enter key for chat
+    document.getElementById("chatInput").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
 </script>
 
 </body>
