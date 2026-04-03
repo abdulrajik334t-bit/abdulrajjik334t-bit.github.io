@@ -8,231 +8,204 @@
 body {
   margin: 0;
   font-family: 'Segoe UI';
+  background: radial-gradient(circle at top,#0f172a,#020617);
   color: white;
   overflow-x: hidden;
-  background: linear-gradient(270deg,#020617,#0f172a,#1e293b);
-  background-size: 600% 600%;
-  animation: gradientMove 10s infinite;
 }
 
-@keyframes gradientMove {
-  0%{background-position:0%}
-  50%{background-position:100%}
-  100%{background-position:0%}
-}
-
-/* ✨ particles */
-canvas {
+/* 🔵 Animated background */
+body::before {
+  content: "";
   position: fixed;
-  top:0;
-  left:0;
-  z-index:-1;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle,#38bdf8,transparent);
+  animation: move 10s linear infinite;
+  opacity: 0.1;
+}
+@keyframes move {
+  0% {transform: translate(-50%,-50%);}
+  50% {transform: translate(0,0);}
+  100% {transform: translate(-50%,-50%);}
 }
 
 /* Navbar */
 .navbar {
-  display:flex;
-  justify-content:space-between;
-  padding:20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
 }
-.logo {font-size:22px;}
-.login-btn {
-  border:1px solid #38bdf8;
-  padding:5px 15px;
-  border-radius:20px;
+.logo { font-size: 22px; }
+.login {
+  border: 1px solid #38bdf8;
+  padding: 5px 15px;
+  border-radius: 20px;
 }
 
 /* Hero */
 .hero {
-  text-align:center;
-  margin-top:40px;
+  text-align: center;
+}
+.hero h1 { font-size: 40px; }
+
+/* Box */
+.box {
+  width: 90%;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
 }
 
-/* Glass Box */
-.container {
-  width:90%;
-  max-width:500px;
-  margin:30px auto;
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:20px;
-  backdrop-filter:blur(15px);
-}
-
-/* Inputs */
-input {
-  width:90%;
-  padding:10px;
-  margin:8px;
-  border-radius:10px;
-  border:none;
-}
+/* Input */
+input { width: 90%; padding: 10px; margin: 5px; }
 
 /* Button */
 button {
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  background:#38bdf8;
-  cursor:pointer;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #38bdf8;
 }
 
 /* Result */
-.result {
-  margin-top:10px;
-  padding:10px;
-  border-radius:10px;
-}
+.result { padding: 10px; margin-top: 10px; border-radius: 10px; }
 
 /* Chat */
 .chatbox {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:260px;
-  background:rgba(255,255,255,0.1);
-  padding:10px;
-  border-radius:10px;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  width: 260px;
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
 }
+#chat { height: 120px; overflow: auto; }
 
-/* Stats circle */
+/* Circle counter */
 .circle {
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:10px solid #38bdf8;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:20px auto;
-  font-size:20px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 8px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 20px;
+  animation: spin 5s linear infinite;
 }
-
-/* Footer */
-.footer {
-  text-align:center;
-  margin:40px;
-  color:#94a3b8;
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
-
 <div class="navbar">
-<div class="logo">💊 DrugAI Ultra</div>
-<div class="login-btn">Login</div>
+  <div class="logo">💊 DrugAI Ultra</div>
+  <div class="login">Login</div>
 </div>
 
 <div class="hero">
-<h1>AI Drug Interaction System</h1>
-<p>24×7 Smart Medical Assistant</p>
+<h1>AI Medical Assistant</h1>
+<p>24×7 Smart Drug Safety System</p>
 </div>
 
-<div class="container">
-
-<input id="drug1" placeholder="Drug 1">
-<input id="drug2" placeholder="Drug 2">
-
-<button onclick="check()">Check Interaction</button>
-<button onclick="food()">Food Interaction</button>
-
-<div id="result" class="result"></div>
-
-<h3>⏰ Set Medicine Reminder</h3>
-<input type="time" id="alarmTime">
-<button onclick="setAlarm()">Set Alarm</button>
-
+<!-- 🔵 Circle counter -->
 <div class="circle" id="counter">0%</div>
 
+<!-- Drug Interaction -->
+<div class="box">
+<h3>Drug Interaction</h3>
+<input id="drug1" placeholder="Drug 1">
+<input id="drug2" placeholder="Drug 2">
+<button onclick="check()">Check</button>
+<div id="result"></div>
+</div>
+
+<!-- 🍎 Drug Food -->
+<div class="box">
+<h3>Drug + Food Interaction</h3>
+<input id="foodDrug" placeholder="Drug">
+<input id="food" placeholder="Food">
+<button onclick="foodCheck()">Check</button>
+<div id="foodResult"></div>
+</div>
+
+<!-- ⏰ Alarm -->
+<div class="box">
+<h3>Medicine Alarm</h3>
+<input type="time" id="time">
+<button onclick="setAlarm()">Set Alarm</button>
+</div>
+
+<!-- Contact -->
+<div class="box">
+<h3>Contact</h3>
+<p>📞 +917999754531</p>
+<p>📧 abdulrajik334t@gmail.com</p>
+<p>🟢 24×7 Available</p>
 </div>
 
 <!-- Chatbot -->
 <div class="chatbox">
-<div id="chat" style="height:120px;overflow:auto;"></div>
+<div id="chat"></div>
 <input id="msg">
 <button onclick="send()">Send</button>
-</div>
-
-<!-- Footer -->
-<div class="footer">
-📞 +917999754531 <br>
-📧 abdulrajik334t@gmail.com <br>
-🟢 Available 24×7
+<button onclick="voice()">🎤</button>
 </div>
 
 <script>
 const BASE="https://drug-api-1-gttd.onrender.com";
 
-/* Interaction */
+// Interaction
 async function check(){
-let d1=drug1.value,d2=drug2.value;
-let res=await fetch(`${BASE}/check?drug1=${d1}&drug2=${d2}`);
-let data=await res.json();
-result.innerHTML=data.message;
+ let d1=drug1.value,d2=drug2.value;
+ let res=await fetch(`${BASE}/check?drug1=${d1}&drug2=${d2}`);
+ let data=await res.json();
+ result.innerHTML=data.severity+"<br>"+data.message;
 }
 
-/* Food Interaction */
-function food(){
-result.innerHTML="🍎 Avoid grapefruit, alcohol with many medicines.";
+// Food interaction (simple AI)
+function foodCheck(){
+ let d=foodDrug.value;
+ let f=food.value;
+ foodResult.innerHTML="⚠️ "+d+" + "+f+" may interact. Avoid alcohol & grapefruit.";
 }
 
-/* Chat */
+// Chat
 async function send(){
-let m=msg.value;
-chat.innerHTML+=`<p>🧑 ${m}</p>`;
-let res=await fetch(`${BASE}/ai?msg=${m}`);
-let data=await res.json();
-chat.innerHTML+=`<p>🤖 ${data.reply}</p>`;
+ let m=msg.value;
+ chat.innerHTML+="<p>🧑 "+m+"</p>";
+ let r=await fetch(`${BASE}/ai?msg=${m}`);
+ let d=await r.json();
+ chat.innerHTML+="<p>🤖 "+d.reply+"</p>";
 }
 
-/* Alarm */
+// Voice
+function voice(){
+ let r=new webkitSpeechRecognition();
+ r.onresult=e=>{msg.value=e.results[0][0].transcript;send();}
+ r.start();
+}
+
+// Alarm
 function setAlarm(){
-let t=document.getElementById("alarmTime").value;
-setInterval(()=>{
-let now=new Date();
-let current=now.getHours()+":"+now.getMinutes();
-if(current===t){
-alert("💊 Time to take medicine!");
-}
-},1000);
+ let t=document.getElementById("time").value;
+ alert("Alarm set at "+t);
 }
 
-/* Counter Animation */
+// Counter animation
 let count=0;
 setInterval(()=>{
-if(count<=100){
-counter.innerHTML=count+"%";
-count++;
-}
-},50);
-
-/* Particles */
-let canvas=document.getElementById("particles");
-let ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
-for(let i=0;i<50;i++){
-particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach(p=>{
-ctx.beginPath();
-ctx.arc(p.x,p.y,2,0,Math.PI*2);
-ctx.fillStyle="white";
-ctx.fill();
-p.y+=0.5;
-if(p.y>canvas.height)p.y=0;
-});
-requestAnimationFrame(draw);
-}
-draw();
+ count=(count+5)%100;
+ document.getElementById("counter").innerText=count+"%";
+},200);
 </script>
 
 </body>
