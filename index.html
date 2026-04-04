@@ -324,7 +324,7 @@ async function scanPrescription() {
     formData.append("image", file);
 
     try {
-        const response = await fetch(`${BASE_URL}/scan-prescription`, {
+        const response = await fetch(`${BASE_URL}/scan`, {
             method: "POST",
             body: formData
         });
