@@ -675,6 +675,41 @@
             statusDiv.className = "result error";
             return;
         }
-        const alarm = { medicine, time, period, id: Date.now() };
+           const alarm = { medicine, time, period, id: Date.now() };
         alarms.push(alarm);
-        localStorage.setItem("medicineAlarms", JSON.stringify(al
+        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
+        statusDiv.innerHTML = `✅ Alarm set for ${medicine} at ${time}`;
+        statusDiv.className = "result low-severity";
+        document.getElementById("alarmMedicine").value = "";
+        document.getElementById("alarmTime").value = "";
+        displayAlarms();
+        const msg = new SpeechSynthesisUtterance(`Alarm set for ${medicine} at ${time}`);
+        window.speechSynthesis.speak(msg);
+        if (Notification.permission === "default") Notification.requestPermission();
+    }
+    
+    function displayAlarms() {
+        const alarmsDiv = document.getElementById("activeAlarms");
+        if (alarms.length === 0) {
+            alarmsDiv.innerHTML = "<p>No active alarms</p>";
+            return;
+        }
+        let html = "<h4>Active Alarms:</h4><ul>";
+        alarms.forEach(alarm => {
+            html += `<li>💊 ${alarm.medicine} at ${alarm.time} 
+                     <button onclick="cancelAlarm(${alarm.id})">❌ Cancel</button></li>`;
+        });
+        html += "</ul>";
+        alarmsDiv.innerHTML = html;
+    }
+    
+    function cancelAlarm(id) {
+        alarms = alarms.filter(alarm => alarm.id !== id);
+        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
+        displayAlarms();
+    }
+    
+    function loadAlarms() {
+        const saved = localStorage.getItem("medicineAlarms");
+        if (saved) {
+            alarms = JSON.parse(saved);                                                   
