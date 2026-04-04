@@ -749,3 +749,21 @@
             resultDiv.className = "result error";
         }
     }
+    // ========== EVENT LISTENERS ==========
+    document.getElementById("drug1").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList"));
+    document.getElementById("drug2").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList2"));
+    document.getElementById("foodDrug").addEventListener("input", (e) => fetchDrugs(e.target.value, "foodDrugList"));
+    
+    // Initialize
+    loadAlarms();
+    updateStreak();
+    switchFamilyMember();
+    fetchHealthNews();
+    
+    document.getElementById("chatInput").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+</script>
+
+</body>
+</html>
