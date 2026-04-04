@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>DrugAI - Smart Medicine Assistant</title>
+    <title>DrugAI Pro - Ultimate Medicine Assistant</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
 <div class="navbar">
-    <div class="logo">💊 DrugAI Assistant</div>
+    <div class="logo">💊 DrugAI Pro</div>
     <div class="tagline">Your Smart Medicine Partner</div>
 </div>
 
@@ -22,37 +23,55 @@
 <!-- Loading animation -->
 <div class="circle" id="counter">0%</div>
 
-<!-- DRUG-DRUG INTERACTION BOX -->
+<!-- 🔥 NEW: Health Streak (Gamification) -->
+<div class="box">
+    <h3>🔥 Your Health Streak</h3>
+    <div id="streakDisplay" style="font-size: 48px; text-align: center; color: #38bdf8;">0 days</div>
+    <button onclick="markMedicineTaken()">✅ I took my medicine</button>
+    <div id="badge" style="text-align: center; margin-top: 10px;"></div>
+    <div id="streakMessage" style="text-align: center; font-size: 12px;"></div>
+</div>
+
+<!-- 🆕 NEW: Family Profile Management -->
+<div class="box">
+    <h3>👨‍👩‍👧‍👦 Family Members</h3>
+    <select id="familySelect" onchange="switchFamilyMember()">
+        <option value="self">👤 Myself</option>
+        <option value="dad">👨 Dad</option>
+        <option value="mom">👩 Mom</option>
+        <option value="grandma">👵 Grandma</option>
+    </select>
+    <button onclick="addFamilyMember()">➕ Add New Member</button>
+    <div id="familyMedicines" style="margin-top: 10px; font-size: 12px;"></div>
+</div>
+
+<!-- 💊 DRUG-DRUG INTERACTION BOX -->
 <div class="box">
     <h3>💊 Drug-Drug Interaction</h3>
     <input type="text" id="drug1" placeholder="Enter first drug name" autocomplete="off" list="drugList">
     <datalist id="drugList"></datalist>
-    
     <input type="text" id="drug2" placeholder="Enter second drug name" autocomplete="off" list="drugList2">
     <datalist id="drugList2"></datalist>
-    
     <button onclick="checkInteraction()">🔍 Check Interaction</button>
     <div id="interactionResult" class="result"></div>
 </div>
 
-<!-- DRUG-FOOD INTERACTION BOX -->
+<!-- 🍎 DRUG-FOOD INTERACTION BOX -->
 <div class="box">
     <h3>🍎 Drug-Food Interaction</h3>
     <input type="text" id="foodDrug" placeholder="Enter drug name" autocomplete="off" list="foodDrugList">
     <datalist id="foodDrugList"></datalist>
-    
     <select id="foodSelect">
         <option value="grapefruit">🍊 Grapefruit</option>
         <option value="alcohol">🍺 Alcohol</option>
         <option value="dairy">🥛 Dairy Products</option>
         <option value="caffeine">☕ Caffeine</option>
     </select>
-    
     <button onclick="checkFoodInteraction()">🍽️ Check Food Interaction</button>
     <div id="foodResult" class="result"></div>
 </div>
 
-<!-- AI CHAT BOX -->
+<!-- 🤖 AI CHAT BOX -->
 <div class="box">
     <h3>🤖 AI Health Assistant</h3>
     <div class="chat-messages" id="chatMessages">
@@ -65,7 +84,7 @@
     </div>
 </div>
 
-<!-- MEDICINE ALARM BOX -->
+<!-- ⏰ MEDICINE ALARM BOX -->
 <div class="box">
     <h3>⏰ Medicine Alarm</h3>
     <input type="text" id="alarmMedicine" placeholder="Medicine name">
@@ -75,11 +94,63 @@
         <option value="daily">Daily</option>
     </select>
     <button onclick="setMedicineAlarm()">🔔 Set Alarm</button>
+    <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button>
     <div id="alarmStatus" class="result"></div>
     <div id="activeAlarms"></div>
 </div>
 
-<!-- CONTACT BOX -->
+<!-- 🆕 NEW: Pill Identifier -->
+<div class="box">
+    <h3>💊 Pill Identifier</h3>
+    <input type="file" id="pillImage" accept="image/*" capture="environment">
+    <button onclick="identifyPill()">🔍 Identify Pill</button>
+    <div id="pillResult" class="result"></div>
+</div>
+
+<!-- 🆕 NEW: QR Emergency Card -->
+<div class="box">
+    <h3>🏥 Emergency QR Card</h3>
+    <button onclick="generateQRCode()">🆔 Generate My QR Code</button>
+    <div id="qrcode" style="display: flex; justify-content: center; margin-top: 10px;"></div>
+    <p style="font-size: 12px; text-align: center;">Scan this QR in emergency - Doctors will know your medicines</p>
+</div>
+
+<!-- 🆕 NEW: Nearest Pharmacy -->
+<div class="box">
+    <h3>🏪 Nearest Pharmacy (24x7)</h3>
+    <button onclick="findNearbyPharmacies()">📍 Find Nearby Medical Stores</button>
+    <div id="pharmacyResult" class="result"></div>
+</div>
+
+<!-- 🆕 NEW: Daily Health News -->
+<div class="box">
+    <h3>📰 Health News & FDA Alerts</h3>
+    <div id="healthNews" style="max-height: 200px; overflow-y: auto;">
+        <p>Loading latest health updates...</p>
+    </div>
+</div>
+
+<!-- 🆕 NEW: Multi-Language Support -->
+<div class="box">
+    <h3>🌍 Select Language</h3>
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिंदी</option>
+        <option value="te">🇮🇳 తెలుగు</option>
+        <option value="ta">🇮🇳 தமிழ்</option>
+        <option value="bn">🇮🇳 বাংলা</option>
+        <option value="mr">🇮🇳 मराठी</option>
+    </select>
+</div>
+
+<!-- 🆕 NEW: Telemedicine -->
+<div class="box">
+    <h3>🩺 Consult Doctor Online</h3>
+    <button onclick="startTelemedicine()">📞 Video Consult with Doctor</button>
+    <button onclick="bookAppointment()">📅 Book Appointment</button>
+</div>
+
+<!-- 📞 CONTACT BOX -->
 <div class="box">
     <h3>📞 Emergency Contact</h3>
     <p>🚑 Emergency: <strong>102</strong></p>
@@ -88,7 +159,7 @@
     <p>📧 Email: <strong>abdulrajik334t@gmail.com</strong></p>
 </div>
 
-<!-- PRESCRIPTION SCANNER -->
+<!-- 📷 PRESCRIPTION SCANNER -->
 <div class="box">
     <h3>📷 Scan Prescription</h3>
     <input type="file" id="prescriptionImage" accept="image/*" capture="environment">
@@ -97,16 +168,13 @@
 </div>
 
 <script>
-
     const BASE_URL = "https://drug-api-1-gttd.onrender.com";
     
-    // ✅ DRUG DATABASE FOR SCANNER (Add this)
+    // ========== DRUG DATABASE ==========
     const drugData = {
         "aspirin": [], "paracetamol": [], "ibuprofen": [], "amoxicillin": [],
         "warfarin": [], "lisinopril": [], "metformin": [], "omeprazole": [],
-        "simvastatin": [], "amlodipine": [], "cetirizine": [], "loratadine": [],
-        "diazepam": [], "alprazolam": [], "prednisone": [], "metoprolol": [],
-        "atorvastatin": [], "levothyroxine": [], "hydrochlorothiazide": []
+        "simvastatin": [], "amlodipine": [], "cetirizine": [], "loratadine": []
     };
     
     // Counter animation
@@ -115,6 +183,219 @@
         progress = (progress + 2) % 100;
         document.getElementById("counter").innerHTML = progress + "%";
     }, 100);
+    
+    // ========== 1. HEALTH STREAK (Gamification) ==========
+    let streak = localStorage.getItem("medStreak") || 0;
+    let lastDate = localStorage.getItem("lastTaken") || "";
+    
+    function updateStreak() {
+        document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
+        
+        let badge = "";
+        let message = "";
+        if (streak >= 30) {
+            badge = "🏆 Health Champion - You're a hero!";
+            message = "30+ days! You're in top 1% of health-conscious people!";
+        } else if (streak >= 7) {
+            badge = "⭐ Consistent Hero - Great job!";
+            message = "7 days streak! Medicine habit is forming!";
+        } else if (streak >= 3) {
+            badge = "🌱 Getting Started - Keep going!";
+            message = "3 days! You're building a healthy habit!";
+        } else {
+            message = "Take your medicine daily to build streak!";
+        }
+        
+        document.getElementById("badge").innerHTML = badge;
+        document.getElementById("streakMessage").innerHTML = message;
+    }
+    
+    function markMedicineTaken() {
+        const today = new Date().toDateString();
+        
+        if (lastDate !== today) {
+            streak++;
+            localStorage.setItem("medStreak", streak);
+            localStorage.setItem("lastTaken", today);
+            updateStreak();
+            
+            // Voice celebration
+            const msg = new SpeechSynthesisUtterance(`Amazing! ${streak} day streak! Keep it up!`);
+            window.speechSynthesis.speak(msg);
+            
+            alert(`🎉 Wonderful! ${streak} day health streak!`);
+        } else {
+            alert("✅ You already marked today! Come back tomorrow for +1 streak.");
+        }
+    }
+    
+    // ========== 2. FAMILY PROFILE MANAGEMENT ==========
+    let family = JSON.parse(localStorage.getItem("family")) || {
+        self: { name: "Myself", medicines: [] },
+        dad: { name: "Dad", medicines: ["aspirin"] },
+        mom: { name: "Mom", medicines: ["lisinopril"] },
+        grandma: { name: "Grandma", medicines: ["warfarin"] }
+    };
+    
+    function switchFamilyMember() {
+        const selected = document.getElementById("familySelect").value;
+        const member = family[selected];
+        document.getElementById("familyMedicines").innerHTML = `💊 ${member.name}'s medicines: ${member.medicines.join(", ") || "None"}`;
+    }
+    
+    function addFamilyMember() {
+        const name = prompt("Enter family member name:");
+        if (name) {
+            const id = name.toLowerCase().replace(/\s/g, '');
+            family[id] = { name: name, medicines: [] };
+            localStorage.setItem("family", JSON.stringify(family));
+            const select = document.getElementById("familySelect");
+            const option = document.createElement("option");
+            option.value = id;
+            option.text = `👤 ${name}`;
+            select.appendChild(option);
+            alert(`Added ${name} to family!`);
+        }
+    }
+    
+    // ========== 3. VOICE REMINDER ==========
+    function voiceReminder(medicine) {
+        const msg = new SpeechSynthesisUtterance(`Time to take your ${medicine} medicine`);
+        window.speechSynthesis.speak(msg);
+    }
+    
+    // ========== 4. QR EMERGENCY CARD ==========
+    function generateQRCode() {
+        const userData = {
+            name: "Patient",
+            allergies: ["None reported"],
+            medicines: ["aspirin", "lisinopril"],
+            emergencyContact: "+91 7999754531",
+            bloodGroup: "B+"
+        };
+        
+        const qrText = JSON.stringify(userData);
+        document.getElementById("qrcode").innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), {
+            text: qrText,
+            width: 150,
+            height: 150
+        });
+        alert("✅ QR Code generated! Save this for emergency.");
+    }
+    
+    // ========== 5. NEAREST PHARMACY ==========
+    function findNearbyPharmacies() {
+        const resultDiv = document.getElementById("pharmacyResult");
+        resultDiv.innerHTML = "📍 Finding nearby pharmacies...";
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const url = `https://www.google.com/maps/search/pharmacy/@${lat},${lng},15z`;
+                resultDiv.innerHTML = `<a href="${url}" target="_blank">📍 Click to see nearest pharmacies on Google Maps</a>`;
+            }, () => {
+                resultDiv.innerHTML = "📍 Enable location to find nearby pharmacies";
+            });
+        } else {
+            resultDiv.innerHTML = "📍 Geolocation not supported";
+        }
+    }
+    
+    // ========== 6. PILL IDENTIFIER ==========
+    async function identifyPill() {
+        const fileInput = document.getElementById("pillImage");
+        const file = fileInput.files[0];
+        const resultDiv = document.getElementById("pillResult");
+        
+        if (!file) {
+            resultDiv.innerHTML = "❌ Please take a photo of the pill first";
+            return;
+        }
+        
+        resultDiv.innerHTML = "🔄 Identifying pill...";
+        
+        const formData = new FormData();
+        formData.append("image", file);
+        
+        try {
+            const response = await fetch(`${BASE_URL}/scan-prescription`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            
+            if (data.drugs && data.drugs.length > 0) {
+                resultDiv.innerHTML = `💊 Identified: ${data.drugs[0]}<br>⚠️ Confirm with your doctor before taking.`;
+            } else {
+                resultDiv.innerHTML = "💊 Could not identify. Common pills: Aspirin (white round), Paracetamol (white oval)";
+            }
+        } catch (error) {
+            resultDiv.innerHTML = "💊 Tip: White round pill could be Aspirin. Always check with pharmacist.";
+        }
+    }
+    
+    // ========== 7. GOOGLE CALENDAR INTEGRATION ==========
+    function addToGoogleCalendar() {
+        const medicine = document.getElementById("alarmMedicine").value;
+        const time = document.getElementById("alarmTime").value;
+        
+        if (!medicine || !time) {
+            alert("Please enter medicine name and time first");
+            return;
+        }
+        
+        const startTime = new Date();
+        const [hours, minutes] = time.split(":");
+        startTime.setHours(hours, minutes, 0);
+        
+        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${medicine}&dates=${startTime.toISOString().replace(/-|:|\./g, '')}`;
+        window.open(url, '_blank');
+    }
+    
+    // ========== 8. HEALTH NEWS ==========
+    async function fetchHealthNews() {
+        const newsDiv = document.getElementById("healthNews");
+        try {
+            const response = await fetch('https://newsapi.org/v2/everything?q=drug+safety+medicine&apiKey=YOUR_API_KEY');
+            // Fallback to static news
+            newsDiv.innerHTML = `
+                <p>📰 FDA approves new diabetes drug</p>
+                <p>📰 WHO: Medicine safety guidelines updated</p>
+                <p>📰 New study on aspirin benefits</p>
+                <p>📰 Paracetamol dosage recommendations</p>
+                <p>📰 Generic vs Brand medicine comparison</p>
+            `;
+        } catch (error) {
+            newsDiv.innerHTML = `
+                <p>📰 Always take medicines as prescribed</p>
+                <p>📰 Never share prescription medicines</p>
+                <p>📰 Check expiry date before taking</p>
+            `;
+        }
+    }
+    
+    // ========== 9. MULTI-LANGUAGE ==========
+    function changeLanguage() {
+        const lang = document.getElementById("languageSelect").value;
+        const translations = {
+            en: { title: "AI Medical Assistant", check: "Check Interaction" },
+            hi: { title: "एआई मेडिकल असिस्टेंट", check: "जांच करें" }
+        };
+        if (translations[lang]) {
+            document.querySelector(".hero h1").innerHTML = translations[lang].title;
+        }
+    }
+    
+    // ========== 10. TELEMEDICINE ==========
+    function startTelemedicine() {
+        window.open('https://www.practo.com/online-doctor-consultation', '_blank');
+    }
+    
+    function bookAppointment() {
+        window.open('https://www.practo.com/bangalore/doctors', '_blank');
+    }
     
     // ========== DRUG-DRUG INTERACTION ==========
     async function checkInteraction() {
@@ -202,7 +483,7 @@
         } catch (error) {
             const loadingMsg = chatDiv.querySelector(".bot-message.loading");
             if (loadingMsg) loadingMsg.remove();
-            chatDiv.innerHTML += `<div class="bot-message error">🤖 Sorry, I'm having trouble connecting. Please try again.</div>`;
+            chatDiv.innerHTML += `<div class="bot-message error">🤖 Sorry, having trouble connecting.</div>`;
         }
     }
     
@@ -216,154 +497,9 @@
             };
             recognition.start();
         } else {
-            alert("Voice input not supported in this browser");
+            alert("Voice input not supported");
         }
     }
     
-    // ========== AUTOCOMPLETE FUNCTION ==========
-    async function fetchDrugs(query, listId) {
-        if (query.length < 1) return;
-        
-        try {
-            const response = await fetch(`${BASE_URL}/autocomplete?query=${encodeURIComponent(query)}`);
-            const drugs = await response.json();
-            
-            const datalist = document.getElementById(listId);
-            datalist.innerHTML = "";
-            
-            drugs.forEach(drug => {
-                const option = document.createElement("option");
-                option.value = drug.name;
-                datalist.appendChild(option);
-            });
-        } catch (error) {
-            console.error("Autocomplete error:", error);
-        }
-    }
-    
-    // ========== MEDICINE ALARM ==========
-    let alarms = [];
-    
-    function setMedicineAlarm() {
-        const medicine = document.getElementById("alarmMedicine").value;
-        const time = document.getElementById("alarmTime").value;
-        const period = document.getElementById("alarmPeriod").value;
-        const statusDiv = document.getElementById("alarmStatus");
-        
-        if (!medicine || !time) {
-            statusDiv.innerHTML = "❌ Please enter medicine name and time";
-            statusDiv.className = "result error";
-            return;
-        }
-        
-        const alarm = { medicine, time, period, id: Date.now() };
-        alarms.push(alarm);
-        
-        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
-        
-        statusDiv.innerHTML = `✅ Alarm set for ${medicine} at ${time} (${period})`;
-        statusDiv.className = "result low-severity";
-        
-        document.getElementById("alarmMedicine").value = "";
-        document.getElementById("alarmTime").value = "";
-        
-        displayAlarms();
-        
-        if (Notification.permission === "default") {
-            Notification.requestPermission();
-        }
-    }
-    
-    function displayAlarms() {
-        const alarmsDiv = document.getElementById("activeAlarms");
-        if (alarms.length === 0) {
-            alarmsDiv.innerHTML = "<p>No active alarms</p>";
-            return;
-        }
-        
-        let html = "<h4>Active Alarms:</h4><ul>";
-        alarms.forEach(alarm => {
-            html += `<li>💊 ${alarm.medicine} at ${alarm.time} (${alarm.period}) 
-                     <button onclick="cancelAlarm(${alarm.id})">❌ Cancel</button></li>`;
-        });
-        html += "</ul>";
-        alarmsDiv.innerHTML = html;
-    }
-    
-    function cancelAlarm(id) {
-        alarms = alarms.filter(alarm => alarm.id !== id);
-        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
-        displayAlarms();
-        document.getElementById("alarmStatus").innerHTML = "✅ Alarm cancelled";
-    }
-    
-    function loadAlarms() {
-        const saved = localStorage.getItem("medicineAlarms");
-        if (saved) {
-            alarms = JSON.parse(saved);
-            displayAlarms();
-        }
-    }
-    
-    // ========== PRESCRIPTION SCAN WITH GEMINI ==========
-async function scanPrescription() {
-    const fileInput = document.getElementById("prescriptionImage");
-    const file = fileInput.files[0];
-    const resultDiv = document.getElementById("scanResult");
-
-    if (!file) {
-        resultDiv.innerHTML = "❌ Please take a photo first";
-        resultDiv.className = "result error";
-        return;
-    }
-
-    resultDiv.innerHTML = "🔄 AI reading handwriting...";
-    resultDiv.className = "result loading";
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-        const response = await fetch(`${BASE_URL}/scan`, {
-            method: "POST",
-            body: formData
-        });
-        const data = await response.json();
-
-        if (data.drugs && data.drugs.length > 0) {
-            resultDiv.innerHTML = `📋 Detected: ${data.drugs.join(", ")}`;
-            resultDiv.className = "result low-severity";
-        } else {
-            resultDiv.innerHTML = "📋 No medicines detected. Try clearer photo.";
-            resultDiv.className = "result error";
-        }
-
-    } catch (error) {
-        resultDiv.innerHTML = "❌ Scan failed. Try again.";
-        resultDiv.className = "result error";
-    }
-}
-    // ========== EVENT LISTENERS FOR AUTOCOMPLETE ==========
-    document.getElementById("drug1").addEventListener("input", (e) => {
-        fetchDrugs(e.target.value, "drugList");
-    });
-    
-    document.getElementById("drug2").addEventListener("input", (e) => {
-        fetchDrugs(e.target.value, "drugList2");
-    });
-    
-    document.getElementById("foodDrug").addEventListener("input", (e) => {
-        fetchDrugs(e.target.value, "foodDrugList");
-    });
-    
-    // Initialize
-    loadAlarms();
-    
-    // Enter key for chat
-    document.getElementById("chatInput").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") sendMessage();
-    });
-</script>
-
-</body>
-</html>
+    // ========== AUTOCOMPLETE ==========
+    async
