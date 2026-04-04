@@ -153,7 +153,38 @@
         <button onclick="bookAppointment()">📅 Book Appointment</button>
     </div>
 
-    <!-- 13. Emergency Contact (Full Width) -->
+    <!-- ========== 🆕 3 NEW FEATURES ========== -->
+
+    <!-- 13. NEW: Medicine Stock Tracker -->
+    <div class="box">
+        <h3>📦 Medicine Stock Tracker</h3>
+        <input type="text" id="stockMedicine" placeholder="Medicine name" style="margin-bottom: 5px;">
+        <input type="number" id="stockQuantity" placeholder="Quantity" style="margin-bottom: 5px;">
+        <input type="date" id="stockExpiry" placeholder="Expiry date" style="margin-bottom: 5px;">
+        <button onclick="addToStock()">➕ Add to Stock</button>
+        <button onclick="checkExpiry()">⚠️ Check Expiring Soon</button>
+        <button onclick="viewAllStock()">📋 View All Stock</button>
+        <div id="stockResult" class="result" style="margin-top: 10px;"></div>
+        <div id="expiryAlert" class="result"></div>
+    </div>
+
+    <!-- 14. NEW: Medicine Interaction Heatmap -->
+    <div class="box">
+        <h3>🌡️ Medicine Interaction Heatmap</h3>
+        <div id="heatmap" style="display: grid; gap: 5px; margin-top: 10px; overflow-x: auto;"></div>
+        <button onclick="generateHeatmap()">📊 Generate Heatmap</button>
+        <p style="font-size: 11px; margin-top: 8px;">🟢 Low Risk &nbsp; 🟠 Moderate &nbsp; 🔴 High Risk</p>
+    </div>
+
+    <!-- 15. NEW: Voice Symptom Checker -->
+    <div class="box">
+        <h3>🗣️ Voice Symptom Checker</h3>
+        <button onclick="startSymptomCheck()">🎙️ Talk to AI Doctor (10 sec)</button>
+        <div id="symptomTranscript" style="min-height: 50px; margin-top: 10px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 8px;"></div>
+        <div id="symptomAdvice" class="result"></div>
+    </div>
+
+    <!-- 16. Emergency Contact (Full Width) -->
     <div class="box full-width">
         <h3>📞 Emergency Contact</h3>
         <p>🚑 Emergency: <strong>102</strong></p>
@@ -162,7 +193,7 @@
         <p>📧 Email: <strong>abdulrajik334t@gmail.com</strong></p>
     </div>
 
-    <!-- 14. Prescription Scanner Box -->
+    <!-- 17. Prescription Scanner Box -->
     <div class="box">
         <h3>📷 Scan Prescription</h3>
         <input type="file" id="prescriptionImage" accept="image/*" capture="environment">
@@ -188,384 +219,3 @@
         progress = (progress + 2) % 100;
         document.getElementById("counter").innerHTML = progress + "%";
     }, 100);
-    
-    // ========== 1. HEALTH STREAK ==========
-    let streak = localStorage.getItem("medStreak") || 0;
-    let lastDate = localStorage.getItem("lastTaken") || "";
-    
-    function updateStreak() {
-        document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
-        let badge = "";
-        if (streak >= 30) badge = "🏆 Health Champion";
-        else if (streak >= 7) badge = "⭐ Consistent Hero";
-        else if (streak >= 3) badge = "🌱 Getting Started";
-        document.getElementById("badge").innerHTML = badge;
-    }
-    
-    function markMedicineTaken() {
-        const today = new Date().toDateString();
-        if (lastDate !== today) {
-            streak++;
-            localStorage.setItem("medStreak", streak);
-            localStorage.setItem("lastTaken", today);
-            updateStreak();
-            const msg = new SpeechSynthesisUtterance(`Amazing! ${streak} day streak!`);
-            window.speechSynthesis.speak(msg);
-            alert(`🎉 ${streak} day health streak!`);
-        } else {
-            alert("✅ Already marked today!");
-        }
-    }
-    
-    // ========== 2. FAMILY MANAGEMENT ==========
-    let family = JSON.parse(localStorage.getItem("family")) || {
-        self: { name: "Myself", medicines: [] },
-        dad: { name: "Dad", medicines: ["aspirin"] },
-        mom: { name: "Mom", medicines: ["lisinopril"] },
-        grandma: { name: "Grandma", medicines: ["warfarin"] }
-    };
-    
-    function switchFamilyMember() {
-        const selected = document.getElementById("familySelect").value;
-        const member = family[selected];
-        document.getElementById("familyMedicines").innerHTML = `💊 ${member.name}'s medicines: ${member.medicines.join(", ") || "None"}`;
-    }
-    
-    function addFamilyMember() {
-        const name = prompt("Enter family member name:");
-        if (name) {
-            const id = name.toLowerCase().replace(/\s/g, '');
-            family[id] = { name: name, medicines: [] };
-            localStorage.setItem("family", JSON.stringify(family));
-            const select = document.getElementById("familySelect");
-            const option = document.createElement("option");
-            option.value = id;
-            option.text = `👤 ${name}`;
-            select.appendChild(option);
-            alert(`Added ${name}!`);
-        }
-    }
-    
-    // ========== 3. QR EMERGENCY CARD ==========
-    function generateQRCode() {
-        const userData = {
-            name: "Patient",
-            allergies: ["None reported"],
-            medicines: ["aspirin", "lisinopril"],
-            emergencyContact: "+91 7999754531",
-            bloodGroup: "B+"
-        };
-        const qrText = JSON.stringify(userData);
-        document.getElementById("qrcode").innerHTML = "";
-        new QRCode(document.getElementById("qrcode"), {
-            text: qrText,
-            width: 150,
-            height: 150
-        });
-        alert("✅ QR Code generated!");
-    }
-    
-    // ========== 4. NEAREST PHARMACY ==========
-    function findNearbyPharmacies() {
-        const resultDiv = document.getElementById("pharmacyResult");
-        resultDiv.innerHTML = "📍 Finding nearby pharmacies...";
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                resultDiv.innerHTML = `<a href="https://www.google.com/maps/search/pharmacy/@${lat},${lng},15z" target="_blank">📍 Click to see nearest pharmacies</a>`;
-            }, () => {
-                resultDiv.innerHTML = "📍 Enable location to find nearby pharmacies";
-            });
-        }
-    }
-    
-    // ========== 5. PILL IDENTIFIER ==========
-    async function identifyPill() {
-        const fileInput = document.getElementById("pillImage");
-        const file = fileInput.files[0];
-        const resultDiv = document.getElementById("pillResult");
-        if (!file) {
-            resultDiv.innerHTML = "❌ Please take a photo first";
-            return;
-        }
-        resultDiv.innerHTML = "🔄 Identifying pill...";
-        const formData = new FormData();
-        formData.append("image", file);
-        try {
-            const response = await fetch(`${BASE_URL}/scan-prescription`, {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();
-            if (data.drugs && data.drugs.length > 0) {
-                resultDiv.innerHTML = `💊 Identified: ${data.drugs[0]}`;
-            } else {
-                resultDiv.innerHTML = "💊 Could not identify. Consult pharmacist.";
-            }
-        } catch (error) {
-            resultDiv.innerHTML = "💊 Tip: White round pill could be Aspirin";
-        }
-    }
-    
-    // ========== 6. GOOGLE CALENDAR ==========
-    function addToGoogleCalendar() {
-        const medicine = document.getElementById("alarmMedicine").value;
-        const time = document.getElementById("alarmTime").value;
-        if (!medicine || !time) {
-            alert("Please enter medicine name and time");
-            return;
-        }
-        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${medicine}&dates=${new Date().toISOString().replace(/-|:|\./g, '')}`;
-        window.open(url, '_blank');
-    }
-    
-    // ========== 7. HEALTH NEWS ==========
-    async function fetchHealthNews() {
-        const newsDiv = document.getElementById("healthNews");
-        newsDiv.innerHTML = `
-            <p>📰 FDA approves new diabetes drug</p>
-            <p>📰 WHO: Medicine safety guidelines updated</p>
-            <p>📰 New study on aspirin benefits</p>
-            <p>📰 Paracetamol dosage recommendations</p>
-        `;
-    }
-    
-    // ========== 8. MULTI-LANGUAGE ==========
-    function changeLanguage() {
-        const lang = document.getElementById("languageSelect").value;
-        const titles = {
-            en: "AI Medical Assistant",
-            hi: "एआई मेडिकल असिस्टेंट",
-            te: "ఏఐ మెడికల్ అసిస్టెంట్",
-            ta: "ஏஐ மெடிக்கல் அசிஸ்டன்ட்",
-            bn: "এআই মেডিকেল অ্যাসিস্ট্যান্ট",
-            mr: "एआय मेडिकल असिस्टंट"
-        };
-        if (titles[lang]) {
-            document.querySelector(".hero h1").innerHTML = titles[lang];
-        }
-    }
-    
-    // ========== 9. TELEMEDICINE ==========
-    function startTelemedicine() {
-        window.open('https://www.practo.com/online-doctor-consultation', '_blank');
-    }
-    
-    function bookAppointment() {
-        window.open('https://www.practo.com/bangalore/doctors', '_blank');
-    }
-    
-    // ========== DRUG-DRUG INTERACTION ==========
-    async function checkInteraction() {
-        const drug1 = document.getElementById("drug1").value;
-        const drug2 = document.getElementById("drug2").value;
-        const resultDiv = document.getElementById("interactionResult");
-        if (!drug1 || !drug2) {
-            resultDiv.innerHTML = "❌ Please enter both drug names";
-            resultDiv.className = "result error";
-            return;
-        }
-        resultDiv.innerHTML = "🔄 Checking interaction...";
-        resultDiv.className = "result loading";
-        try {
-            const response = await fetch(`${BASE_URL}/check?drug1=${encodeURIComponent(drug1)}&drug2=${encodeURIComponent(drug2)}`);
-            const data = await response.json();
-            let severityClass = "";
-            if (data.severity === "HIGH") severityClass = "high-severity";
-            else if (data.severity === "MODERATE") severityClass = "moderate-severity";
-            else severityClass = "low-severity";
-            resultDiv.innerHTML = `<strong>⚠️ Severity: ${data.severity}</strong><br>📋 ${data.message}`;
-            resultDiv.className = `result ${severityClass}`;
-        } catch (error) {
-            resultDiv.innerHTML = "❌ Error checking interaction.";
-            resultDiv.className = "result error";
-        }
-    }
-    
-    // ========== DRUG-FOOD INTERACTION ==========
-    async function checkFoodInteraction() {
-        const drug = document.getElementById("foodDrug").value;
-        const food = document.getElementById("foodSelect").value;
-        const resultDiv = document.getElementById("foodResult");
-        if (!drug) {
-            resultDiv.innerHTML = "❌ Please enter a drug name";
-            resultDiv.className = "result error";
-            return;
-        }
-        resultDiv.innerHTML = "🔄 Checking food interaction...";
-        resultDiv.className = "result loading";
-        try {
-            const response = await fetch(`${BASE_URL}/foodcheck?drug=${encodeURIComponent(drug)}&food=${encodeURIComponent(food)}`);
-            const data = await response.json();
-            resultDiv.innerHTML = `<strong>🍽️ ${food.toUpperCase()} + ${drug}</strong><br>📋 ${data.message}`;
-            resultDiv.className = "result moderate-severity";
-        } catch (error) {
-            resultDiv.innerHTML = "❌ Error checking food interaction.";
-            resultDiv.className = "result error";
-        }
-    }
-    
-    // ========== AI CHATBOT ==========
-    async function sendMessage() {
-        const input = document.getElementById("chatInput");
-        const message = input.value.trim();
-        const chatDiv = document.getElementById("chatMessages");
-        if (!message) return;
-        chatDiv.innerHTML += `<div class="user-message">🧑 ${message}</div>`;
-        input.value = "";
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-        chatDiv.innerHTML += `<div class="bot-message loading">🤖 Thinking...</div>`;
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-        try {
-            const response = await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(message)}`);
-            const data = await response.json();
-            const loadingMsg = chatDiv.querySelector(".bot-message.loading");
-            if (loadingMsg) loadingMsg.remove();
-            chatDiv.innerHTML += `<div class="bot-message">🤖 ${data.reply}</div>`;
-            chatDiv.scrollTop = chatDiv.scrollHeight;
-        } catch (error) {
-            const loadingMsg = chatDiv.querySelector(".bot-message.loading");
-            if (loadingMsg) loadingMsg.remove();
-            chatDiv.innerHTML += `<div class="bot-message error">🤖 Sorry, having trouble connecting.</div>`;
-        }
-    }
-    
-    function startVoiceInput() {
-        if ('webkitSpeechRecognition' in window) {
-            const recognition = new webkitSpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.onresult = (event) => {
-                document.getElementById("chatInput").value = event.results[0][0].transcript;
-                sendMessage();
-            };
-            recognition.start();
-        } else {
-            alert("Voice input not supported");
-        }
-    }
-    
-    // ========== AUTOCOMPLETE ==========
-    async function fetchDrugs(query, listId) {
-        if (query.length < 1) return;
-        try {
-            const response = await fetch(`${BASE_URL}/autocomplete?query=${encodeURIComponent(query)}`);
-            const drugs = await response.json();
-            const datalist = document.getElementById(listId);
-            datalist.innerHTML = "";
-            drugs.forEach(drug => {
-                const option = document.createElement("option");
-                option.value = drug.name;
-                datalist.appendChild(option);
-            });
-        } catch (error) {
-            console.error("Autocomplete error:", error);
-        }
-    }
-    
-    // ========== MEDICINE ALARM ==========
-    let alarms = [];
-    
-    function setMedicineAlarm() {
-        const medicine = document.getElementById("alarmMedicine").value;
-        const time = document.getElementById("alarmTime").value;
-        const period = document.getElementById("alarmPeriod").value;
-        const statusDiv = document.getElementById("alarmStatus");
-        if (!medicine || !time) {
-            statusDiv.innerHTML = "❌ Please enter medicine name and time";
-            statusDiv.className = "result error";
-            return;
-        }
-        const alarm = { medicine, time, period, id: Date.now() };
-        alarms.push(alarm);
-        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
-        statusDiv.innerHTML = `✅ Alarm set for ${medicine} at ${time}`;
-        statusDiv.className = "result low-severity";
-        document.getElementById("alarmMedicine").value = "";
-        document.getElementById("alarmTime").value = "";
-        displayAlarms();
-        const msg = new SpeechSynthesisUtterance(`Alarm set for ${medicine} at ${time}`);
-        window.speechSynthesis.speak(msg);
-        if (Notification.permission === "default") Notification.requestPermission();
-    }
-    
-    function displayAlarms() {
-        const alarmsDiv = document.getElementById("activeAlarms");
-        if (alarms.length === 0) {
-            alarmsDiv.innerHTML = "<p>No active alarms</p>";
-            return;
-        }
-        let html = "<h4>Active Alarms:</h4><ul>";
-        alarms.forEach(alarm => {
-            html += `<li>💊 ${alarm.medicine} at ${alarm.time} 
-                     <button onclick="cancelAlarm(${alarm.id})">❌ Cancel</button></li>`;
-        });
-        html += "</ul>";
-        alarmsDiv.innerHTML = html;
-    }
-    
-    function cancelAlarm(id) {
-        alarms = alarms.filter(alarm => alarm.id !== id);
-        localStorage.setItem("medicineAlarms", JSON.stringify(alarms));
-        displayAlarms();
-    }
-    
-    function loadAlarms() {
-        const saved = localStorage.getItem("medicineAlarms");
-        if (saved) {
-            alarms = JSON.parse(saved);
-            displayAlarms();
-        }
-    }
-    
-    // ========== PRESCRIPTION SCAN ==========
-    async function scanPrescription() {
-        const fileInput = document.getElementById("prescriptionImage");
-        const file = fileInput.files[0];
-        const resultDiv = document.getElementById("scanResult");
-        if (!file) {
-            resultDiv.innerHTML = "❌ Please take a photo first";
-            resultDiv.className = "result error";
-            return;
-        }
-        resultDiv.innerHTML = "🔄 Scanning prescription...";
-        resultDiv.className = "result loading";
-        const formData = new FormData();
-        formData.append("image", file);
-        try {
-            const response = await fetch(`${BASE_URL}/scan-prescription`, {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();
-            if (data.drugs && data.drugs.length > 0) {
-                resultDiv.innerHTML = `📋 Detected medicines: ${data.drugs.join(", ")}`;
-                resultDiv.className = "result low-severity";
-            } else {
-                resultDiv.innerHTML = "📋 No medicines detected. Try clearer photo.";
-                resultDiv.className = "result error";
-            }
-        } catch (error) {
-            resultDiv.innerHTML = "❌ Scan failed. Please try again.";
-            resultDiv.className = "result error";
-        }
-    }
-    
-    // ========== EVENT LISTENERS ==========
-    document.getElementById("drug1").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList"));
-    document.getElementById("drug2").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList2"));
-    document.getElementById("foodDrug").addEventListener("input", (e) => fetchDrugs(e.target.value, "foodDrugList"));
-    
-    // Initialize
-    loadAlarms();
-    updateStreak();
-    switchFamilyMember();
-    fetchHealthNews();
-    
-    document.getElementById("chatInput").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") sendMessage();
-    });
-</script>
-
-</body>
-</html>
