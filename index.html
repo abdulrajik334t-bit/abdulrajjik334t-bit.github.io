@@ -712,4 +712,40 @@
     function loadAlarms() {
         const saved = localStorage.getItem("medicineAlarms");
         if (saved) {
-            alarms = JSON.parse(saved);                                                   
+            alarms = JSON.parse(saved);   
+            displayAlarms();
+        }
+    }
+    
+    // ========== PRESCRIPTION SCAN ==========
+    async function scanPrescription() {
+        const fileInput = document.getElementById("prescriptionImage");
+        const file = fileInput.files[0];
+        const resultDiv = document.getElementById("scanResult");
+        if (!file) {
+            resultDiv.innerHTML = "❌ Please take a photo first";
+            resultDiv.className = "result error";
+            return;
+        }
+        resultDiv.innerHTML = "🔄 Scanning prescription...";
+        resultDiv.className = "result loading";
+        const formData = new FormData();
+        formData.append("image", file);
+        try {
+            const response = await fetch(`${BASE_URL}/scan-prescription`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            if (data.drugs && data.drugs.length > 0) {
+                resultDiv.innerHTML = `📋 Detected medicines: ${data.drugs.join(", ")}`;
+                resultDiv.className = "result low-severity";
+            } else {
+                resultDiv.innerHTML = "📋 No medicines detected. Try clearer photo.";
+                resultDiv.className = "result error";
+            }
+        } catch (error) {
+            resultDiv.innerHTML = "❌ Scan failed. Please try again.";
+            resultDiv.className = "result error";
+        }
+    }
