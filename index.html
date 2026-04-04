@@ -295,42 +295,53 @@
     }
     
     // ========== PRESCRIPTION SCAN ==========
-    async function scanPrescription() {
-        const fileInput = document.getElementById("prescriptionImage");
-        const file = fileInput.files[0];
-        const resultDiv = document.getElementById("scanResult");
-        
-        if (!file) {
-            resultDiv.innerHTML = "❌ Please take a photo first";
-            resultDiv.className = "result error";
-            return;
-        }
-        
-        resultDiv.innerHTML = "🔄 Scanning prescription...";
-        resultDiv.className = "result loading";
-        
-        const formData = new FormData();
-        formData.append("image", file);
-        
-        try {
-            const response = await fetch(`${BASE_URL}/scan`, {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();
-            
-            if (data.drugs && data.drugs.length > 0) {
-                resultDiv.innerHTML = `📋 Detected medicines: ${data.drugs.join(", ")}<br>💡 Always consult your doctor before taking these.`;
-                resultDiv.className = "result low-severity";
-            } else {
-                resultDiv.innerHTML = "📋 No medicines detected. Please try a clearer image.";
-                resultDiv.className = "result error";
-            }
-        } catch (error) {
-            resultDiv.innerHTML = "❌ Scan failed. Please try again.";
-            resultDiv.className = "result error";
-        }
+async function scanPrescription() {
+    const fileInput = document.getElementById("prescriptionImage");
+    const file = fileInput.files[0];
+    const resultDiv = document.getElementById("scanResult");
+
+    // Loading state
+    resultDiv.innerHTML = "🔄 Scanning prescription... Please wait.";
+    resultDiv.className = "result loading";
+
+    if (!file) {
+        resultDiv.innerHTML = "❌ Please take a photo first";
+        resultDiv.className = "result error";
+        return;
     }
+
+    try {
+        // ✅ CORRECT API for Tesseract.js v4/v5
+        const { createWorker } = Tesseract;
+        const worker = await createWorker('eng');
+        
+        // Perform OCR on the file
+        const { data: { text } } = await worker.recognize(file);
+        
+        // Terminate worker to save resources
+        await worker.terminate();
+
+        // Process the extracted text
+        const lowerText = text.toLowerCase();
+        console.log("Extracted Text:", lowerText);
+
+        // Find detected drugs (using your existing logic)
+        const detected = Object.keys(drugData).filter(d => lowerText.includes(d.toLowerCase()));
+
+        if (detected.length > 0) {
+            resultDiv.innerHTML = `📋 Detected medicines: ${detected.join(", ")}<br>💡 Always consult your doctor before taking these.`;
+            resultDiv.className = "result low-severity";
+        } else {
+            resultDiv.innerHTML = "📋 No known medicines detected. Please try a clearer image.";
+            resultDiv.className = "result error";
+        }
+
+    } catch (error) {
+        console.error("Scan error:", error);
+        resultDiv.innerHTML = "❌ Scan failed. Please try again.";
+        resultDiv.className = "result error";
+    }
+}
     
     // ========== EVENT LISTENERS FOR AUTOCOMPLETE ==========
     document.getElementById("drug1").addEventListener("input", (e) => {
