@@ -305,54 +305,44 @@
         }
     }
     
-    // ========== PRESCRIPTION SCAN - FIXED ==========
-    async function scanPrescription() {
-        const fileInput = document.getElementById("prescriptionImage");
-        const file = fileInput.files[0];
-        const resultDiv = document.getElementById("scanResult");
+    // ========== PRESCRIPTION SCAN WITH GEMINI ==========
+async function scanPrescription() {
+    const fileInput = document.getElementById("prescriptionImage");
+    const file = fileInput.files[0];
+    const resultDiv = document.getElementById("scanResult");
 
-        if (!file) {
-            resultDiv.innerHTML = "❌ Please take a photo first";
-            resultDiv.className = "result error";
-            return;
-        }
-
-        resultDiv.innerHTML = "🔄 Scanning prescription... Please wait (first time may take 10-15 sec)";
-        resultDiv.className = "result loading";
-
-        try {
-            // Check if Tesseract is loaded
-            if (typeof Tesseract === 'undefined') {
-                throw new Error("Tesseract library not loaded");
-            }
-            
-            const worker = await Tesseract.createWorker('eng');
-            const { data: { text } } = await worker.recognize(file);
-            await worker.terminate();
-
-            const lowerText = text.toLowerCase();
-            console.log("Extracted Text:", lowerText);
-
-            // Use drugData that we defined above
-            const detected = Object.keys(drugData).filter(drug => 
-                lowerText.includes(drug.toLowerCase())
-            );
-
-            if (detected.length > 0) {
-                resultDiv.innerHTML = `📋 Detected medicines: ${detected.join(", ")}<br>💡 Always consult your doctor.`;
-                resultDiv.className = "result low-severity";
-            } else {
-                resultDiv.innerHTML = "📋 No medicines detected. Try clearer photo with printed text.";
-                resultDiv.className = "result error";
-            }
-
-        } catch (error) {
-            console.error("Scan error:", error);
-            resultDiv.innerHTML = `❌ Scan failed: ${error.message}`;
-            resultDiv.className = "result error";
-        }
+    if (!file) {
+        resultDiv.innerHTML = "❌ Please take a photo first";
+        resultDiv.className = "result error";
+        return;
     }
-    
+
+    resultDiv.innerHTML = "🔄 AI reading handwriting...";
+    resultDiv.className = "result loading";
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+        const response = await fetch(`${BASE_URL}/scan-prescription`, {
+            method: "POST",
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.drugs && data.drugs.length > 0) {
+            resultDiv.innerHTML = `📋 Detected: ${data.drugs.join(", ")}`;
+            resultDiv.className = "result low-severity";
+        } else {
+            resultDiv.innerHTML = "📋 No medicines detected. Try clearer photo.";
+            resultDiv.className = "result error";
+        }
+
+    } catch (error) {
+        resultDiv.innerHTML = "❌ Scan failed. Try again.";
+        resultDiv.className = "result error";
+    }
+}
     // ========== EVENT LISTENERS FOR AUTOCOMPLETE ==========
     document.getElementById("drug1").addEventListener("input", (e) => {
         fetchDrugs(e.target.value, "drugList");
