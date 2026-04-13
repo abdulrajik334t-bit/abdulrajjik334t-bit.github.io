@@ -767,6 +767,9 @@
     document.getElementById("chatInput").addEventListener("keypress", (e) => {
         if (e.key === "Enter") sendMessage();
     });
+    // ========== AUTO-LOGIN REMOVE (Open app directly) ==========
+// No login required - app will show directly
+document.getElementById('loginScreen')?.remove();
 </script>
 
 </body>
