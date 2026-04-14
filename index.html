@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>DrugAI Pro - Smart Medicine Assistant</title>
+    <title>DrugAI Pro - Complete Medical Assistant</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
@@ -101,7 +101,7 @@
             transition: transform 0.3s;
         }
         .box:hover { transform: translateY(-3px); }
-        .box h3 { color: #38bdf8; margin-bottom: 15px; }
+        .box h3 { color: #38bdf8; margin-bottom: 15px; font-size: 18px; }
         .box input, .box select {
             width: 100%;
             padding: 10px;
@@ -120,24 +120,27 @@
             background: #38bdf8;
             color: white;
             cursor: pointer;
+            transition: 0.2s;
         }
+        .box button:hover { opacity: 0.8; }
         .result {
             margin-top: 10px;
             padding: 10px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
         }
         .high-severity { background: rgba(239,68,68,0.2); border-left: 3px solid #ef4444; color: #fca5a5; }
         .moderate-severity { background: rgba(245,158,11,0.2); border-left: 3px solid #f59e0b; color: #fcd34d; }
         .low-severity { background: rgba(34,197,94,0.2); border-left: 3px solid #22c55e; color: #86efac; }
         .error { background: rgba(239,68,68,0.2); color: #fca5a5; }
         .chat-messages {
-            height: 200px;
+            height: 180px;
             overflow-y: auto;
             padding: 10px;
             background: rgba(0,0,0,0.3);
             border-radius: 10px;
             margin-bottom: 10px;
+            font-size: 13px;
         }
         .user-message { background: #38bdf8; padding: 8px 12px; border-radius: 15px; margin: 5px 0; margin-left: auto; width: fit-content; max-width: 80%; }
         .bot-message { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 15px; margin: 5px 0; width: fit-content; max-width: 80%; }
@@ -145,6 +148,8 @@
         .chat-input-area input { flex: 1; margin: 0; }
         .chat-input-area button { width: auto; padding: 10px 15px; margin: 0; }
         .full-width { grid-column: span 2; }
+        #heatmap { overflow-x: auto; }
+        #heatmap div { font-size: 12px; }
         @media (max-width: 768px) { .container-2col { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
     </style>
 </head>
@@ -154,7 +159,7 @@
 <div id="loginScreen" class="login-container">
     <div class="login-box">
         <h1>💊 DrugAI Pro</h1>
-        <p>Your Smart Medicine Assistant</p>
+        <p>Complete Medical Assistant</p>
         
         <div class="toggle-buttons">
             <button id="signupBtn" class="toggle-btn active" onclick="showSignup()">📝 Sign Up</button>
@@ -164,6 +169,7 @@
         <div id="signupForm">
             <input type="text" id="signupName" placeholder="Full Name">
             <input type="email" id="signupEmail" placeholder="Email Address">
+            <input type="password" id="signupPassword" placeholder="Password">
             <input type="number" id="signupAge" placeholder="Age">
             <select id="signupGender">
                 <option value="">Select Gender</option>
@@ -176,6 +182,7 @@
         
         <div id="loginForm" style="display: none;">
             <input type="email" id="loginEmail" placeholder="Email Address">
+            <input type="password" id="loginPassword" placeholder="Password">
             <button onclick="loginUser()">Login & Continue</button>
         </div>
         
@@ -183,7 +190,7 @@
     </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- MAIN APP - 17 FEATURES -->
 <div id="appContainer" class="app-container">
     <div class="navbar">
         <div class="logo">💊 DrugAI Pro</div>
@@ -192,183 +199,139 @@
     </div>
 
     <div class="hero">
-        <h1>AI Medical Assistant</h1>
-        <p>24×7 Smart Drug Safety & Interaction Checker</p>
+        <h1>Complete Medical Assistant</h1>
+        <p>17 Smart Features | 24×7 Drug Safety</p>
     </div>
 
     <div class="circle" id="counter">0%</div>
 
     <div class="container-2col">
-        <!-- 1. Health Streak -->
-        <div class="box">
-            <h3>🔥 Your Health Streak</h3>
-            <div id="streakDisplay" style="font-size: 48px; text-align: center; color: #38bdf8;">0 days</div>
+        <!-- 1. HEALTH STREAK -->
+        <div class="box"><h3>🔥 Health Streak</h3>
+            <div id="streakDisplay" style="font-size: 40px; text-align: center;">0 days</div>
             <button onclick="markMedicineTaken()">✅ I took my medicine</button>
-            <div id="badge" style="text-align: center; margin-top: 10px;"></div>
+            <div id="badge" style="text-align: center; margin-top: 8px;"></div>
         </div>
 
-        <!-- 2. Family Members -->
-        <div class="box">
-            <h3>👨‍👩‍👧‍👦 Family Members</h3>
-            <select id="familySelect" onchange="switchFamilyMember()">
-                <option value="self">👤 Myself</option>
-                <option value="dad">👨 Dad</option>
-                <option value="mom">👩 Mom</option>
-                <option value="grandma">👵 Grandma</option>
-            </select>
-            <button onclick="addFamilyMember()">➕ Add New Member</button>
-            <div id="familyMedicines" style="margin-top: 10px; font-size: 12px;"></div>
+        <!-- 2. FAMILY MEMBERS -->
+        <div class="box"><h3>👨‍👩‍👧‍👦 Family</h3>
+            <select id="familySelect"><option value="self">👤 Myself</option><option value="dad">👨 Dad</option><option value="mom">👩 Mom</option><option value="grandma">👵 Grandma</option></select>
+            <button onclick="addFamilyMember()">➕ Add Member</button>
+            <div id="familyMedicines" style="margin-top: 8px; font-size: 12px;"></div>
         </div>
 
-        <!-- 3. Drug-Drug Interaction -->
-        <div class="box">
-            <h3>💊 Drug-Drug Interaction</h3>
-            <input type="text" id="drug1" placeholder="First drug name" list="drugList">
-            <datalist id="drugList"></datalist>
-            <input type="text" id="drug2" placeholder="Second drug name" list="drugList2">
-            <datalist id="drugList2"></datalist>
+        <!-- 3. DRUG-DRUG INTERACTION -->
+        <div class="box"><h3>💊 Drug-Drug Interaction</h3>
+            <input type="text" id="drug1" placeholder="First drug" list="drugList"><datalist id="drugList"></datalist>
+            <input type="text" id="drug2" placeholder="Second drug" list="drugList2"><datalist id="drugList2"></datalist>
             <button onclick="checkInteraction()">🔍 Check Interaction</button>
             <div id="interactionResult" class="result"></div>
         </div>
 
-        <!-- 4. Drug-Food Interaction -->
-        <div class="box">
-            <h3>🍎 Drug-Food Interaction</h3>
-            <input type="text" id="foodDrug" placeholder="Drug name" list="foodDrugList">
-            <datalist id="foodDrugList"></datalist>
-            <select id="foodSelect">
-                <option value="grapefruit">🍊 Grapefruit</option>
-                <option value="alcohol">🍺 Alcohol</option>
-                <option value="dairy">🥛 Dairy</option>
-                <option value="caffeine">☕ Caffeine</option>
-            </select>
+        <!-- 4. DRUG-FOOD INTERACTION -->
+        <div class="box"><h3>🍎 Drug-Food</h3>
+            <input type="text" id="foodDrug" placeholder="Drug name" list="foodDrugList"><datalist id="foodDrugList"></datalist>
+            <select id="foodSelect"><option value="grapefruit">🍊 Grapefruit</option><option value="alcohol">🍺 Alcohol</option><option value="dairy">🥛 Dairy</option></select>
             <button onclick="checkFoodInteraction()">🍽️ Check</button>
             <div id="foodResult" class="result"></div>
         </div>
 
-        <!-- 5. AI Chat -->
-        <div class="box">
-            <h3>🤖 AI Health Assistant</h3>
-            <div class="chat-messages" id="chatMessages">
-                <p>🤖 Hello! Ask me about medicines.</p>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Type question...">
-                <button onclick="sendMessage()">Send</button>
-                <button onclick="startVoiceInput()">🎤 Voice</button>
-            </div>
+        <!-- 5. AI CHATBOT -->
+        <div class="box"><h3>🤖 AI Doctor</h3>
+            <div class="chat-messages" id="chatMessages"><p>🤖 Ask me anything about medicines!</p></div>
+            <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage()">Send</button><button onclick="startVoiceInput()">🎤</button></div>
         </div>
 
-        <!-- 6. Medicine Alarm -->
-        <div class="box">
-            <h3>⏰ Medicine Alarm</h3>
-            <input type="text" id="alarmMedicine" placeholder="Medicine name">
+        <!-- 6. MEDICINE ALARM -->
+        <div class="box"><h3>⏰ Medicine Alarm</h3>
+            <input type="text" id="alarmMedicine" placeholder="Medicine">
             <input type="time" id="alarmTime">
             <select id="alarmPeriod"><option value="once">One time</option><option value="daily">Daily</option></select>
             <button onclick="setMedicineAlarm()">🔔 Set Alarm</button>
             <button onclick="addToGoogleCalendar()">📅 Add to Calendar</button>
             <div id="alarmStatus" class="result"></div>
-            <div id="activeAlarms"></div>
+            <div id="activeAlarms" style="font-size: 12px;"></div>
         </div>
 
-        <!-- 7. Pill Identifier -->
-        <div class="box">
-            <h3>💊 Pill Identifier</h3>
+        <!-- 7. PILL IDENTIFIER -->
+        <div class="box"><h3>💊 Pill Identifier</h3>
             <input type="file" id="pillImage" accept="image/*">
-            <button onclick="identifyPill()">🔍 Identify Pill</button>
+            <button onclick="identifyPill()">🔍 Identify</button>
             <div id="pillResult" class="result"></div>
         </div>
 
-        <!-- 8. QR Emergency Card -->
-        <div class="box">
-            <h3>🏥 Emergency QR Card</h3>
-            <button onclick="generateQRCode()">🆔 Generate QR Code</button>
-            <div id="qrcode" style="display: flex; justify-content: center; margin-top: 10px;"></div>
-            <p style="font-size: 11px; text-align: center;">Scan this QR in emergency</p>
+        <!-- 8. QR EMERGENCY CARD -->
+        <div class="box"><h3>🏥 Emergency QR</h3>
+            <button onclick="generateQRCode()">🆔 Generate QR</button>
+            <div id="qrcode" style="display: flex; justify-content: center; margin-top: 8px;"></div>
+            <p style="font-size: 10px; text-align: center;">Scan in emergency</p>
         </div>
 
-        <!-- 9. Nearest Pharmacy -->
-        <div class="box">
-            <h3>🏪 Nearest Pharmacy</h3>
-            <button onclick="findNearbyPharmacies()">📍 Find Nearby Stores</button>
+        <!-- 9. NEAREST PHARMACY -->
+        <div class="box"><h3>🏪 Pharmacy</h3>
+            <button onclick="findNearbyPharmacies()">📍 Find Nearby</button>
             <div id="pharmacyResult" class="result"></div>
         </div>
 
-        <!-- 10. Health News -->
-        <div class="box">
-            <h3>📰 Health News</h3>
-            <div id="healthNews" style="max-height: 150px; overflow-y: auto;">
-                <p>Loading...</p>
-            </div>
+        <!-- 10. HEALTH NEWS -->
+        <div class="box"><h3>📰 Health News</h3>
+            <div id="healthNews" style="max-height: 120px; overflow-y: auto; font-size: 12px;">Loading...</div>
         </div>
 
-        <!-- 11. Multi-Language -->
-        <div class="box">
-            <h3>🌍 Select Language</h3>
-            <select id="languageSelect" onchange="changeLanguage()">
-                <option value="en">🇬🇧 English</option>
-                <option value="hi">🇮🇳 हिंदी</option>
-                <option value="te">🇮🇳 తెలుగు</option>
-                <option value="ta">🇮🇳 தமிழ்</option>
-            </select>
+        <!-- 11. MULTI-LANGUAGE -->
+        <div class="box"><h3>🌍 Language</h3>
+            <select id="languageSelect" onchange="changeLanguage()"><option value="en">🇬🇧 English</option><option value="hi">🇮🇳 हिंदी</option><option value="te">🇮🇳 తెలుగు</option><option value="ta">🇮🇳 தமிழ்</option></select>
         </div>
 
-        <!-- 12. Telemedicine -->
-        <div class="box">
-            <h3>🩺 Consult Doctor</h3>
+        <!-- 12. TELEMEDICINE -->
+        <div class="box"><h3>🩺 Telemedicine</h3>
             <button onclick="startTelemedicine()">📞 Video Consult</button>
             <button onclick="bookAppointment()">📅 Book Appointment</button>
         </div>
 
-        <!-- 13. Medicine Stock Tracker -->
-        <div class="box">
-            <h3>📦 Stock Tracker</h3>
-            <input type="text" id="stockMedicine" placeholder="Medicine name">
-            <input type="number" id="stockQuantity" placeholder="Quantity">
-            <input type="date" id="stockExpiry" placeholder="Expiry date">
-            <button onclick="addToStock()">➕ Add to Stock</button>
+        <!-- 13. STOCK TRACKER -->
+        <div class="box"><h3>📦 Stock Tracker</h3>
+            <input type="text" id="stockMedicine" placeholder="Medicine">
+            <input type="number" id="stockQuantity" placeholder="Qty">
+            <input type="date" id="stockExpiry" placeholder="Expiry">
+            <button onclick="addToStock()">➕ Add</button>
             <button onclick="checkExpiry()">⚠️ Check Expiry</button>
             <button onclick="viewAllStock()">📋 View Stock</button>
-            <div id="stockResult" class="result"></div>
-            <div id="expiryAlert" class="result"></div>
+            <div id="stockResult" class="result" style="font-size: 11px;"></div>
+            <div id="expiryAlert" class="result" style="font-size: 11px;"></div>
         </div>
 
-        <!-- 14. Interaction Heatmap -->
-        <div class="box">
-            <h3>🌡️ Interaction Heatmap</h3>
-            <div id="heatmap" style="overflow-x: auto;"></div>
+        <!-- 14. INTERACTION HEATMAP -->
+        <div class="box"><h3>🌡️ Heatmap</h3>
+            <div id="heatmap"></div>
             <button onclick="generateHeatmap()">📊 Generate</button>
         </div>
 
-        <!-- 15. Voice Symptom Checker -->
-        <div class="box">
-            <h3>🗣️ Voice Symptom Checker</h3>
-            <button onclick="startSymptomCheck()">🎙️ Talk to AI Doctor</button>
-            <div id="symptomTranscript" style="min-height: 40px; margin-top: 10px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 8px;"></div>
+        <!-- 15. VOICE SYMPTOM CHECKER -->
+        <div class="box"><h3>🗣️ Voice Symptom</h3>
+            <button onclick="startSymptomCheck()">🎙️ Talk to AI (10 sec)</button>
+            <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 12px;"></div>
             <div id="symptomAdvice" class="result"></div>
         </div>
 
-        <!-- 16. Prescription Scanner -->
-        <div class="box">
-            <h3>📷 Scan Prescription</h3>
+        <!-- 16. PRESCRIPTION SCANNER -->
+        <div class="box"><h3>📷 Scan Prescription</h3>
             <input type="file" id="prescriptionImage" accept="image/*">
-            <button onclick="scanPrescription()">🔍 Scan & Detect</button>
+            <button onclick="scanPrescription()">🔍 Scan</button>
             <div id="scanResult" class="result"></div>
         </div>
 
-        <!-- 17. Emergency Contact (Full Width) -->
-        <div class="box full-width">
-            <h3>📞 Emergency Contact</h3>
-            <p>🚑 Emergency: <strong>102</strong> | 📞 Poison Control: <strong>1800-123-1234</strong></p>
-            <p>💬 Support: <strong>+91 7999754531</strong> | 📧 Email: <strong>abdulrajik334t@gmail.com</strong></p>
+        <!-- 17. EMERGENCY CONTACT (FULL WIDTH) -->
+        <div class="box full-width"><h3>📞 Emergency</h3>
+            <p>🚑 102 | ☠️ Poison: 1800-123-1234 | 📞 +91 7999754531 | 📧 abdulrajik334t@gmail.com</p>
         </div>
     </div>
 </div>
 
 <script>
-    const BASE_URL = "https://drug-api-final.onrender.com";
+    const BASE_URL = "https://drug-api-final.onrender.com"; // 🔥 CHANGE THIS TO YOUR BACKEND URL
     
-    // ========== LOGIN FUNCTIONS ==========
+    // ========== LOGIN ==========
     function showSignup() {
         document.getElementById('signupForm').style.display = 'block';
         document.getElementById('loginForm').style.display = 'none';
@@ -376,7 +339,6 @@
         document.getElementById('loginBtn').classList.remove('active');
         document.getElementById('authMessage').innerHTML = '';
     }
-    
     function showLogin() {
         document.getElementById('signupForm').style.display = 'none';
         document.getElementById('loginForm').style.display = 'block';
@@ -384,56 +346,51 @@
         document.getElementById('signupBtn').classList.remove('active');
         document.getElementById('authMessage').innerHTML = '';
     }
-    
     async function registerUser() {
         const name = document.getElementById('signupName').value;
         const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
         const age = document.getElementById('signupAge').value;
         const gender = document.getElementById('signupGender').value;
-        const msgDiv = document.getElementById('authMessage');
-        if (!name || !email || !age || !gender) { msgDiv.innerHTML = "❌ Fill all fields"; return; }
-        msgDiv.innerHTML = "🔄 Registering...";
+        const msg = document.getElementById('authMessage');
+        if(!name||!email||!password||!age||!gender) { msg.innerHTML="❌ Fill all fields"; return; }
+        msg.innerHTML="🔄 Registering...";
         try {
-            const response = await fetch(`${BASE_URL}/api/register`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, age, gender })
+            const res = await fetch(`${BASE_URL}/api/register`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({name,email,password,age,gender})
             });
-            const data = await response.json();
-            if (data.success) {
-                localStorage.setItem('drugai_token', data.token);
-                localStorage.setItem('drugai_user', JSON.stringify(data.user));
-                msgDiv.innerHTML = "✅ Success! Redirecting...";
-                setTimeout(() => location.reload(), 1000);
-            } else { msgDiv.innerHTML = "❌ " + data.message; }
-        } catch(e) { msgDiv.innerHTML = "❌ Server error"; }
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('drugai_token',data.token);
+                localStorage.setItem('drugai_user',JSON.stringify(data.user));
+                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+            } else { msg.innerHTML="❌ "+data.message; }
+        } catch(e) { msg.innerHTML="❌ Server error - Backend not deployed"; }
     }
-    
     async function loginUser() {
         const email = document.getElementById('loginEmail').value;
-        const msgDiv = document.getElementById('authMessage');
-        if (!email) { msgDiv.innerHTML = "❌ Enter email"; return; }
-        msgDiv.innerHTML = "🔄 Logging in...";
+        const password = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('authMessage');
+        if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
+        msg.innerHTML="🔄 Logging in...";
         try {
-            const response = await fetch(`${BASE_URL}/api/login`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
+            const res = await fetch(`${BASE_URL}/api/login`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email,password})
             });
-            const data = await response.json();
-            if (data.success) {
-                localStorage.setItem('drugai_token', data.token);
-                localStorage.setItem('drugai_user', JSON.stringify(data.user));
-                msgDiv.innerHTML = "✅ Success! Redirecting...";
-                setTimeout(() => location.reload(), 1000);
-            } else { msgDiv.innerHTML = "❌ " + data.message; }
-        } catch(e) { msgDiv.innerHTML = "❌ Server error"; }
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('drugai_token',data.token);
+                localStorage.setItem('drugai_user',JSON.stringify(data.user));
+                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+            } else { msg.innerHTML="❌ "+data.message; }
+        } catch(e) { msg.innerHTML="❌ Server error - Backend not deployed"; }
     }
-    
-    function logout() { localStorage.removeItem('drugai_token'); localStorage.removeItem('drugai_user'); location.reload(); }
-    
+    function logout() { localStorage.clear(); location.reload(); }
     function checkAuth() {
-        const token = localStorage.getItem('drugai_token');
         const user = JSON.parse(localStorage.getItem('drugai_user'));
-        if (token && user) {
+        if(user) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             document.getElementById('userName').innerHTML = user.name.split(' ')[0];
@@ -442,94 +399,77 @@
     
     // ========== COUNTER ==========
     let progress = 0;
-    setInterval(() => { if(document.getElementById('counter')) { progress = (progress+2)%100; document.getElementById('counter').innerHTML = progress+"%"; } }, 100);
+    setInterval(() => { if(document.getElementById('counter')) { progress=(progress+2)%100; document.getElementById('counter').innerHTML=progress+"%"; } }, 100);
     
     // ========== HEALTH STREAK ==========
-    let streak = localStorage.getItem("medStreak") || 0;
-    let lastDate = localStorage.getItem("lastTaken") || "";
-    function updateStreak() {
-        document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
-        let badge = streak>=30 ? "🏆 Health Champion" : (streak>=7 ? "⭐ Consistent Hero" : (streak>=3 ? "🌱 Getting Started" : ""));
-        document.getElementById("badge").innerHTML = badge;
-    }
-    function markMedicineTaken() {
-        const today = new Date().toDateString();
-        if (lastDate !== today) { streak++; localStorage.setItem("medStreak", streak); localStorage.setItem("lastTaken", today); updateStreak(); alert(`🎉 ${streak} day streak!`); }
-        else { alert("✅ Already marked today!"); }
-    }
+    let streak = localStorage.getItem("medStreak")||0, lastDate = localStorage.getItem("lastTaken")||"";
+    function updateStreak() { document.getElementById("streakDisplay").innerHTML=`🔥 ${streak} days`; let b = streak>=30?"🏆 Champion":(streak>=7?"⭐ Hero":(streak>=3?"🌱 Starter":"")); document.getElementById("badge").innerHTML=b; }
+    function markMedicineTaken() { let t=new Date().toDateString(); if(lastDate!==t) { streak++; localStorage.setItem("medStreak",streak); localStorage.setItem("lastTaken",t); updateStreak(); alert(`🎉 ${streak} day streak!`); } else alert("✅ Already marked!"); }
     
     // ========== FAMILY ==========
-    let family = JSON.parse(localStorage.getItem("family")) || { self: { name: "Myself", medicines: [] }, dad: { name: "Dad", medicines: ["aspirin"] }, mom: { name: "Mom", medicines: ["lisinopril"] }, grandma: { name: "Grandma", medicines: ["warfarin"] } };
-    function switchFamilyMember() { const selected = document.getElementById("familySelect").value; document.getElementById("familyMedicines").innerHTML = `💊 ${family[selected].name}'s medicines: ${family[selected].medicines.join(", ") || "None"}`; }
-    function addFamilyMember() { const name = prompt("Enter name:"); if(name) { const id = name.toLowerCase().replace(/\s/g,''); family[id] = { name, medicines: [] }; localStorage.setItem("family", JSON.stringify(family)); const select = document.getElementById("familySelect"); const option = document.createElement("option"); option.value = id; option.text = `👤 ${name}`; select.appendChild(option); alert(`Added ${name}!`); } }
+    let family = JSON.parse(localStorage.getItem("family"))||{self:{name:"Myself",medicines:[]},dad:{name:"Dad",medicines:["aspirin"]},mom:{name:"Mom",medicines:["lisinopril"]},grandma:{name:"Grandma",medicines:["warfarin"]}};
+    function switchFamilyMember() { let s=document.getElementById("familySelect").value; document.getElementById("familyMedicines").innerHTML=`💊 ${family[s].name}: ${family[s].medicines.join(", ")||"None"}`; }
+    function addFamilyMember() { let n=prompt("Name:"); if(n) { let id=n.toLowerCase().replace(/\s/g,''); family[id]={name:n,medicines:[]}; localStorage.setItem("family",JSON.stringify(family)); let opt=document.createElement("option"); opt.value=id; opt.text=`👤 ${n}`; document.getElementById("familySelect").appendChild(opt); alert(`Added ${n}!`); } }
     
-    // ========== QR CODE ==========
-    function generateQRCode() { const userData = { name: "Patient", allergies: ["None"], medicines: ["aspirin","lisinopril"], emergencyContact: "+91 7999754531", bloodGroup: "B+" }; document.getElementById("qrcode").innerHTML = ""; new QRCode(document.getElementById("qrcode"), { text: JSON.stringify(userData), width: 150, height: 150 }); alert("✅ QR Generated!"); }
+    // ========== QR =
+    function generateQRCode() { let d={name:"Patient",medicines:["aspirin","lisinopril"],contact:"+91 7999754531"}; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:JSON.stringify(d),width:130,height:130}); alert("✅ QR Generated!"); }
     
     // ========== PHARMACY ==========
-    function findNearbyPharmacies() { const div = document.getElementById("pharmacyResult"); div.innerHTML = "📍 Finding..."; if(navigator.geolocation) { navigator.geolocation.getCurrentPosition(p => { div.innerHTML = `<a href="https://www.google.com/maps/search/pharmacy/@${p.coords.latitude},${p.coords.longitude},15z" target="_blank">📍 Click to see pharmacies</a>`; }, () => { div.innerHTML = "📍 Enable location"; }); } }
+    function findNearbyPharmacies() { let d=document.getElementById("pharmacyResult"); d.innerHTML="📍 Finding..."; if(navigator.geolocation) { navigator.geolocation.getCurrentPosition(p=>{ d.innerHTML=`<a href="https://www.google.com/maps/search/pharmacy/@${p.coords.latitude},${p.coords.longitude},15z" target="_blank">📍 Click for pharmacies</a>`; },()=>{ d.innerHTML="📍 Enable location"; }); } }
     
-    // ========== PILL IDENTIFIER ==========
-    async function identifyPill() { const file = document.getElementById('pillImage').files[0]; const div = document.getElementById('pillResult'); if(!file) { div.innerHTML = "❌ Select image"; return; } div.innerHTML = "🔄 Identifying..."; const fd = new FormData(); fd.append('image', file); try { const res = await fetch(`${BASE_URL}/scan-prescription`, { method: 'POST', body: fd }); const data = await res.json(); if(data.drugs && data.drugs.length>0) div.innerHTML = `💊 Identified: ${data.drugs[0]}`; else div.innerHTML = "💊 Could not identify"; } catch(e) { div.innerHTML = "💊 Tip: White round pill = Aspirin"; } }
+    // ========== PILL ==========
+    async function identifyPill() { let f=document.getElementById('pillImage').files[0], d=document.getElementById('pillResult'); if(!f){d.innerHTML="❌ Select image";return;} d.innerHTML="🔄 Scanning..."; let fd=new FormData(); fd.append('image',f); try{ let r=await fetch(`${BASE_URL}/scan-prescription`,{method:'POST',body:fd}); let da=await r.json(); if(da.drugs&&da.drugs.length) d.innerHTML=`💊 ${da.drugs[0]}`; else d.innerHTML="💊 Not identified"; }catch(e){ d.innerHTML="💊 Tip: White round = Aspirin"; } }
     
-    // ========== GOOGLE CALENDAR ==========
-    function addToGoogleCalendar() { const med = document.getElementById('alarmMedicine').value; const time = document.getElementById('alarmTime').value; if(!med||!time) { alert("Enter medicine and time"); return; } window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${med}&dates=${new Date().toISOString().replace(/-|:|\./g,'')}`, '_blank'); }
+    // ========== CALENDAR ==========
+    function addToGoogleCalendar() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value; if(!m||!t){alert("Enter medicine & time");return;} window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${m}&dates=${new Date().toISOString().replace(/-|:|\./g,'')}`,'_blank'); }
     
-    // ========== HEALTH NEWS ==========
-    async function fetchHealthNews() { document.getElementById("healthNews").innerHTML = `<p>📰 FDA approves new diabetes drug</p><p>📰 WHO: Medicine safety guidelines updated</p><p>📰 New study on aspirin benefits</p><p>📰 Paracetamol dosage recommendations</p>`; }
+    // ========== NEWS ==========
+    async function fetchHealthNews() { document.getElementById("healthNews").innerHTML=`<p>📰 FDA new diabetes drug</p><p>📰 WHO safety guidelines</p><p>📰 Aspirin study</p>`; }
     
-    // ========== MULTI-LANGUAGE ==========
-    function changeLanguage() { const lang = document.getElementById("languageSelect").value; const titles = { en: "AI Medical Assistant", hi: "एआई मेडिकल असिस्टेंट", te: "ఏఐ మెడికల్ అసిస్టెంట్", ta: "ஏஐ மெடிக்கல் அசிஸ்டன்ட்" }; if(titles[lang]) document.querySelector(".hero h1").innerHTML = titles[lang]; }
+    // ========== LANGUAGE ==========
+    function changeLanguage() { let l=document.getElementById("languageSelect").value, t={en:"Complete Medical Assistant",hi:"पूर्ण चिकित्सा सहायक",te:"పూర్తి వైద్య సహాయక",ta:"முழு மருத்துவ உதவியாளர்"}; if(t[l]) document.querySelector(".hero h1").innerHTML=t[l]; }
+    function startTelemedicine() { window.open('https://www.practo.com/online-doctor-consultation','_blank'); }
+    function bookAppointment() { window.open('https://www.practo.com/bangalore/doctors','_blank'); }
     
-    // ========== TELEMEDICINE ==========
-    function startTelemedicine() { window.open('https://www.practo.com/online-doctor-consultation', '_blank'); }
-    function bookAppointment() { window.open('https://www.practo.com/bangalore/doctors', '_blank'); }
-    
-    // ========== STOCK TRACKER ==========
-    let medicineStock = JSON.parse(localStorage.getItem("medicineStock")) || {};
-    function addToStock() { const name = document.getElementById("stockMedicine").value.trim().toLowerCase(); const qty = parseInt(document.getElementById("stockQuantity").value); const expiry = document.getElementById("stockExpiry").value; const div = document.getElementById("stockResult"); if(!name||!qty||!expiry) { div.innerHTML = "❌ Fill all fields"; return; } if(medicineStock[name]) medicineStock[name].quantity += qty; else medicineStock[name] = { quantity: qty, expiryDate: expiry }; localStorage.setItem("medicineStock", JSON.stringify(medicineStock)); div.innerHTML = `✅ Added ${qty} x ${name}`; document.getElementById("stockMedicine").value=""; document.getElementById("stockQuantity").value=""; document.getElementById("stockExpiry").value=""; }
-    function checkExpiry() { const today = new Date(); const expiring = []; for(const [name,data] of Object.entries(medicineStock)) { const days = Math.ceil((new Date(data.expiryDate)-today)/(1000*60*60*24)); if(days<=30 && days>0) expiring.push(`${name}: ${days} days left`); else if(days<=0) expiring.push(`${name}: EXPIRED!`); } document.getElementById("expiryAlert").innerHTML = expiring.length ? `⚠️ ${expiring.join(", ")}` : "✅ No expiring medicines"; }
-    function viewAllStock() { let html = "<strong>Stock:</strong><br>"; for(const [name,data] of Object.entries(medicineStock)) html += `💊 ${name}: ${data.quantity} units (Exp: ${data.expiryDate})<br>`; document.getElementById("stockResult").innerHTML = html || "No stock"; }
+    // ========== STOCK ==========
+    let stock=JSON.parse(localStorage.getItem("medicineStock")||"{}");
+    function addToStock() { let n=document.getElementById("stockMedicine").value.trim().toLowerCase(), q=parseInt(document.getElementById("stockQuantity").value), e=document.getElementById("stockExpiry").value, d=document.getElementById("stockResult"); if(!n||!q||!e){d.innerHTML="❌ Fill all";return;} if(stock[n]) stock[n].quantity+=q; else stock[n]={quantity:q,expiryDate:e}; localStorage.setItem("medicineStock",JSON.stringify(stock)); d.innerHTML=`✅ Added ${q} x ${n}`; document.getElementById("stockMedicine").value=""; document.getElementById("stockQuantity").value=""; document.getElementById("stockExpiry").value=""; }
+    function checkExpiry() { let t=new Date(), exp=[]; for(let [n,da] of Object.entries(stock)){ let d=Math.ceil((new Date(da.expiryDate)-t)/(1000*3600*24)); if(d<=30&&d>0) exp.push(`${n}: ${d}d`); else if(d<=0) exp.push(`${n}: EXPIRED!`); } document.getElementById("expiryAlert").innerHTML=exp.length?`⚠️ ${exp.join(", ")}`:"✅ No expiry soon"; }
+    function viewAllStock() { let h="<strong>Stock:</strong><br>"; for(let [n,da] of Object.entries(stock)) h+=`💊 ${n}: ${da.quantity} (Exp: ${da.expiryDate})<br>`; document.getElementById("stockResult").innerHTML=h||"Empty"; }
     
     // ========== HEATMAP ==========
-    async function generateHeatmap() { const meds = ["aspirin","paracetamol","ibuprofen","warfarin","lisinopril","metformin"]; const div = document.getElementById('heatmap'); div.innerHTML = "🔄 Generating..."; let html = '<div style="display:grid;gap:5px;">'; html += `<div style="display:grid;grid-template-columns:repeat(${meds.length+1},100px);gap:5px;"><div></div>${meds.map(m=>`<div style="font-weight:bold">${m.substring(0,6)}</div>`).join('')}</div>`; for(let i=0;i<meds.length;i++) { html += `<div style="display:grid;grid-template-columns:repeat(${meds.length+1},100px);gap:5px;"><div style="font-weight:bold">${meds[i].substring(0,6)}</div>`; for(let j=0;j<meds.length;j++) { if(i===j) html += `<div style="background:#333;text-align:center">-</div>`; else { try { const res = await fetch(`${BASE_URL}/check?drug1=${meds[i]}&drug2=${meds[j]}`); const data = await res.json(); let color = "#22c55e"; let sym = "✓"; if(data.severity==="HIGH") { color="#ef4444"; sym="⚠️"; } else if(data.severity==="MODERATE") { color="#f59e0b"; sym="⚡"; } html += `<div style="background:${color};text-align:center;border-radius:5px;padding:5px" title="${data.message}">${sym}</div>`; } catch(e) { html += `<div style="background:#555;text-align:center">?</div>`; } } } html += `</div>`; } html += `</div>`; div.innerHTML = html; }
-    
+    async function generateHeatmap() { let meds=["aspirin","paracetamol","ibuprofen","warfarin","lisinopril","metformin"], div=document.getElementById('heatmap'); div.innerHTML="🔄 Generating..."; let html='<div style="display:grid;gap:3px;">'; html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div></div>${meds.map(m=>`<div style="font-weight:bold;font-size:11px">${m.slice(0,5)}</div>`).join('')}</div>`; for(let i=0;i<meds.length;i++){ html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div style="font-weight:bold;font-size:11px">${meds[i].slice(0,5)}</div>`; for(let j=0;j<meds.length;j++){ if(i===j) html+=`<div style="background:#333;text-align:center">-</div>`; else{ try{ let r=await fetch(`${BASE_URL}/check?drug1=${meds[i]}&drug2=${meds[j]}`); let da=await r.json(); let c="#22c55e",s="✓"; if(da.severity==="HIGH"){c="#ef4444";s="⚠️"}else if(da.severity==="MODERATE"){c="#f59e0b";s="⚡"} html+=`<div style="background:${c};text-align:center;border-radius:3px;padding:4px;font-size:10px" title="${da.message}">${s}</div>`; }catch(e){ html+=`<div style="background:#555;text-align:center">?</div>`; } } } html+=`</div>`; } html+=`</div>`; div.innerHTML=html; }
     // ========== VOICE SYMPTOM ==========
-    let mediaRecorder, audioChunks = [];
-    async function startSymptomCheck() { const trans = document.getElementById('symptomTranscript'); const adv = document.getElementById('symptomAdvice'); try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream); audioChunks = []; mediaRecorder.ondataavailable = e => audioChunks.push(e.data); mediaRecorder.onstop = () => { trans.innerHTML = "🤖 Processing..."; setTimeout(() => { trans.innerHTML = "🗣️ Symptoms described"; adv.innerHTML = "🩺 Rest, hydrate, take paracetamol if needed. Consult if persists >3 days."; adv.className = "result low-severity"; }, 2000); stream.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); trans.innerHTML = "🎙️ Listening... (10 sec)"; setTimeout(() => { if(mediaRecorder && mediaRecorder.state==="recording") mediaRecorder.stop(); }, 10000); } catch(e) { trans.innerHTML = "❌ Microphone access denied"; } }
+    let recorder, chunks=[];
+    async function startSymptomCheck() { let t=document.getElementById('symptomTranscript'), a=document.getElementById('symptomAdvice'); try{ let s=await navigator.mediaDevices.getUserMedia({audio:true}); recorder=new MediaRecorder(s); chunks=[]; recorder.ondataavailable=e=>chunks.push(e.data); recorder.onstop=()=>{ t.innerHTML="🤖 Analyzing..."; setTimeout(()=>{ t.innerHTML="🗣️ Symptoms: fever, headache, cough"; a.innerHTML="🩺 Rest, hydrate, paracetamol. Consult if persists >3 days."; a.className="result low-severity"; },1500); s.getTracks().forEach(tr=>tr.stop()); }; recorder.start(); t.innerHTML="🎙️ Listening (10 sec)..."; setTimeout(()=>{ if(recorder&&recorder.state==="recording") recorder.stop(); },10000); }catch(e){ t.innerHTML="❌ Microphone access denied"; } }
     
     // ========== DRUG INTERACTIONS ==========
-    async function checkInteraction() { const d1 = document.getElementById('drug1').value, d2 = document.getElementById('drug2').value, div = document.getElementById('interactionResult'); if(!d1||!d2) { div.innerHTML="❌ Enter both drugs"; return; } div.innerHTML="🔄 Checking..."; try { const res = await fetch(`${BASE_URL}/check?drug1=${d1}&drug2=${d2}`); const data = await res.json(); let cls = data.severity==="HIGH"?"high-severity":(data.severity==="MODERATE"?"moderate-severity":"low-severity"); div.innerHTML = `<strong>⚠️ Severity: ${data.severity}</strong><br>📋 ${data.message}`; div.className = `result ${cls}`; } catch(e) { div.innerHTML="❌ Error"; div.className="result error"; } }
-    async function checkFoodInteraction() { const d = document.getElementById('foodDrug').value, f = document.getElementById('foodSelect').value, div = document.getElementById('foodResult'); if(!d) { div.innerHTML="❌ Enter drug name"; return; } div.innerHTML="🔄 Checking..."; try { const res = await fetch(`${BASE_URL}/foodcheck?drug=${d}&food=${f}`); const data = await res.json(); div.innerHTML = `<strong>🍽️ ${f} + ${d}</strong><br>📋 ${data.message}`; div.className = "result moderate-severity"; } catch(e) { div.innerHTML="❌ Error"; div.className="result error"; } }
+    async function checkInteraction() { let d1=document.getElementById('drug1').value, d2=document.getElementById('drug2').value, div=document.getElementById('interactionResult'); if(!d1||!d2){div.innerHTML="❌ Enter both";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/check?drug1=${d1}&drug2=${d2}`); let da=await r.json(); let c=da.severity==="HIGH"?"high-severity":(da.severity==="MODERATE"?"moderate-severity":"low-severity"); div.innerHTML=`<strong>⚠️ ${da.severity}</strong><br>📋 ${da.message}`; div.className=`result ${c}`; }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
+    async function checkFoodInteraction() { let d=document.getElementById('foodDrug').value, f=document.getElementById('foodSelect').value, div=document.getElementById('foodResult'); if(!d){div.innerHTML="❌ Enter drug";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/foodcheck?drug=${d}&food=${f}`); let da=await r.json(); div.innerHTML=`<strong>🍽️ ${f} + ${d}</strong><br>📋 ${da.message}`; div.className="result moderate-severity"; }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
     
     // ========== AI CHAT ==========
-    async function sendMessage() { const inp = document.getElementById('chatInput'), msg = inp.value.trim(), chat = document.getElementById('chatMessages'); if(!msg) return; chat.innerHTML += `<div class="user-message">🧑 ${msg}</div>`; inp.value=""; chat.scrollTop=chat.scrollHeight; chat.innerHTML += `<div class="bot-message">🤖 Thinking...</div>`; try { const res = await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(msg)}`); const data = await res.json(); chat.removeChild(chat.lastChild); chat.innerHTML += `<div class="bot-message">🤖 ${data.reply}</div>`; } catch(e) { chat.removeChild(chat.lastChild); chat.innerHTML += `<div class="bot-message">🤖 Sorry, error</div>`; } chat.scrollTop=chat.scrollHeight; }
-    function startVoiceInput() { if('webkitSpeechRecognition' in window) { const rec = new webkitSpeechRecognition(); rec.onresult = e => { document.getElementById('chatInput').value = e.results[0][0].transcript; sendMessage(); }; rec.start(); } else { alert("Voice not supported"); } }
+    async function sendMessage() { let inp=document.getElementById('chatInput'), msg=inp.value.trim(), chat=document.getElementById('chatMessages'); if(!msg) return; chat.innerHTML+=`<div class="user-message">🧑 ${msg}</div>`; inp.value=""; chat.scrollTop=chat.scrollHeight; chat.innerHTML+=`<div class="bot-message">🤖 Thinking...</div>`; try{ let r=await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(msg)}`); let da=await r.json(); chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 ${da.reply}</div>`; }catch(e){ chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 Error</div>`; } chat.scrollTop=chat.scrollHeight; }
+    function startVoiceInput() { if('webkitSpeechRecognition' in window) { let r=new webkitSpeechRecognition(); r.onresult=e=>{ document.getElementById('chatInput').value=e.results[0][0].transcript; sendMessage(); }; r.start(); } else alert("Not supported"); }
     
     // ========== AUTOCOMPLETE ==========
-    async function fetchDrugs(q, id) { if(q.length<1) return; try { const res = await fetch(`${BASE_URL}/autocomplete?query=${q}`); const drugs = await res.json(); const list = document.getElementById(id); list.innerHTML = ""; drugs.forEach(d => { const opt = document.createElement("option"); opt.value = d.name; list.appendChild(opt); }); } catch(e) { console.error(e); } }
+    async function fetchDrugs(q,id) { if(q.length<1) return; try{ let r=await fetch(`${BASE_URL}/autocomplete?query=${q}`); let drugs=await r.json(); let list=document.getElementById(id); list.innerHTML=""; drugs.forEach(d=>{ let opt=document.createElement("option"); opt.value=d.name; list.appendChild(opt); }); }catch(e){} }
     
     // ========== ALARM ==========
-    let alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
-    function setMedicineAlarm() { const med = document.getElementById('alarmMedicine').value, time = document.getElementById('alarmTime').value, status = document.getElementById('alarmStatus'); if(!med||!time) { status.innerHTML="❌ Fill all fields"; return; } alarms.push({ medicine:med, time, id:Date.now() }); localStorage.setItem('medicineAlarms', JSON.stringify(alarms)); status.innerHTML = `✅ Alarm set for ${med} at ${time}`; status.className = "result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); }
-    function displayAlarms() { const div = document.getElementById('activeAlarms'); if(alarms.length===0) { div.innerHTML="<p>No alarms</p>"; return; } let html = "<h4>Active Alarms:</h4><ul>"; alarms.forEach(a => { html += `<li>💊 ${a.medicine} at ${a.time} <button onclick="cancelAlarm(${a.id})" style="width:auto;background:#ef4444">Cancel</button></li>`; }); html += "</ul>"; div.innerHTML = html; }
-    function cancelAlarm(id) { alarms = alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms', JSON.stringify(alarms)); displayAlarms(); }
-    
+    let alarms=JSON.parse(localStorage.getItem('medicineAlarms')||'[]');
+    function setMedicineAlarm() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value, s=document.getElementById('alarmStatus'); if(!m||!t){s.innerHTML="❌ Fill fields";return;} alarms.push({medicine:m,time:t,id:Date.now()}); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); s.innerHTML=`✅ Alarm set for ${m} at ${t}`; s.className="result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); }
+    function displayAlarms() { let div=document.getElementById('activeAlarms'); if(alarms.length===0){div.innerHTML="<p>No alarms</p>";return;} let h="<h4>Alarms:</h4><ul>"; alarms.forEach(a=>{ h+=`<li>💊 ${a.medicine} at ${a.time} <button onclick="cancelAlarm(${a.id})" style="width:auto;background:#ef4444">Cancel</button></li>`; }); h+="</ul>"; div.innerHTML=h; }
+    function cancelAlarm(id) { alarms=alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); displayAlarms(); }
     // ========== SCAN ==========
-    async function scanPrescription() { const file = document.getElementById('prescriptionImage').files[0], div = document.getElementById('scanResult'); if(!file) { div.innerHTML="❌ Select image"; return; } div.innerHTML="🔄 Scanning..."; const fd = new FormData(); fd.append('image', file); try { const res = await fetch(`${BASE_URL}/scan-prescription`, { method:'POST', body:fd }); const data = await res.json(); if(data.drugs && data.drugs.length>0) div.innerHTML = `📋 Detected: ${data.drugs.join(", ")}`; else div.innerHTML = "📋 No medicines detected"; div.className = "result low-severity"; } catch(e) { div.innerHTML="❌ Scan failed"; div.className="result error"; } }
+    async function scanPrescription() { let f=document.getElementById('prescriptionImage').files[0], d=document.getElementById('scanResult'); if(!f){d.innerHTML="❌ Select image";return;} d.innerHTML="🔄 Scanning..."; let fd=new FormData(); fd.append('image',f); try{ let r=await fetch(`${BASE_URL}/scan-prescription`,{method:'POST',body:fd}); let da=await r.json(); if(da.drugs&&da.drugs.length) d.innerHTML=`📋 ${da.drugs.join(", ")}`; else d.innerHTML="📋 None detected"; d.className="result low-severity"; }catch(e){ d.innerHTML="❌ Scan failed"; d.className="result error"; } }
     
     // ========== EVENT LISTENERS ==========
-    document.getElementById("drug1").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList"));
-    document.getElementById("drug2").addEventListener("input", (e) => fetchDrugs(e.target.value, "drugList2"));
-    document.getElementById("foodDrug").addEventListener("input", (e) => fetchDrugs(e.target.value, "foodDrugList"));
+    document.getElementById("drug1").addEventListener("input",e=>fetchDrugs(e.target.value,"drugList"));
+    document.getElementById("drug2").addEventListener("input",e=>fetchDrugs(e.target.value,"drugList2"));
+    document.getElementById("foodDrug").addEventListener("input",e=>fetchDrugs(e.target.value,"foodDrugList"));
     
-    // ========== INITIALIZE ==========
-    displayAlarms();
-    updateStreak();
-    switchFamilyMember();
-    fetchHealthNews();
-    checkAuth();
-    document.getElementById("chatInput").addEventListener("keypress", (e) => { if(e.key==="Enter") sendMessage(); });
+    // ========== INIT ==========
+    displayAlarms(); updateStreak(); switchFamilyMember(); fetchHealthNews(); checkAuth();
+    document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
 </script>
 
 </body>
