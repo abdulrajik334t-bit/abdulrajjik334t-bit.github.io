@@ -1,0 +1,15 @@
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  minify = false
+  bundle = false
+
+[build.processing.js]
+  minify = false
+  bundle = false
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "index, follow"
