@@ -215,6 +215,7 @@
             <div id="streakDisplay" style="font-size: 40px; text-align: center;">0 days</div>
             <button onclick="markMedicineTaken()">✅ I took my medicine</button>
             <div id="badge" style="text-align: center; margin-top: 8px;"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 2. FAMILY MEMBERS -->
@@ -230,6 +231,7 @@
             <input type="text" id="drug2" placeholder="Second drug" list="drugList2"><datalist id="drugList2"></datalist>
             <button onclick="checkInteraction()">🔍 Check Interaction</button>
             <div id="interactionResult" class="result"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 4. DRUG-FOOD INTERACTION -->
@@ -238,12 +240,14 @@
             <select id="foodSelect"><option value="grapefruit">🍊 Grapefruit</option><option value="alcohol">🍺 Alcohol</option><option value="dairy">🥛 Dairy</option></select>
             <button onclick="checkFoodInteraction()">🍽️ Check</button>
             <div id="foodResult" class="result"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 5. AI CHATBOT -->
         <div class="box"><h3>🤖 AI Doctor</h3>
             <div class="chat-messages" id="chatMessages"><p>🤖 Ask me anything about medicines!</p></div>
             <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage()">Send</button><button onclick="startVoiceInput()">🎤</button></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 6. MEDICINE ALARM -->
@@ -255,6 +259,7 @@
             <button onclick="addToGoogleCalendar()">📅 Add to Calendar</button>
             <div id="alarmStatus" class="result"></div>
             <div id="activeAlarms" style="font-size: 12px;"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 7. PILL IDENTIFIER -->
@@ -262,6 +267,7 @@
             <input type="file" id="pillImage" accept="image/*">
             <button onclick="identifyPill()">🔍 Identify</button>
             <div id="pillResult" class="result"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 8. QR EMERGENCY CARD -->
@@ -303,12 +309,14 @@
             <button onclick="viewAllStock()">📋 View Stock</button>
             <div id="stockResult" class="result" style="font-size: 11px;"></div>
             <div id="expiryAlert" class="result" style="font-size: 11px;"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 14. INTERACTION HEATMAP -->
         <div class="box"><h3>🌡️ Heatmap</h3>
             <div id="heatmap"></div>
             <button onclick="generateHeatmap()">📊 Generate</button>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 15. VOICE SYMPTOM CHECKER -->
@@ -316,6 +324,7 @@
             <button onclick="startSymptomCheck()">🎙️ Talk to AI (10 sec)</button>
             <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 12px;"></div>
             <div id="symptomAdvice" class="result"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 16. PRESCRIPTION SCANNER -->
@@ -323,6 +332,7 @@
             <input type="file" id="prescriptionImage" accept="image/*">
             <button onclick="scanPrescription()">🔍 Scan</button>
             <div id="scanResult" class="result"></div>
+            <button onclick="clearBox(this)" style="background: #ef4444; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 17. EMERGENCY CONTACT (FULL WIDTH) -->
@@ -474,6 +484,63 @@
     // ========== INIT ==========
     displayAlarms(); updateStreak(); switchFamilyMember(); fetchHealthNews(); checkAuth();
     document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
+    // ========== FORGOT PASSWORD ==========
+function forgotPassword() {
+    const email = prompt("Enter your registered email address:");
+    if (email && email.includes('@')) {
+        // Check if email exists in registered users
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const userExists = users.find(u => u.email === email);
+        
+        if (userExists) {
+            // In a real app, send reset link to email
+            alert(`Password reset link sent to ${email}\n\nDemo: Your password is still the same. In production, this would send a real email.`);
+        } else {
+            alert("Email not found. Please sign up first.");
+        }
+    } else if (email) {
+        alert("Please enter a valid email address.");
+    }
+}
+
+// ========== CLEAR BOX FUNCTION ==========
+function clearBox(button) {
+    // Get the parent box
+    const box = button.closest('.box');
+    
+    // Find all input fields in this box
+    const inputs = box.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'text' || input.type === 'number' || input.type === 'email' || input.type === 'password') {
+            input.value = '';
+        } else if (input.type === 'file') {
+            input.value = '';
+        } else if (input.tagName === 'SELECT') {
+            input.selectedIndex = 0;
+        } else if (input.type === 'date') {
+            input.value = '';
+        } else if (input.type === 'time') {
+            input.value = '';
+        }
+    });
+    
+    // Clear result divs in this box
+    const resultDivs = box.querySelectorAll('.result');
+    resultDivs.forEach(div => {
+        div.innerHTML = '';
+        div.className = 'result';
+    });
+    
+    // Show confirmation
+    const clearMsg = document.createElement('div');
+    clearMsg.innerHTML = '✅ Cleared!';
+    clearMsg.style.cssText = 'color: #22c55e; font-size: 12px; margin-top: 5px; text-align: center;';
+    box.appendChild(clearMsg);
+    
+    setTimeout(() => {
+        clearMsg.remove();
+    }, 1500);
+}
 </script>
 
 </body>
