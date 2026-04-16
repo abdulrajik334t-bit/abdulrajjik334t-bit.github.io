@@ -413,3 +413,59 @@ button:active {
     display: flex;
     flex-direction: column;
 }
+/* ========== 3D EFFECTS ========== */
+
+/* 3D Boxes */
+.box {
+    transform-style: preserve-3d;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 20px 30px -15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateY(-10px);
+    box-shadow: 0 30px 40px -20px rgba(0,0,0,0.4);
+    border-color: rgba(56,189,248,0.6);
+}
+
+/* 3D Buttons */
+button {
+    background: linear-gradient(145deg, #38bdf8, #1e4a76);
+    box-shadow: 0 6px 0 #0f2c44;
+    transition: all 0.1s ease;
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #0f2c44;
+}
+
+/* 3D Login Box */
+.login-box {
+    transform: perspective(1000px) rotateX(2deg);
+    box-shadow: 0 25px 40px -15px rgba(0,0,0,0.4);
+}
+
+/* Floating 3D Animation */
+@keyframes float3D {
+    0% { transform: translateY(0px) rotateX(0deg); }
+    50% { transform: translateY(-15px) rotateX(5deg); }
+    100% { transform: translateY(0px) rotateX(0deg); }
+}
+
+.logo, .hero h1 {
+    animation: float3D 4s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* 3D Glowing Border */
+@keyframes border3DGlow {
+    0% { box-shadow: 0 0 5px rgba(56,189,248,0.3), 0 0 0 0 rgba(56,189,248,0.2); }
+    50% { box-shadow: 0 0 20px rgba(56,189,248,0.6), 0 0 0 10px rgba(56,189,248,0); }
+    100% { box-shadow: 0 0 5px rgba(56,189,248,0.3), 0 0 0 0 rgba(56,189,248,0); }
+}
+
+.box:focus-within {
+    animation: border3DGlow 2s ease-in-out infinite;
+}
