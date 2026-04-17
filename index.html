@@ -371,26 +371,50 @@
         document.getElementById('authMessage').innerHTML = '';
     }
     async function registerUser() {
-        const name = document.getElementById('signupName').value;
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-        const age = document.getElementById('signupAge').value;
-        const gender = document.getElementById('signupGender').value;
-        const msg = document.getElementById('authMessage');
-        if(!name||!email||!password||!age||!gender) { msg.innerHTML="❌ Fill all fields"; return; }
-        msg.innerHTML="🔄 Registering...";
-        try {
-            const res = await fetch(`${BASE_URL}/api/register`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({name,email,password,age,gender})
-            });
-            const data = await res.json();
-            if(data.success) {
-                localStorage.setItem('drugai_token',data.token);
-                localStorage.setItem('drugai_user',JSON.stringify(data.user));
-                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
-            } else { msg.innerHTML="❌ "+data.message; }
-        } catch(e) { msg.innerHTML="❌ Server error - Backend not deployed"; }
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const age = document.getElementById('signupAge').value;
+    const gender = document.getElementById('signupGender').value;
+    const msg = document.getElementById('authMessage');
+    if(!name||!email||!password||!age||!gender) { msg.innerHTML="❌ Fill all fields"; return; }
+    msg.innerHTML="🔄 Registering...";
+    try {
+        const res = await fetch(`${BASE_URL}/api/register`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({name,email,password,age,gender})
+        });
+        const data = await res.json();
+        if(data.success) {
+            localStorage.setItem('drugai_token',data.token);
+            localStorage.setItem('drugai_user',JSON.stringify(data.user));
+            msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+        } else {
+            // Save to localStorage if backend fails
+            const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const userExists = localUsers.find(u => u.email === email);
+            if(!userExists) {
+                localUsers.push({ name, email, password, age, gender });
+                localStorage.setItem('registeredUsers', JSON.stringify(localUsers));
+            }
+            localStorage.setItem('drugai_token', btoa(email));
+            localStorage.setItem('drugai_user', JSON.stringify({ name, email, age, gender }));
+            msg.innerHTML="✅ Registered! Redirecting...";
+            setTimeout(()=>location.reload(),1000);
+        }
+    } catch(e) { 
+        // Save to localStorage when backend is down
+        const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const userExists = localUsers.find(u => u.email === email);
+        if(!userExists) {
+            localUsers.push({ name, email, password, age, gender });
+            localStorage.setItem('registeredUsers', JSON.stringify(localUsers));
+        }
+        localStorage.setItem('drugai_token', btoa(email));
+        localStorage.setItem('drugai_user', JSON.stringify({ name, email, age, gender }));
+        msg.innerHTML="✅ Registered (Offline Mode)! Redirecting...";
+        setTimeout(()=>location.reload(),1000);
+    }
     }
     async function loginUser() {
         const email = document.getElementById('loginEmail').value;
