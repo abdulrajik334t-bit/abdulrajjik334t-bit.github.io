@@ -417,23 +417,45 @@
     }
     }
     async function loginUser() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const msg = document.getElementById('authMessage');
-        if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
-        msg.innerHTML="🔄 Logging in...";
-        try {
-            const res = await fetch(`${BASE_URL}/api/login`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({email,password})
-            });
-            const data = await res.json();
-            if(data.success) {
-                localStorage.setItem('drugai_token',data.token);
-                localStorage.setItem('drugai_user',JSON.stringify(data.user));
-                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
-            } else { msg.innerHTML="❌ "+data.message; }
-        } catch(e) { msg.innerHTML="❌ Server error - Backend not deployed"; }
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const msg = document.getElementById('authMessage');
+    if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
+    msg.innerHTML="🔄 Logging in...";
+    try {
+        const res = await fetch(`${BASE_URL}/api/login`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email,password})
+        });
+        const data = await res.json();
+        if(data.success) {
+            localStorage.setItem('drugai_token',data.token);
+            localStorage.setItem('drugai_user',JSON.stringify(data.user));
+            msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+        } else {
+            // Check in localStorage if backend fails
+            const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const localUser = localUsers.find(u => u.email === email && u.password === password);
+            if(localUser) {
+                localStorage.setItem('drugai_token', btoa(email));
+                localStorage.setItem('drugai_user', JSON.stringify({ name: localUser.name, email: localUser.email, age: localUser.age, gender: localUser.gender }));
+                msg.innerHTML="✅ Success! (Offline Mode)"; setTimeout(()=>location.reload(),1000);
+            } else {
+                msg.innerHTML="❌ " + data.message;
+            }
+        }
+    } catch(e) { 
+        // Check in localStorage when backend is down
+        const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const localUser = localUsers.find(u => u.email === email && u.password === password);
+        if(localUser) {
+            localStorage.setItem('drugai_token', btoa(email));
+            localStorage.setItem('drugai_user', JSON.stringify({ name: localUser.name, email: localUser.email, age: localUser.age, gender: localUser.gender }));
+            msg.innerHTML="✅ Success! (Offline Mode)"; setTimeout(()=>location.reload(),1000);
+        } else {
+            msg.innerHTML="❌ Email not registered. Please sign up first.";
+        }
+    }
     }
     function logout() { localStorage.clear(); location.reload(); }
     function checkAuth() {
