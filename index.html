@@ -540,6 +540,74 @@ function clearBox(button) {
         div.innerHTML = '';
         div.className = 'result';
     });
+    // ========== SIDE PANEL HEALTH NEWS ==========
+let isSidebarCollapsed = false;
+
+function toggleNewsSidebar() {
+    const sidebar = document.getElementById('newsSidebar');
+    const btn = document.querySelector('.toggle-btn');
+    
+    isSidebarCollapsed = !isSidebarCollapsed;
+    
+    if (isSidebarCollapsed) {
+        sidebar.classList.add('collapsed');
+        btn.innerHTML = '▶';
+    } else {
+        sidebar.classList.remove('collapsed');
+        btn.innerHTML = '◀';
+    }
+}
+
+async function fetchSideNews() {
+    const newsDiv = document.getElementById('sideNewsList');
+    newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/health-news`);
+        const data = await response.json();
+        
+        if (data.success && data.news && data.news.length > 0) {
+            let html = '';
+            data.news.forEach(news => {
+                let timeAgo = '';
+                if (news.publishedAt) {
+                    const pubDate = new Date(news.publishedAt);
+                    const now = new Date();
+                    const diffHours = Math.floor((now - pubDate) / (1000 * 60 * 60));
+                    if (diffHours < 1) timeAgo = 'Just now';
+                    else if (diffHours < 24) timeAgo = `${diffHours} hours ago`;
+                    else timeAgo = `${Math.floor(diffHours / 24)} days ago`;
+                }
+                
+                html += `
+                    <div class="news-item" onclick="openNewsLink('${news.url}')">
+                        <div class="news-title">${news.title.substring(0, 80)}${news.title.length > 80 ? '...' : ''}</div>
+                        <div class="news-source">
+                            <span>📌 ${news.source}</span>
+                            <span class="news-time">${timeAgo || 'Recently'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            newsDiv.innerHTML = html;
+        } else {
+            newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>';
+        }
+    } catch (error) {
+        newsDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
+    }
+}
+
+function openNewsLink(url) {
+    if (url && url !== '#') {
+        window.open(url, '_blank');
+    }
+}
+
+// Auto-refresh news every 30 minutes
+setInterval(() => {
+    fetchSideNews();
+}, 30 * 60 * 1000);
     
     // Show confirmation
     const clearMsg = document.createElement('div');
