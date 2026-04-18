@@ -197,13 +197,16 @@
 <div class="news-sidebar" id="newsSidebar">
     <div class="news-header">
         <h3>📰 Health News</h3>
-        <button class="toggle-btn" onclick="toggleNewsSidebar()">◀</button>
+        <div>
+            <button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; margin-right: 5px;">🔄</button>
+            <button class="toggle-btn" onclick="toggleNewsSidebar()">◀</button>
+        </div>
     </div>
     <div id="sideNewsList">
         <div class="loading-news">🔄 Loading latest health news...</div>
     </div>
 </div>
-
+    
 <!-- MAIN APP - 17 FEATURES -->
 <div id="appContainer" class="app-container">
     <div class="navbar">
@@ -604,7 +607,6 @@ function toggleNewsSidebar() {
         btn.innerHTML = '◀';
     }
 }
-
 async function fetchSideNews() {
     const newsDiv = document.getElementById('sideNewsList');
     newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
@@ -644,6 +646,7 @@ async function fetchSideNews() {
         newsDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
     }
 }
+
 
 function openNewsLink(url) {
     if (url && url !== '#') {
