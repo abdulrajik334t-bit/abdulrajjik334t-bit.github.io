@@ -260,7 +260,7 @@
         <!-- 5. AI CHATBOT -->
         <div class="box"><h3>🤖 AI Doctor</h3>
             <div class="chat-messages" id="chatMessages"><p>🤖 Ask me anything about medicines!</p></div>
-            <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage()">Send</button><button onclick="startVoiceInput()">🎤</button></div>
+            <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage(); blinkElement('chatMessages')">Send</button><button onclick="startVoiceInput()">🎤</button></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
@@ -279,7 +279,7 @@
         <!-- 7. PILL IDENTIFIER -->
         <div class="box"><h3>💊 Pill Identifier</h3>
             <input type="file" id="pillImage" accept="image/*">
-            <button onclick="identifyPill()">🔍 Identify</button>
+            <button onclick="identifyPill(); blinkElement('pillResult')">🔍 Identify</button>
             <div id="pillResult" class="result"></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
@@ -329,13 +329,13 @@
         <!-- 14. INTERACTION HEATMAP -->
         <div class="box"><h3>🌡️ Heatmap</h3>
             <div id="heatmap"></div>
-            <button onclick="generateHeatmap()">📊 Generate</button>
+            <button onclick="generateHeatmap(); blinkElement('heatmap')">📊 Generate</button>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <!-- 15. VOICE SYMPTOM CHECKER -->
         <div class="box"><h3>🗣️ Voice Symptom</h3>
-            <button onclick="startSymptomCheck()">🎙️ Talk to AI (10 sec)</button>
+            <button onclick="startSymptomCheck(); blinkElement('symptomAdvice')">🎙️ Talk to AI (10 sec)</button>
             <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 12px;"></div>
             <div id="symptomAdvice" class="result"></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
@@ -344,7 +344,7 @@
         <!-- 16. PRESCRIPTION SCANNER -->
         <div class="box"><h3>📷 Scan Prescription</h3>
             <input type="file" id="prescriptionImage" accept="image/*">
-            <button onclick="scanPrescription()">🔍 Scan</button>
+            <button onclick="scanPrescription(); blinkElement('scanResult')">🔍 Scan</button>
             <div id="scanResult" class="result"></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
