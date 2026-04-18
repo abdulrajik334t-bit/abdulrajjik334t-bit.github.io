@@ -185,6 +185,7 @@
             <input type="email" id="loginEmail" placeholder="Email Address">
             <input type="password" id="loginPassword" placeholder="Password">
             <button onclick="loginUser()">Login & Continue</button>
+
         </div>
         <div style="text-align: right; margin-top: -10px; margin-bottom: 10px;">
     <a href="#" onclick="forgotPassword()" style="color: #38bdf8; font-size: 12px; text-decoration: none;">Forgot Password?</a>
@@ -242,7 +243,7 @@
         <div class="box"><h3>💊 Drug-Drug Interaction</h3>
             <input type="text" id="drug1" placeholder="First drug" list="drugList"><datalist id="drugList"></datalist>
             <input type="text" id="drug2" placeholder="Second drug" list="drugList2"><datalist id="drugList2"></datalist>
-            <button onclick="checkInteraction()">🔍 Check Interaction</button>
+            <button onclick="checkInteraction(); blinkElement('interactionResult')">🔍 Check Interaction</button>
             <div id="interactionResult" class="result"></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
@@ -251,7 +252,7 @@
         <div class="box"><h3>🍎 Drug-Food</h3>
             <input type="text" id="foodDrug" placeholder="Drug name" list="foodDrugList"><datalist id="foodDrugList"></datalist>
             <select id="foodSelect"><option value="grapefruit">🍊 Grapefruit</option><option value="alcohol">🍺 Alcohol</option><option value="dairy">🥛 Dairy</option></select>
-            <button onclick="checkFoodInteraction()">🍽️ Check</button>
+            <button onclick="checkFoodInteraction(); blinkElement('foodResult')">🍽️ Check</button>
             <div id="foodResult" class="result"></div>
             <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
         </div>
@@ -658,6 +659,16 @@ function openNewsLink(url) {
 setInterval(() => {
     fetchSideNews();
 }, 30 * 60 * 1000);
+    // Button click par blink effect
+function blinkElement(elementId) {
+    const element = document.getElementById(elementId);
+    if(element) {
+        element.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            element.style.transform = 'scale(1)';
+        }, 150);
+    }
+}
     
     // Show confirmation
     const clearMsg = document.createElement('div');
