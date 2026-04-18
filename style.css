@@ -618,3 +618,38 @@ input:focus, select:focus {
         transform: translateY(calc(100% - 50px));
     }
 }
+/* ========== BOX BLINK EFFECT ========== */
+
+/* Box Blink on Click */
+@keyframes blink {
+    0% { 
+        transform: scale(1); 
+        border-color: #38bdf8;
+        box-shadow: 0 0 0px #38bdf8;
+    }
+    50% { 
+        transform: scale(1.02); 
+        border-color: #ffffff;
+        box-shadow: 0 0 20px #38bdf8;
+    }
+    100% { 
+        transform: scale(1); 
+        border-color: #38bdf8;
+        box-shadow: 0 0 0px #38bdf8;
+    }
+}
+
+/* Jab box click ho */
+.box:active {
+    animation: blink 0.3s ease-in-out;
+}
+
+/* Result box jab aaye */
+.result {
+    transition: all 0.3s ease;
+}
+
+.result:hover {
+    transform: scale(1.01);
+    box-shadow: 0 0 10px rgba(56,189,248,0.3);
+}
