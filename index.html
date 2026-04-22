@@ -727,47 +727,50 @@ function loadSidebarState() {
         }
     }
 }
-// ========== SIDE PANEL TOGGLE - FULL HIDE/SHOW ==========
+// ========== SIDE PANEL TOGGLE ==========
 function toggleSidePanel() {
     const sidebar = document.getElementById('newsSidebar');
-    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    sidebar.classList.toggle('open');
     
-    sidebar.classList.toggle('collapsed');
-    
-    // Change arrow direction
-    if (sidebar.classList.contains('collapsed')) {
-        toggleBtn.innerHTML = '▶';
-    } else {
-        toggleBtn.innerHTML = '◀';
-    }
-    
-    // Save state
-    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-}
-function loadSidebarState() {
-    const sidebar = document.getElementById('newsSidebar');
-    const toggleBtn = document.getElementById('sidebarToggleBtn');
-    
-    if (!sidebar || !toggleBtn) return;
-    
-    let isCollapsed = localStorage.getItem('sidebarCollapsed');
-    
-    if (isCollapsed === null) {
-        isCollapsed = true;
-        localStorage.setItem('sidebarCollapsed', 'true');
-    } else {
-        isCollapsed = isCollapsed === 'true';
-    }
-    
-    if (isCollapsed) {
-        sidebar.classList.add('collapsed');
-        toggleBtn.innerHTML = '▶';
-    } else {
-        sidebar.classList.remove('collapsed');
-        toggleBtn.innerHTML = '◀';
+    if (sidebar.classList.contains('open')) {
+        fetchSideNews();
     }
 }
 
+async function fetchSideNews() {
+    const newsDiv = document.getElementById('sideNewsList');
+    if (!newsDiv) return;
+    
+    newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/health-news`);
+        const data = await response.json();
+        
+        if (data.success && data.news && data.news.length > 0) {
+            let html = '';
+            data.news.forEach(news => {
+                html += `
+                    <div class="news-item" onclick="openNewsLink('${news.url}')">
+                        <div class="news-title">${news.title.substring(0, 100)}${news.title.length > 100 ? '...' : ''}</div>
+                        <div class="news-source">📌 ${news.source}</div>
+                    </div>
+                `;
+            });
+            newsDiv.innerHTML = html;
+        } else {
+            newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>';
+        }
+    } catch (error) {
+        newsDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
+    }
+}
+
+function openNewsLink(url) {
+    if (url && url !== '#') {
+        window.open(url, '_blank');
+    }
+}
 // Call this after login
 loadSidebarState();
 </script>
