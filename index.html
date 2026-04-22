@@ -286,14 +286,18 @@
     </div>
 </div>
 
-<!-- SIDE PANEL - Hidden by default, shows after login -->
+<!-- SIDE PANEL WITH ARROW BUTTON -->
 <div class="news-sidebar" id="newsSidebar">
+    <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidePanel()">▶</button>
     <div class="news-header">
         <h3>📰 Health News</h3>
-        <div><button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; margin-right: 5px; border: none; border-radius: 20px; color: white;">🔄</button>
-        <button class="toggle-btn" onclick="toggleNewsSidebar()">◀</button></div>
+        <div>
+            <button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; margin-right: 5px; border: none; border-radius: 20px; color: white; cursor: pointer;">🔄</button>
+        </div>
     </div>
-    <div id="sideNewsList"><div class="loading-news">🔄 Loading health news...</div></div>
+    <div id="sideNewsList">
+        <div class="loading-news">🔄 Loading health news...</div>
+    </div>
 </div>
 
 <!-- MAIN APP - NEW DASHBOARD DESIGN -->
