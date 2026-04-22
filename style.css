@@ -834,3 +834,136 @@ body {
     font-size: 12px;
     color: #2c7da0;
 }
+/* ========== WHITE BACKGROUND WITH PLUS ICON ========== */
+
+/* White Background */
+body {
+    background: #ffffff !important;
+}
+
+/* App Container Background */
+.app-container {
+    background: #ffffff !important;
+}
+
+/* Login Screen Background */
+.login-container {
+    background: #ffffff !important;
+}
+
+/* Login Box Background */
+.login-box {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Login Box Text Color */
+.login-box h1, .login-box p {
+    color: #1a2c3e !important;
+}
+
+/* Navbar Background */
+.navbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: #ffffff !important;
+}
+
+/* Stats Cards */
+.stat-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Timeline Section */
+.timeline-section {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Boxes Background */
+.box {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Side Panel Background */
+.news-sidebar {
+    background: #ffffff !important;
+    border-left: 2px solid #2c7da0 !important;
+}
+
+/* News Item Background */
+.news-item {
+    background: #f8fafc !important;
+}
+
+/* ========== PLUS ICON - FLOATING BUTTON ========== */
+
+/* Floating Plus Button */
+.floating-plus {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: #2c7da0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    border: none;
+}
+
+.floating-plus:hover {
+    transform: scale(1.1);
+    background: #1e5a73;
+}
+
+.floating-plus span {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Plus Menu Options (Hidden by default) */
+.plus-menu {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    padding: 10px 0;
+    min-width: 180px;
+    z-index: 999;
+    display: none;
+    border: 1px solid #e2e8f0;
+}
+
+.plus-menu.show {
+    display: block;
+}
+
+.plus-menu-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #1a2c3e;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.plus-menu-item:hover {
+    background: #f1f5f9;
+}
