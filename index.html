@@ -368,7 +368,7 @@
             <select id="familySelect"><option value="self">👤 Myself</option><option value="dad">👨 Dad</option><option value="mom">👩 Mom</option><option value="grandma">👵 Grandma</option></select>
             <button onclick="addFamilyMember()">➕ Add Member</button>
             <div id="familyMedicines" style="margin-top: 8px; font-size: 12px;"></div>
-            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="resetHealthStreak()" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Reset Streak</button>
         </div>
 
         <div class="box"><h3>💊 Drug-Drug Interaction</h3>
@@ -548,6 +548,8 @@
             updateStreak();
             switchFamilyMember();
             displayAlarms();
+            resetDailyTakenStatus();
+        updateTodaySchedule();
         }
     }
         // ========== DASHBOARD FUNCTIONS ==========
@@ -607,7 +609,25 @@
     
     // ========== FAMILY ==========
     let family = JSON.parse(localStorage.getItem("family"))||{self:{name:"Myself",medicines:[]},dad:{name:"Dad",medicines:["aspirin"]},mom:{name:"Mom",medicines:["lisinopril"]},grandma:{name:"Grandma",medicines:["warfarin"]}};
-    function switchFamilyMember() { let s=document.getElementById("familySelect").value; document.getElementById("familyMedicines").innerHTML=`💊 ${family[s].name}: ${family[s].medicines.join(", ")||"None"}`; }
+    function switchFamilyMember() {
+    const selected = document.getElementById('familySelect').value;
+    const member = family[selected];
+    let medicinesHtml = '';
+    
+    if (member.medicines && member.medicines.length > 0) {
+        medicinesHtml = member.medicines.join(', ');
+    } else {
+        medicinesHtml = 'No medicines added yet';
+    }
+    
+    document.getElementById('familyMedicines').innerHTML = `💊 ${member.name}'s medicines: ${medicinesHtml}`;
+    
+    // Update drug interaction dropdowns with family member's medicines
+    if (member.medicines && member.medicines.length > 0) {
+        // Optional: pre-fill drug inputs
+        console.log(`Switched to ${member.name} with medicines: ${member.medicines.join(', ')}`);
+    }
+    }
     function addFamilyMember() { let n=prompt("Name:"); if(n) { let id=n.toLowerCase().replace(/\s/g,''); family[id]={name:n,medicines:[]}; localStorage.setItem("family",JSON.stringify(family)); let opt=document.createElement("option"); opt.value=id; opt.text=`👤 ${n}`; document.getElementById("familySelect").appendChild(opt); alert(`Added ${n}!`); } }
         // ========== QR ==========
     function generateQRCode() { let d={name:"Patient",medicines:["aspirin","lisinopril"],contact:"+91 7999754531"}; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:JSON.stringify(d),width:130,height:130}); alert("✅ QR Generated!"); }
@@ -769,6 +789,105 @@ async function fetchSideNews() {
 function openNewsLink(url) {
     if (url && url !== '#') {
         window.open(url, '_blank');
+    }
+}
+    // ========== RESET HEALTH STREAK ==========
+function resetHealthStreak() {
+    if (confirm('Are you sure you want to reset your health streak? This cannot be undone.')) {
+        streak = 0;
+        lastDate = '';
+        localStorage.setItem('medStreak', 0);
+        localStorage.setItem('lastTaken', '');
+        updateStreak();
+        updateDashboard();
+        alert('✅ Health streak has been reset to 0 days!');
+    }
+}
+    // ========== UPDATE TODAY'S SCHEDULE ==========
+function updateTodaySchedule() {
+    const alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
+    const scheduleDiv = document.getElementById('medicineScheduleList');
+    
+    if (!scheduleDiv) return;
+    
+    if (alarms.length === 0) {
+        scheduleDiv.innerHTML = `
+            <div class="medicine-card">
+                <div><span class="medicine-name">No medicines scheduled</span></div>
+                <div>⚠️ Add medicine alarm</div>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    const today = new Date().toDateString();
+    
+    alarms.forEach(alarm => {
+        // Check if alarm is for today or daily
+        const isToday = alarm.period === 'daily' || true;
+        
+        // Get taken status from localStorage
+        const takenKey = `taken_${alarm.medicine}_${today}`;
+        const isTaken = localStorage.getItem(takenKey) === 'true';
+        
+        html += `
+            <div class="medicine-card" id="schedule_${alarm.id}">
+                <div>
+                    <span class="medicine-name">${alarm.medicine}</span>
+                    <br>
+                    <span class="dose-badge">At ${alarm.time} | ${alarm.period === 'daily' ? 'Daily' : 'One time'}</span>
+                </div>
+                <div>
+                    <button onclick="markMedicineAsTaken('${alarm.medicine}', ${alarm.id})" 
+                            style="background: ${isTaken ? '#22c55e' : '#e2e8f0'}; color: ${isTaken ? 'white' : '#1a2c3e'}; padding: 5px 15px; border: none; border-radius: 20px; cursor: pointer;">
+                        ${isTaken ? '✅ Taken' : '⏰ Mark Taken'}
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    scheduleDiv.innerHTML = html;
+}
+
+// Mark medicine as taken
+function markMedicineAsTaken(medicine, alarmId) {
+    const today = new Date().toDateString();
+    const takenKey = `taken_${medicine}_${today}`;
+    localStorage.setItem(takenKey, 'true');
+    
+    // Update UI
+    const scheduleCard = document.getElementById(`schedule_${alarmId}`);
+    if (scheduleCard) {
+        const button = scheduleCard.querySelector('button');
+        button.innerHTML = '✅ Taken';
+        button.style.background = '#22c55e';
+        button.style.color = 'white';
+        button.disabled = true;
+    }
+    
+    // Update streak when medicine taken
+    markMedicineTaken();
+    
+    alert(`✅ Marked ${medicine} as taken!`);
+}
+
+// Reset taken status for new day
+function resetDailyTakenStatus() {
+    const today = new Date().toDateString();
+    const lastResetDate = localStorage.getItem('lastResetDate');
+    
+    if (lastResetDate !== today) {
+        // Clear all taken statuses for new day
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+            if (key.startsWith('taken_')) {
+                localStorage.removeItem(key);
+            }
+        });
+        localStorage.setItem('lastResetDate', today);
+        updateTodaySchedule();
     }
 }
 // Call this after login
