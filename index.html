@@ -689,6 +689,44 @@
     // ========== INIT ==========
     displayAlarms(); updateStreak(); switchFamilyMember(); checkAuth();
     document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
+    // ========== SIDE PANEL SLIDE TOGGLE ==========
+function toggleSidePanel() {
+    const sidebar = document.getElementById('newsSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    
+    sidebar.classList.toggle('collapsed');
+    
+    // Change arrow direction
+    if (sidebar.classList.contains('collapsed')) {
+        toggleBtn.innerHTML = '◀';
+    } else {
+        toggleBtn.innerHTML = '▶';
+    }
+    
+    // Save state to localStorage
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    localStorage.setItem('sidebarCollapsed', isCollapsed);
+}
+
+// Load saved sidebar state
+function loadSidebarState() {
+    const sidebar = document.getElementById('newsSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    
+    if (sidebar && toggleBtn) {
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+            toggleBtn.innerHTML = '◀';
+        } else {
+            sidebar.classList.remove('collapsed');
+            toggleBtn.innerHTML = '▶';
+        }
+    }
+}
+
+// Call this after login
+loadSidebarState();
 </script>
 
 </body>
