@@ -741,23 +741,30 @@ function toggleSidePanel() {
     // Save state
     localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
 }
-
-// Load saved sidebar state
 function loadSidebarState() {
     const sidebar = document.getElementById('newsSidebar');
     const toggleBtn = document.getElementById('sidebarToggleBtn');
-    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     
-    if (sidebar && toggleBtn) {
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
-            toggleBtn.innerHTML = '▶';
-        } else {
-            sidebar.classList.remove('collapsed');
-            toggleBtn.innerHTML = '◀';
-        }
+    if (!sidebar || !toggleBtn) return;
+    
+    let isCollapsed = localStorage.getItem('sidebarCollapsed');
+    
+    if (isCollapsed === null) {
+        isCollapsed = true;
+        localStorage.setItem('sidebarCollapsed', 'true');
+    } else {
+        isCollapsed = isCollapsed === 'true';
+    }
+    
+    if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+        toggleBtn.innerHTML = '▶';
+    } else {
+        sidebar.classList.remove('collapsed');
+        toggleBtn.innerHTML = '◀';
     }
 }
+
 // Call this after login
 loadSidebarState();
 </script>
