@@ -286,16 +286,18 @@
     </div>
 </div>
 
-<!-- SIDE PANEL - MINIMAL ICON MODE -->
-    <div class="news-sidebar collapsed" id="newsSidebar">
-    <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidePanel()">◀</button>
-    <div class="news-header">
+<!-- FLOATING NEWS BUTTON - ONLY ARROW -->
+<button id="newsFloatingBtn" class="news-floating-btn" onclick="openNewsPanel()">
+    📰
+</button>
+
+<!-- NEWS PANEL (Hidden by default) -->
+<div class="news-panel" id="newsPanel">
+    <div class="news-panel-header">
         <h3>📰 Health News</h3>
-        <div>
-            <button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; border: none; border-radius: 20px; color: white; cursor: pointer;">🔄</button>
-        </div>
+        <button class="close-news-btn" onclick="closeNewsPanel()">✕</button>
     </div>
-    <div id="sideNewsList">
+    <div class="news-panel-content" id="newsPanelContent">
         <div class="loading-news">🔄 Loading health news...</div>
     </div>
 </div>
@@ -689,7 +691,8 @@
     // ========== INIT ==========
     displayAlarms(); updateStreak(); switchFamilyMember(); checkAuth();
     document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
-    // ========== SIDE PANEL SLIDE TOGGLE ==========
+    
+// ========== SIDE PANEL SLIDE TOGGLE ==========
 function toggleSidePanel() {
     const sidebar = document.getElementById('newsSidebar');
     const toggleBtn = document.getElementById('sidebarToggleBtn');
