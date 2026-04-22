@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0f172a, #020617); color: white; min-height: 100vh; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7fb; color: #1a2c3e; min-height: 100vh; }
         
         /* Login Screen */
         .login-container {
@@ -18,6 +18,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background: linear-gradient(135deg, #0f172a, #020617);
         }
         .login-box {
             background: rgba(255,255,255,0.08);
@@ -62,30 +63,103 @@
             background: #38bdf8 !important;
         }
         
-        /* App Container */
-        .app-container { display: none; }
+        /* App Container - New Dashboard Design */
+        .app-container { display: none; background: #f4f7fb; }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .greeting h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a2c3e;
+            margin: 0;
+        }
+        .greeting p {
+            color: #6c86a3;
+            margin: 5px 0 0;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px;
+            overflow-x: auto;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 24px;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2c7da0;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #6c86a3;
+            margin-top: 5px;
+        }
+        
+        /* Timeline Section */
+        .timeline-section {
+            background: white;
+            margin: 20px;
+            padding: 16px;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid #edf2f7;
+        }
+        .medicine-card {
+            background: #f8fafc;
+            margin: 12px 0;
+            padding: 16px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .medicine-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1e2f41;
+        }
+        .dose-badge {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #2c7da0;
+        }
+        .taken-status {
+            color: #22c55e;
+            font-weight: 500;
+        }
+        
+        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(0,0,0,0.3);
+            background: white;
             flex-wrap: wrap;
+            border-bottom: 1px solid #eef2f6;
         }
-        .logo { font-size: 22px; font-weight: bold; color: #38bdf8; }
-        .logout-btn { background: #ef4444 !important; width: auto !important; padding: 8px 20px !important; border-radius: 20px; }
-        .hero { text-align: center; padding: 30px; }
-        .hero h1 { font-size: 32px; background: linear-gradient(135deg, #38bdf8, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .circle {
-            width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8;
-            display: flex; align-items: center; justify-content: center; margin: 20px auto;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56,189,248,0.4); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(56,189,248,0); }
-            100% { transform: scale(1); }
-        }
+        .logo { font-size: 22px; font-weight: bold; color: #2c7da0; }
+        .logout-btn { background: #ef4444 !important; width: auto !important; padding: 8px 20px !important; border-radius: 20px; color: white; border: none; cursor: pointer; }
+        .theme-toggle { background: #eef2ff; border: none; border-radius: 50px; padding: 8px 15px; cursor: pointer; font-size: 14px; margin-right: 10px; }
+        
+        /* 2-Column Layout */
         .container-2col {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -95,30 +169,31 @@
             padding: 20px;
         }
         .box {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
+            background: white;
+            border-radius: 24px;
             padding: 20px;
-            border: 1px solid rgba(56,189,248,0.2);
+            border: 1px solid #edf2f7;
             transition: transform 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
         .box:hover { transform: translateY(-3px); }
-        .box h3 { color: #38bdf8; margin-bottom: 15px; font-size: 18px; }
+        .box h3 { color: #1a2c3e; margin-bottom: 15px; font-size: 18px; }
         .box input, .box select {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #1a2c3e;
         }
         .box button {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
             border: none;
-            border-radius: 8px;
-            background: #38bdf8;
+            border-radius: 12px;
+            background: #2c7da0;
             color: white;
             cursor: pointer;
             transition: 0.2s;
@@ -127,31 +202,57 @@
         .result {
             margin-top: 10px;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 13px;
         }
-        .high-severity { background: rgba(239,68,68,0.2); border-left: 3px solid #ef4444; color: #fca5a5; }
-        .moderate-severity { background: rgba(245,158,11,0.2); border-left: 3px solid #f59e0b; color: #fcd34d; }
-        .low-severity { background: rgba(34,197,94,0.2); border-left: 3px solid #22c55e; color: #86efac; }
-        .error { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .high-severity { background: #fee2e2; border-left: 3px solid #ef4444; color: #991b1b; }
+        .moderate-severity { background: #fff3e3; border-left: 3px solid #f59e0b; color: #92400e; }
+        .low-severity { background: #dcfce7; border-left: 3px solid #22c55e; color: #166534; }
+        .error { background: #fee2e2; color: #991b1b; }
         .chat-messages {
             height: 180px;
             overflow-y: auto;
             padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
+            background: #f8fafc;
+            border-radius: 16px;
             margin-bottom: 10px;
             font-size: 13px;
         }
-        .user-message { background: #38bdf8; padding: 8px 12px; border-radius: 15px; margin: 5px 0; margin-left: auto; width: fit-content; max-width: 80%; }
-        .bot-message { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 15px; margin: 5px 0; width: fit-content; max-width: 80%; }
+        .user-message { background: #2c7da0; color: white; padding: 8px 12px; border-radius: 15px; margin: 5px 0; margin-left: auto; width: fit-content; max-width: 80%; }
+        .bot-message { background: #eef2ff; color: #1a2c3e; padding: 8px 12px; border-radius: 15px; margin: 5px 0; width: fit-content; max-width: 80%; }
         .chat-input-area { display: flex; gap: 10px; }
         .chat-input-area input { flex: 1; margin: 0; }
         .chat-input-area button { width: auto; padding: 10px 15px; margin: 0; }
         .full-width { grid-column: span 2; }
-        #heatmap { overflow-x: auto; }
-        #heatmap div { font-size: 12px; }
         @media (max-width: 768px) { .container-2col { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+        
+        /* Side Panel - Hidden by default, shows after login */
+        .news-sidebar {
+            position: fixed;
+            right: 0;
+            top: 80px;
+            width: 300px;
+            height: calc(100vh - 100px);
+            background: white;
+            border-left: 2px solid #2c7da0;
+            border-radius: 15px 0 0 15px;
+            padding: 15px;
+            z-index: 100;
+            overflow-y: auto;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.05);
+            display: none;  /* 🔥 Hidden by default - shows only after login */
+        }
+        .news-sidebar.collapsed { transform: translateX(calc(100% - 40px)); }
+        .news-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .news-header h3 { color: #2c7da0; }
+        .toggle-btn { background: #2c7da0; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; color: white; }
+        .news-item { background: #f8fafc; border-radius: 12px; padding: 12px; margin-bottom: 12px; cursor: pointer; border-left: 3px solid #2c7da0; }
+        .news-title { color: #1a2c3e; font-size: 13px; font-weight: bold; }
+        .news-source { font-size: 10px; color: #2c7da0; margin-top: 5px; }
+        .loading-news { text-align: center; padding: 20px; color: #6c86a3; }
+        @media (max-width: 768px) { .news-sidebar { width: 100%; height: 300px; top: auto; bottom: 0; border-radius: 15px 15px 0 0; } .news-sidebar.collapsed { transform: translateY(calc(100% - 40px)); } }
     </style>
 </head>
 <body>
@@ -161,111 +262,131 @@
     <div class="login-box">
         <h1>💊 DrugAI Pro</h1>
         <p>Complete Medical Assistant</p>
-        
         <div class="toggle-buttons">
             <button id="signupBtn" class="toggle-btn active" onclick="showSignup()">📝 Sign Up</button>
             <button id="loginBtn" class="toggle-btn" onclick="showLogin()">🔐 Login</button>
         </div>
-        
         <div id="signupForm">
             <input type="text" id="signupName" placeholder="Full Name">
             <input type="email" id="signupEmail" placeholder="Email Address">
             <input type="password" id="signupPassword" placeholder="Password">
             <input type="number" id="signupAge" placeholder="Age">
-            <select id="signupGender">
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
+            <select id="signupGender"><option value="">Select Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
             <button onclick="registerUser()">Sign Up & Continue</button>
         </div>
-        
         <div id="loginForm" style="display: none;">
             <input type="email" id="loginEmail" placeholder="Email Address">
             <input type="password" id="loginPassword" placeholder="Password">
             <button onclick="loginUser()">Login & Continue</button>
-
         </div>
         <div style="text-align: right; margin-top: -10px; margin-bottom: 10px;">
-    <a href="#" onclick="forgotPassword()" style="color: #38bdf8; font-size: 12px; text-decoration: none;">Forgot Password?</a>
+            <a href="#" onclick="forgotPassword()" style="color: #38bdf8; font-size: 12px; text-decoration: none;">Forgot Password?</a>
         </div>
-        
         <div id="authMessage" style="text-align: center; margin-top: 10px; font-size: 14px;"></div>
     </div>
 </div>
-    <!-- Side Panel for Health News -->
+
+<!-- SIDE PANEL - Hidden by default, shows after login -->
 <div class="news-sidebar" id="newsSidebar">
     <div class="news-header">
         <h3>📰 Health News</h3>
-        <div>
-            <button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; margin-right: 5px;">🔄</button>
-            <button class="toggle-btn" onclick="toggleNewsSidebar()">◀</button>
-        </div>
+        <div><button onclick="fetchSideNews()" style="background: #22c55e; width: auto; padding: 5px 10px; margin-right: 5px; border: none; border-radius: 20px; color: white;">🔄</button>
+        <button class="toggle-btn" onclick="toggleNewsSidebar()">◀</button></div>
     </div>
-    <div id="sideNewsList">
-        <div class="loading-news">🔄 Loading latest health news...</div>
-    </div>
+    <div id="sideNewsList"><div class="loading-news">🔄 Loading health news...</div></div>
 </div>
-    
-<!-- MAIN APP - 17 FEATURES -->
+
+<!-- MAIN APP - NEW DASHBOARD DESIGN -->
 <div id="appContainer" class="app-container">
     <div class="navbar">
         <div class="logo">💊 DrugAI Pro</div>
         <div>Welcome, <span id="userName">User</span></div>
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        <div>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">🌙 Dark</button>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
     </div>
 
-    <div class="hero">
-        <h1>Complete Medical Assistant</h1>
-        <p>17 Smart Features | 24×7 Drug Safety</p>
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="greeting">
+            <h2>Good morning, <span id="userNameDisplay">User</span> 👋</h2>
+            <p>Stay track your health with timely reminders</p>
+        </div>
     </div>
 
-    <div class="circle" id="counter">0%</div>
+    <!-- Stats Cards -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-number" id="streakDays">0</div>
+            <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="todayMeds">0</div>
+            <div class="stat-label">Today's Meds</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalInteractions">0</div>
+            <div class="stat-label">Checks Done</div>
+        </div>
+    </div>
 
+    <!-- Timeline / Schedule Section -->
+    <div class="timeline-section">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <h3>📅 Today's Schedule</h3>
+            <span style="color:#2c7da0;">S M T W T F S</span>
+        </div>
+        <div id="medicineScheduleList">
+            <div class="medicine-card">
+                <div><span class="medicine-name">Amlodipine</span><br><span class="dose-badge">5mg | Before Meals</span></div>
+                <div class="taken-status">✅ Taken</div>
+            </div>
+            <div class="medicine-card">
+                <div><span class="medicine-name">Vitamin D</span><br><span class="dose-badge">10,000 IU</span></div>
+                <div class="taken-status" style="color:#f59e0b;">⏰ Remind</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing Features (2-Column Layout) -->
     <div class="container-2col">
-        <!-- 1. HEALTH STREAK -->
         <div class="box"><h3>🔥 Health Streak</h3>
             <div id="streakDisplay" style="font-size: 40px; text-align: center;">0 days</div>
             <button onclick="markMedicineTaken()">✅ I took my medicine</button>
             <div id="badge" style="text-align: center; margin-top: 8px;"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 2. FAMILY MEMBERS -->
         <div class="box"><h3>👨‍👩‍👧‍👦 Family</h3>
             <select id="familySelect"><option value="self">👤 Myself</option><option value="dad">👨 Dad</option><option value="mom">👩 Mom</option><option value="grandma">👵 Grandma</option></select>
             <button onclick="addFamilyMember()">➕ Add Member</button>
             <div id="familyMedicines" style="margin-top: 8px; font-size: 12px;"></div>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 3. DRUG-DRUG INTERACTION -->
         <div class="box"><h3>💊 Drug-Drug Interaction</h3>
             <input type="text" id="drug1" placeholder="First drug" list="drugList"><datalist id="drugList"></datalist>
             <input type="text" id="drug2" placeholder="Second drug" list="drugList2"><datalist id="drugList2"></datalist>
-            <button onclick="checkInteraction(); blinkElement('interactionResult')">🔍 Check Interaction</button>
+            <button onclick="checkInteraction()">🔍 Check Interaction</button>
             <div id="interactionResult" class="result"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 4. DRUG-FOOD INTERACTION -->
         <div class="box"><h3>🍎 Drug-Food</h3>
             <input type="text" id="foodDrug" placeholder="Drug name" list="foodDrugList"><datalist id="foodDrugList"></datalist>
             <select id="foodSelect"><option value="grapefruit">🍊 Grapefruit</option><option value="alcohol">🍺 Alcohol</option><option value="dairy">🥛 Dairy</option></select>
-            <button onclick="checkFoodInteraction(); blinkElement('foodResult')">🍽️ Check</button>
+            <button onclick="checkFoodInteraction()">🍽️ Check</button>
             <div id="foodResult" class="result"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 5. AI CHATBOT -->
         <div class="box"><h3>🤖 AI Doctor</h3>
             <div class="chat-messages" id="chatMessages"><p>🤖 Ask me anything about medicines!</p></div>
-            <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage(); blinkElement('chatMessages')">Send</button><button onclick="startVoiceInput()">🎤</button></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type..."><button onclick="sendMessage()">Send</button><button onclick="startVoiceInput()">🎤</button></div>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 6. MEDICINE ALARM -->
         <div class="box"><h3>⏰ Medicine Alarm</h3>
             <input type="text" id="alarmMedicine" placeholder="Medicine">
             <input type="time" id="alarmTime">
@@ -274,47 +395,36 @@
             <button onclick="addToGoogleCalendar()">📅 Add to Calendar</button>
             <div id="alarmStatus" class="result"></div>
             <div id="activeAlarms" style="font-size: 12px;"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 7. PILL IDENTIFIER -->
         <div class="box"><h3>💊 Pill Identifier</h3>
             <input type="file" id="pillImage" accept="image/*">
-            <button onclick="identifyPill(); blinkElement('pillResult')">🔍 Identify</button>
+            <button onclick="identifyPill()">🔍 Identify</button>
             <div id="pillResult" class="result"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 8. QR EMERGENCY CARD -->
         <div class="box"><h3>🏥 Emergency QR</h3>
             <button onclick="generateQRCode()">🆔 Generate QR</button>
             <div id="qrcode" style="display: flex; justify-content: center; margin-top: 8px;"></div>
             <p style="font-size: 10px; text-align: center;">Scan in emergency</p>
         </div>
 
-        <!-- 9. NEAREST PHARMACY -->
         <div class="box"><h3>🏪 Pharmacy</h3>
             <button onclick="findNearbyPharmacies()">📍 Find Nearby</button>
             <div id="pharmacyResult" class="result"></div>
         </div>
 
-        <!-- 10. HEALTH NEWS -->
-        <div class="box"><h3>📰 Health News</h3>
-            <div id="healthNews" style="max-height: 120px; overflow-y: auto; font-size: 12px;">Loading...</div>
-        </div>
-
-        <!-- 11. MULTI-LANGUAGE -->
         <div class="box"><h3>🌍 Language</h3>
             <select id="languageSelect" onchange="changeLanguage()"><option value="en">🇬🇧 English</option><option value="hi">🇮🇳 हिंदी</option><option value="te">🇮🇳 తెలుగు</option><option value="ta">🇮🇳 தமிழ்</option></select>
         </div>
 
-        <!-- 12. TELEMEDICINE -->
         <div class="box"><h3>🩺 Telemedicine</h3>
             <button onclick="startTelemedicine()">📞 Video Consult</button>
             <button onclick="bookAppointment()">📅 Book Appointment</button>
         </div>
 
-        <!-- 13. STOCK TRACKER -->
         <div class="box"><h3>📦 Stock Tracker</h3>
             <input type="text" id="stockMedicine" placeholder="Medicine">
             <input type="number" id="stockQuantity" placeholder="Qty">
@@ -324,33 +434,29 @@
             <button onclick="viewAllStock()">📋 View Stock</button>
             <div id="stockResult" class="result" style="font-size: 11px;"></div>
             <div id="expiryAlert" class="result" style="font-size: 11px;"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 14. INTERACTION HEATMAP -->
         <div class="box"><h3>🌡️ Heatmap</h3>
             <div id="heatmap"></div>
-            <button onclick="generateHeatmap(); blinkElement('heatmap')">📊 Generate</button>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="generateHeatmap()">📊 Generate</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 15. VOICE SYMPTOM CHECKER -->
-        <div class="box"><h3>🗣️ Voice Symptom</h3>
-            <button onclick="startSymptomCheck(); blinkElement('symptomAdvice')">🎙️ Talk to AI (10 sec)</button>
-            <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 12px;"></div>
+                <div class="box"><h3>🗣️ Voice Symptom</h3>
+            <button onclick="startSymptomCheck()">🎙️ Talk to AI (10 sec)</button>
+            <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: #f8fafc; border-radius: 6px; font-size: 12px;"></div>
             <div id="symptomAdvice" class="result"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 16. PRESCRIPTION SCANNER -->
         <div class="box"><h3>📷 Scan Prescription</h3>
             <input type="file" id="prescriptionImage" accept="image/*">
-            <button onclick="scanPrescription(); blinkElement('scanResult')">🔍 Scan</button>
+            <button onclick="scanPrescription()">🔍 Scan</button>
             <div id="scanResult" class="result"></div>
-            <button onclick="clearBox(this)" style="background: #ffffff; color: #000000; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-        <!-- 17. EMERGENCY CONTACT (FULL WIDTH) -->
         <div class="box full-width"><h3>📞 Emergency</h3>
             <p>🚑 102 | ☠️ Poison: 1800-123-1234 | 📞 +91 7999754531 | 📧 abdulrajik334t@gmail.com</p>
         </div>
@@ -358,7 +464,7 @@
 </div>
 
 <script>
-    const BASE_URL = "https://drug-api-uk6k.onrender.com"; // 🔥 CHANGE THIS TO YOUR BACKEND URL
+    const BASE_URL = "https://drug-api-uk6k.onrender.com";
     
     // ========== LOGIN ==========
     function showSignup() {
@@ -375,119 +481,129 @@
         document.getElementById('signupBtn').classList.remove('active');
         document.getElementById('authMessage').innerHTML = '';
     }
+    
     async function registerUser() {
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const age = document.getElementById('signupAge').value;
-    const gender = document.getElementById('signupGender').value;
-    const msg = document.getElementById('authMessage');
-    if(!name||!email||!password||!age||!gender) { msg.innerHTML="❌ Fill all fields"; return; }
-    msg.innerHTML="🔄 Registering...";
-    try {
-        const res = await fetch(`${BASE_URL}/api/register`, {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({name,email,password,age,gender})
-        });
-        const data = await res.json();
-        if(data.success) {
-            localStorage.setItem('drugai_token',data.token);
-            localStorage.setItem('drugai_user',JSON.stringify(data.user));
-            msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
-        } else {
-            // Save to localStorage if backend fails
-            const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const userExists = localUsers.find(u => u.email === email);
-            if(!userExists) {
-                localUsers.push({ name, email, password, age, gender });
-                localStorage.setItem('registeredUsers', JSON.stringify(localUsers));
-            }
-            localStorage.setItem('drugai_token', btoa(email));
-            localStorage.setItem('drugai_user', JSON.stringify({ name, email, age, gender }));
-            msg.innerHTML="✅ Registered! Redirecting...";
-            setTimeout(()=>location.reload(),1000);
-        }
-    } catch(e) { 
-        // Save to localStorage when backend is down
-        const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const userExists = localUsers.find(u => u.email === email);
-        if(!userExists) {
-            localUsers.push({ name, email, password, age, gender });
-            localStorage.setItem('registeredUsers', JSON.stringify(localUsers));
-        }
-        localStorage.setItem('drugai_token', btoa(email));
-        localStorage.setItem('drugai_user', JSON.stringify({ name, email, age, gender }));
-        msg.innerHTML="✅ Registered (Offline Mode)! Redirecting...";
-        setTimeout(()=>location.reload(),1000);
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const age = document.getElementById('signupAge').value;
+        const gender = document.getElementById('signupGender').value;
+        const msg = document.getElementById('authMessage');
+        if(!name||!email||!password||!age||!gender) { msg.innerHTML="❌ Fill all fields"; return; }
+        msg.innerHTML="🔄 Registering...";
+        try {
+            const res = await fetch(`${BASE_URL}/api/register`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({name,email,password,age,gender})
+            });
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('drugai_token',data.token);
+                localStorage.setItem('drugai_user',JSON.stringify(data.user));
+                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+            } else { msg.innerHTML="❌ "+data.message; }
+        } catch(e) { msg.innerHTML="❌ Server error"; }
     }
-    }
+    
     async function loginUser() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    const msg = document.getElementById('authMessage');
-    if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
-    msg.innerHTML="🔄 Logging in...";
-    try {
-        const res = await fetch(`${BASE_URL}/api/login`, {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({email,password})
-        });
-        const data = await res.json();
-        if(data.success) {
-            localStorage.setItem('drugai_token',data.token);
-            localStorage.setItem('drugai_user',JSON.stringify(data.user));
-            msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
-        } else {
-            // Check in localStorage if backend fails
-            const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const localUser = localUsers.find(u => u.email === email && u.password === password);
-            if(localUser) {
-                localStorage.setItem('drugai_token', btoa(email));
-                localStorage.setItem('drugai_user', JSON.stringify({ name: localUser.name, email: localUser.email, age: localUser.age, gender: localUser.gender }));
-                msg.innerHTML="✅ Success! (Offline Mode)"; setTimeout(()=>location.reload(),1000);
-            } else {
-                msg.innerHTML="❌ " + data.message;
-            }
-        }
-    } catch(e) { 
-        // Check in localStorage when backend is down
-        const localUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const localUser = localUsers.find(u => u.email === email && u.password === password);
-        if(localUser) {
-            localStorage.setItem('drugai_token', btoa(email));
-            localStorage.setItem('drugai_user', JSON.stringify({ name: localUser.name, email: localUser.email, age: localUser.age, gender: localUser.gender }));
-            msg.innerHTML="✅ Success! (Offline Mode)"; setTimeout(()=>location.reload(),1000);
-        } else {
-            msg.innerHTML="❌ Email not registered. Please sign up first.";
-        }
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('authMessage');
+        if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
+                msg.innerHTML="🔄 Logging in...";
+        try {
+            const res = await fetch(`${BASE_URL}/api/login`, {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email,password})
+            });
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('drugai_token',data.token);
+                localStorage.setItem('drugai_user',JSON.stringify(data.user));
+                msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
+            } else { msg.innerHTML="❌ "+data.message; }
+        } catch(e) { msg.innerHTML="❌ Server error"; }
     }
-    }
+    
     function logout() { localStorage.clear(); location.reload(); }
+    
     function checkAuth() {
         const user = JSON.parse(localStorage.getItem('drugai_user'));
         if(user) {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             document.getElementById('userName').innerHTML = user.name.split(' ')[0];
+            document.getElementById('userNameDisplay').innerHTML = user.name.split(' ')[0];
+            // Show side panel after login
+            document.getElementById('newsSidebar').style.display = 'block';
+            loadTheme();
             fetchSideNews();
+            updateDashboard();
+            updateStreak();
+            switchFamilyMember();
+            displayAlarms();
+        }
+    }
+        // ========== DASHBOARD FUNCTIONS ==========
+    function updateDashboard() {
+        let streak = localStorage.getItem("medStreak") || 0;
+        document.getElementById("streakDays").innerText = streak;
+        document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
+        
+        let alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
+        document.getElementById("todayMeds").innerText = alarms.length;
+        
+        let totalChecks = localStorage.getItem("totalChecks") || 0;
+        document.getElementById("totalInteractions").innerText = totalChecks;
+    }
+        // ========== THEME TOGGLE ==========
+    function toggleTheme() {
+        const body = document.body;
+        const toggleBtn = document.getElementById('themeToggleBtn');
+        body.classList.toggle('light-mode');
+        const isLightMode = body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+        if(toggleBtn) {
+            toggleBtn.innerHTML = isLightMode ? '☀️ Light' : '🌙 Dark';
         }
     }
     
-    // ========== COUNTER ==========
-    let progress = 0;
-    setInterval(() => { if(document.getElementById('counter')) { progress=(progress+2)%100; document.getElementById('counter').innerHTML=progress+"%"; } }, 100);
-    
-    // ========== HEALTH STREAK ==========
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const toggleBtn = document.getElementById('themeToggleBtn');
+        if(savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            if(toggleBtn) toggleBtn.innerHTML = '☀️ Light';
+        } else {
+            document.body.classList.remove('light-mode');
+            if(toggleBtn) toggleBtn.innerHTML = '🌙 Dark';
+        }
+    }
+        // ========== HEALTH STREAK ==========
     let streak = localStorage.getItem("medStreak")||0, lastDate = localStorage.getItem("lastTaken")||"";
-    function updateStreak() { document.getElementById("streakDisplay").innerHTML=`🔥 ${streak} days`; let b = streak>=30?"🏆 Champion":(streak>=7?"⭐ Hero":(streak>=3?"🌱 Starter":"")); document.getElementById("badge").innerHTML=b; }
-    function markMedicineTaken() { let t=new Date().toDateString(); if(lastDate!==t) { streak++; localStorage.setItem("medStreak",streak); localStorage.setItem("lastTaken",t); updateStreak(); alert(`🎉 ${streak} day streak!`); } else alert("✅ Already marked!"); }
+    function updateStreak() { 
+        document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
+        document.getElementById("streakDays").innerText = streak;
+        let b = streak>=30?"🏆 Champion":(streak>=7?"⭐ Hero":(streak>=3?"🌱 Starter":""));
+        document.getElementById("badge").innerHTML = b;
+    }
+    function markMedicineTaken() { 
+        let t=new Date().toDateString(); 
+        if(lastDate!==t) { 
+            streak++; 
+            localStorage.setItem("medStreak",streak); 
+            localStorage.setItem("lastTaken",t); 
+            updateStreak(); 
+            updateDashboard();
+            alert(`🎉 ${streak} day streak!`); 
+        } else alert("✅ Already marked!"); 
+    }
     
     // ========== FAMILY ==========
     let family = JSON.parse(localStorage.getItem("family"))||{self:{name:"Myself",medicines:[]},dad:{name:"Dad",medicines:["aspirin"]},mom:{name:"Mom",medicines:["lisinopril"]},grandma:{name:"Grandma",medicines:["warfarin"]}};
     function switchFamilyMember() { let s=document.getElementById("familySelect").value; document.getElementById("familyMedicines").innerHTML=`💊 ${family[s].name}: ${family[s].medicines.join(", ")||"None"}`; }
     function addFamilyMember() { let n=prompt("Name:"); if(n) { let id=n.toLowerCase().replace(/\s/g,''); family[id]={name:n,medicines:[]}; localStorage.setItem("family",JSON.stringify(family)); let opt=document.createElement("option"); opt.value=id; opt.text=`👤 ${n}`; document.getElementById("familySelect").appendChild(opt); alert(`Added ${n}!`); } }
-    
-    // ========== QR =
+        // ========== QR ==========
     function generateQRCode() { let d={name:"Patient",medicines:["aspirin","lisinopril"],contact:"+91 7999754531"}; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:JSON.stringify(d),width:130,height:130}); alert("✅ QR Generated!"); }
     
     // ========== PHARMACY ==========
@@ -499,15 +615,11 @@
     // ========== CALENDAR ==========
     function addToGoogleCalendar() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value; if(!m||!t){alert("Enter medicine & time");return;} window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${m}&dates=${new Date().toISOString().replace(/-|:|\./g,'')}`,'_blank'); }
     
-    // ========== NEWS ==========
-    async function fetchHealthNews() { document.getElementById("healthNews").innerHTML=`<p>📰 FDA new diabetes drug</p><p>📰 WHO safety guidelines</p><p>📰 Aspirin study</p>`; }
-    
     // ========== LANGUAGE ==========
     function changeLanguage() { let l=document.getElementById("languageSelect").value, t={en:"Complete Medical Assistant",hi:"पूर्ण चिकित्सा सहायक",te:"పూర్తి వైద్య సహాయక",ta:"முழு மருத்துவ உதவியாளர்"}; if(t[l]) document.querySelector(".hero h1").innerHTML=t[l]; }
     function startTelemedicine() { window.open('https://www.practo.com/online-doctor-consultation','_blank'); }
     function bookAppointment() { window.open('https://www.practo.com/bangalore/doctors','_blank'); }
-    
-    // ========== STOCK ==========
+        // ========== STOCK ==========
     let stock=JSON.parse(localStorage.getItem("medicineStock")||"{}");
     function addToStock() { let n=document.getElementById("stockMedicine").value.trim().toLowerCase(), q=parseInt(document.getElementById("stockQuantity").value), e=document.getElementById("stockExpiry").value, d=document.getElementById("stockResult"); if(!n||!q||!e){d.innerHTML="❌ Fill all";return;} if(stock[n]) stock[n].quantity+=q; else stock[n]={quantity:q,expiryDate:e}; localStorage.setItem("medicineStock",JSON.stringify(stock)); d.innerHTML=`✅ Added ${q} x ${n}`; document.getElementById("stockMedicine").value=""; document.getElementById("stockQuantity").value=""; document.getElementById("stockExpiry").value=""; }
     function checkExpiry() { let t=new Date(), exp=[]; for(let [n,da] of Object.entries(stock)){ let d=Math.ceil((new Date(da.expiryDate)-t)/(1000*3600*24)); if(d<=30&&d>0) exp.push(`${n}: ${d}d`); else if(d<=0) exp.push(`${n}: EXPIRED!`); } document.getElementById("expiryAlert").innerHTML=exp.length?`⚠️ ${exp.join(", ")}`:"✅ No expiry soon"; }
@@ -515,28 +627,55 @@
     
     // ========== HEATMAP ==========
     async function generateHeatmap() { let meds=["aspirin","paracetamol","ibuprofen","warfarin","lisinopril","metformin"], div=document.getElementById('heatmap'); div.innerHTML="🔄 Generating..."; let html='<div style="display:grid;gap:3px;">'; html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div></div>${meds.map(m=>`<div style="font-weight:bold;font-size:11px">${m.slice(0,5)}</div>`).join('')}</div>`; for(let i=0;i<meds.length;i++){ html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div style="font-weight:bold;font-size:11px">${meds[i].slice(0,5)}</div>`; for(let j=0;j<meds.length;j++){ if(i===j) html+=`<div style="background:#333;text-align:center">-</div>`; else{ try{ let r=await fetch(`${BASE_URL}/check?drug1=${meds[i]}&drug2=${meds[j]}`); let da=await r.json(); let c="#22c55e",s="✓"; if(da.severity==="HIGH"){c="#ef4444";s="⚠️"}else if(da.severity==="MODERATE"){c="#f59e0b";s="⚡"} html+=`<div style="background:${c};text-align:center;border-radius:3px;padding:4px;font-size:10px" title="${da.message}">${s}</div>`; }catch(e){ html+=`<div style="background:#555;text-align:center">?</div>`; } } } html+=`</div>`; } html+=`</div>`; div.innerHTML=html; }
-    // ========== VOICE SYMPTOM ==========
+        // ========== VOICE SYMPTOM ==========
     let recorder, chunks=[];
     async function startSymptomCheck() { let t=document.getElementById('symptomTranscript'), a=document.getElementById('symptomAdvice'); try{ let s=await navigator.mediaDevices.getUserMedia({audio:true}); recorder=new MediaRecorder(s); chunks=[]; recorder.ondataavailable=e=>chunks.push(e.data); recorder.onstop=()=>{ t.innerHTML="🤖 Analyzing..."; setTimeout(()=>{ t.innerHTML="🗣️ Symptoms: fever, headache, cough"; a.innerHTML="🩺 Rest, hydrate, paracetamol. Consult if persists >3 days."; a.className="result low-severity"; },1500); s.getTracks().forEach(tr=>tr.stop()); }; recorder.start(); t.innerHTML="🎙️ Listening (10 sec)..."; setTimeout(()=>{ if(recorder&&recorder.state==="recording") recorder.stop(); },10000); }catch(e){ t.innerHTML="❌ Microphone access denied"; } }
     
     // ========== DRUG INTERACTIONS ==========
-    async function checkInteraction() { let d1=document.getElementById('drug1').value, d2=document.getElementById('drug2').value, div=document.getElementById('interactionResult'); if(!d1||!d2){div.innerHTML="❌ Enter both";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/check?drug1=${d1}&drug2=${d2}`); let da=await r.json(); let c=da.severity==="HIGH"?"high-severity":(da.severity==="MODERATE"?"moderate-severity":"low-severity"); div.innerHTML=`<strong>⚠️ ${da.severity}</strong><br>📋 ${da.message}`; div.className=`result ${c}`; }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
+    async function checkInteraction() { let d1=document.getElementById('drug1').value, d2=document.getElementById('drug2').value, div=document.getElementById('interactionResult'); if(!d1||!d2){div.innerHTML="❌ Enter both";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/check?drug1=${d1}&drug2=${d2}`); let da=await r.json(); let c=da.severity==="HIGH"?"high-severity":(da.severity==="MODERATE"?"moderate-severity":"low-severity"); div.innerHTML=`<strong>⚠️ ${da.severity}</strong><br>📋 ${da.message}`; div.className=`result ${c}`; let total=parseInt(localStorage.getItem("totalChecks")||0)+1; localStorage.setItem("totalChecks",total); updateDashboard(); }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
     async function checkFoodInteraction() { let d=document.getElementById('foodDrug').value, f=document.getElementById('foodSelect').value, div=document.getElementById('foodResult'); if(!d){div.innerHTML="❌ Enter drug";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/foodcheck?drug=${d}&food=${f}`); let da=await r.json(); div.innerHTML=`<strong>🍽️ ${f} + ${d}</strong><br>📋 ${da.message}`; div.className="result moderate-severity"; }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
-    
-    // ========== AI CHAT ==========
+        // ========== AI CHAT ==========
     async function sendMessage() { let inp=document.getElementById('chatInput'), msg=inp.value.trim(), chat=document.getElementById('chatMessages'); if(!msg) return; chat.innerHTML+=`<div class="user-message">🧑 ${msg}</div>`; inp.value=""; chat.scrollTop=chat.scrollHeight; chat.innerHTML+=`<div class="bot-message">🤖 Thinking...</div>`; try{ let r=await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(msg)}`); let da=await r.json(); chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 ${da.reply}</div>`; }catch(e){ chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 Error</div>`; } chat.scrollTop=chat.scrollHeight; }
     function startVoiceInput() { if('webkitSpeechRecognition' in window) { let r=new webkitSpeechRecognition(); r.onresult=e=>{ document.getElementById('chatInput').value=e.results[0][0].transcript; sendMessage(); }; r.start(); } else alert("Not supported"); }
     
     // ========== AUTOCOMPLETE ==========
     async function fetchDrugs(q,id) { if(q.length<1) return; try{ let r=await fetch(`${BASE_URL}/autocomplete?query=${q}`); let drugs=await r.json(); let list=document.getElementById(id); list.innerHTML=""; drugs.forEach(d=>{ let opt=document.createElement("option"); opt.value=d.name; list.appendChild(opt); }); }catch(e){} }
-    
-    // ========== ALARM ==========
+        // ========== ALARM ==========
     let alarms=JSON.parse(localStorage.getItem('medicineAlarms')||'[]');
-    function setMedicineAlarm() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value, s=document.getElementById('alarmStatus'); if(!m||!t){s.innerHTML="❌ Fill fields";return;} alarms.push({medicine:m,time:t,id:Date.now()}); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); s.innerHTML=`✅ Alarm set for ${m} at ${t}`; s.className="result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); }
+    function setMedicineAlarm() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value, s=document.getElementById('alarmStatus'); if(!m||!t){s.innerHTML="❌ Fill fields";return;} alarms.push({medicine:m,time:t,id:Date.now()}); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); s.innerHTML=`✅ Alarm set for ${m} at ${t}`; s.className="result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); updateDashboard(); }
     function displayAlarms() { let div=document.getElementById('activeAlarms'); if(alarms.length===0){div.innerHTML="<p>No alarms</p>";return;} let h="<h4>Alarms:</h4><ul>"; alarms.forEach(a=>{ h+=`<li>💊 ${a.medicine} at ${a.time} <button onclick="cancelAlarm(${a.id})" style="width:auto;background:#ef4444">Cancel</button></li>`; }); h+="</ul>"; div.innerHTML=h; }
-    function cancelAlarm(id) { alarms=alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); displayAlarms(); }
+    function cancelAlarm(id) { alarms=alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); displayAlarms(); updateDashboard(); }
+    
     // ========== SCAN ==========
     async function scanPrescription() { let f=document.getElementById('prescriptionImage').files[0], d=document.getElementById('scanResult'); if(!f){d.innerHTML="❌ Select image";return;} d.innerHTML="🔄 Scanning..."; let fd=new FormData(); fd.append('image',f); try{ let r=await fetch(`${BASE_URL}/scan-prescription`,{method:'POST',body:fd}); let da=await r.json(); if(da.drugs&&da.drugs.length) d.innerHTML=`📋 ${da.drugs.join(", ")}`; else d.innerHTML="📋 None detected"; d.className="result low-severity"; }catch(e){ d.innerHTML="❌ Scan failed"; d.className="result error"; } }
+        // ========== SIDE NEWS ==========
+    let isSidebarCollapsed = false;
+    function toggleNewsSidebar() { const sidebar = document.getElementById('newsSidebar'); const btn = document.querySelector('.toggle-btn'); isSidebarCollapsed = !isSidebarCollapsed; if(isSidebarCollapsed) { sidebar.classList.add('collapsed'); btn.innerHTML = '▶'; } else { sidebar.classList.remove('collapsed'); btn.innerHTML = '◀'; } }
+    
+    async function fetchSideNews() {
+        const newsDiv = document.getElementById('sideNewsList');
+        newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
+        try {
+            const response = await fetch(`${BASE_URL}/api/health-news`);
+            const data = await response.json();
+            if (data.success && data.news && data.news.length > 0) {
+                let html = '';
+                data.news.forEach(news => {
+                    html += `<div class="news-item" onclick="openNewsLink('${news.url}')"><div class="news-title">${news.title.substring(0, 100)}${news.title.length > 100 ? '...' : ''}</div><div class="news-source">📌 ${news.source}</div></div>`;
+                });
+                newsDiv.innerHTML = html;
+            } else { newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>'; }
+        } catch (error) { newsDiv.innerHTML = '<div class="loading-news">❌ Click refresh to load news</div>'; }
+    }
+    
+    function openNewsLink(url) { if(url && url !== '#') { window.open(url, '_blank'); } }
+    setInterval(() => { fetchSideNews(); }, 30 * 60 * 1000);
+        
+    // ========== FORGOT PASSWORD ==========
+    function forgotPassword() { const email = prompt("Enter your registered email address:"); if(email && email.includes('@')) { alert(`Password reset link sent to ${email}`); } else if(email) { alert("Please enter a valid email address."); } }
+    
+    // ========== CLEAR BOX ==========
+    function clearBox(button) { const box = button.closest('.box'); const inputs = box.querySelectorAll('input, select, textarea'); inputs.forEach(input => { if(input.type === 'text' || input.type === 'number' || input.type === 'email' || input.type === 'password') { input.value = ''; } else if(input.type === 'file') { input.value = ''; } else if(input.tagName === 'SELECT') { input.selectedIndex = 0; } else if(input.type === 'date' || input.type === 'time') { input.value = ''; } }); const resultDivs = box.querySelectorAll('.result'); resultDivs.forEach(div => { div.innerHTML = ''; div.className = 'result'; }); const clearMsg = document.createElement('div'); clearMsg.innerHTML = '✅ Cleared!'; clearMsg.style.cssText = 'color: #22c55e; font-size: 12px; margin-top: 5px; text-align: center;'; box.appendChild(clearMsg); setTimeout(() => { clearMsg.remove(); }, 1500); }
     
     // ========== EVENT LISTENERS ==========
     document.getElementById("drug1").addEventListener("input",e=>fetchDrugs(e.target.value,"drugList"));
@@ -544,178 +683,8 @@
     document.getElementById("foodDrug").addEventListener("input",e=>fetchDrugs(e.target.value,"foodDrugList"));
     
     // ========== INIT ==========
-    displayAlarms(); updateStreak(); switchFamilyMember(); fetchHealthNews(); checkAuth();
+    displayAlarms(); updateStreak(); switchFamilyMember(); checkAuth();
     document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
-    // ========== FORGOT PASSWORD ==========
-function forgotPassword() {
-    const email = prompt("Enter your registered email address:");
-    if (email && email.includes('@')) {
-        // Check if email exists in registered users
-        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const userExists = users.find(u => u.email === email);
-        
-        if (userExists) {
-            // In a real app, send reset link to email
-            alert(`Password reset link sent to ${email}\n\nDemo: Your password is still the same. In production, this would send a real email.`);
-        } else {
-            alert("Email not found. Please sign up first.");
-        }
-    } else if (email) {
-        alert("Please enter a valid email address.");
-    }
-}
-
-// ========== CLEAR BOX FUNCTION ==========
-function clearBox(button) {
-    // Get the parent box
-    const box = button.closest('.box');
-    
-    // Find all input fields in this box
-    const inputs = box.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'text' || input.type === 'number' || input.type === 'email' || input.type === 'password') {
-            input.value = '';
-        } else if (input.type === 'file') {
-            input.value = '';
-        } else if (input.tagName === 'SELECT') {
-            input.selectedIndex = 0;
-        } else if (input.type === 'date') {
-            input.value = '';
-        } else if (input.type === 'time') {
-            input.value = '';
-        }
-    });
-    
-    // Clear result divs in this box
-    const resultDivs = box.querySelectorAll('.result');
-    resultDivs.forEach(div => {
-        div.innerHTML = '';
-        div.className = 'result';
-    });
-    // ========== SIDE PANEL HEALTH NEWS ==========
-let isSidebarCollapsed = false;
-
-function toggleNewsSidebar() {
-    const sidebar = document.getElementById('newsSidebar');
-    const btn = document.querySelector('.toggle-btn');
-    
-    isSidebarCollapsed = !isSidebarCollapsed;
-    
-    if (isSidebarCollapsed) {
-        sidebar.classList.add('collapsed');
-        btn.innerHTML = '▶';
-    } else {
-        sidebar.classList.remove('collapsed');
-        btn.innerHTML = '◀';
-    }
-}
-async function fetchSideNews() {
-    const newsDiv = document.getElementById('sideNewsList');
-    newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
-    
-    try {
-        const response = await fetch(`${BASE_URL}/api/health-news`);
-        const data = await response.json();
-        
-        if (data.success && data.news && data.news.length > 0) {
-            let html = '';
-            data.news.forEach(news => {
-                let timeAgo = '';
-                if (news.publishedAt) {
-                    const pubDate = new Date(news.publishedAt);
-                    const now = new Date();
-                    const diffHours = Math.floor((now - pubDate) / (1000 * 60 * 60));
-                    if (diffHours < 1) timeAgo = 'Just now';
-                    else if (diffHours < 24) timeAgo = `${diffHours} hours ago`;
-                    else timeAgo = `${Math.floor(diffHours / 24)} days ago`;
-                }
-                
-                html += `
-                    <div class="news-item" onclick="openNewsLink('${news.url}')">
-                        <div class="news-title">${news.title.substring(0, 80)}${news.title.length > 80 ? '...' : ''}</div>
-                        <div class="news-source">
-                            <span>📌 ${news.source}</span>
-                            <span class="news-time">${timeAgo || 'Recently'}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            newsDiv.innerHTML = html;
-        } else {
-            newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>';
-        }
-    } catch (error) {
-        newsDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
-    }
-}
-
-
-function openNewsLink(url) {
-    if (url && url !== '#') {
-        window.open(url, '_blank');
-    }
-}
-
-// Auto-refresh news every 30 minutes
-setInterval(() => {
-    fetchSideNews();
-}, 30 * 60 * 1000);
-    // Button click par blink effect
-function blinkElement(elementId) {
-    const element = document.getElementById(elementId);
-    if(element) {
-        element.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            element.style.transform = 'scale(1)';
-        }, 150);
-    }
-}
-    // ========== DARK/LIGHT MODE TOGGLE ==========
-function toggleTheme() {
-    const body = document.body;
-    const toggleBtn = document.getElementById('themeToggleBtn');
-    
-    // Toggle light-mode class
-    body.classList.toggle('light-mode');
-    
-    // Save preference to localStorage
-    const isLightMode = body.classList.contains('light-mode');
-    localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
-    
-    // Update button text and icon
-    if (isLightMode) {
-        toggleBtn.innerHTML = '☀️ Light';
-    } else {
-        toggleBtn.innerHTML = '🌙 Dark';
-    }
-}
-
-// Load saved theme on page load
-function loadTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    const toggleBtn = document.getElementById('themeToggleBtn');
-    
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        if (toggleBtn) toggleBtn.innerHTML = '☀️ Light';
-    } else {
-        document.body.classList.remove('light-mode');
-        if (toggleBtn) toggleBtn.innerHTML = '🌙 Dark';
-    }
-}
-
-// Call loadTheme when page loads
-loadTheme();
-    // Show confirmation
-    const clearMsg = document.createElement('div');
-    clearMsg.innerHTML = '✅ Cleared!';
-    clearMsg.style.cssText = 'color: #22c55e; font-size: 12px; margin-top: 5px; text-align: center;';
-    box.appendChild(clearMsg);
-    
-    setTimeout(() => {
-        clearMsg.remove();
-    }, 1500);
-}
 </script>
 
 </body>
