@@ -724,7 +724,40 @@ function loadSidebarState() {
         }
     }
 }
+// ========== SIDE PANEL TOGGLE - FULL HIDE/SHOW ==========
+function toggleSidePanel() {
+    const sidebar = document.getElementById('newsSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    
+    sidebar.classList.toggle('collapsed');
+    
+    // Change arrow direction
+    if (sidebar.classList.contains('collapsed')) {
+        toggleBtn.innerHTML = '▶';
+    } else {
+        toggleBtn.innerHTML = '◀';
+    }
+    
+    // Save state
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+}
 
+// Load saved sidebar state
+function loadSidebarState() {
+    const sidebar = document.getElementById('newsSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    
+    if (sidebar && toggleBtn) {
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+            toggleBtn.innerHTML = '▶';
+        } else {
+            sidebar.classList.remove('collapsed');
+            toggleBtn.innerHTML = '◀';
+        }
+    }
+}
 // Call this after login
 loadSidebarState();
 </script>
