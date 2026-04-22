@@ -967,7 +967,7 @@ body {
 .plus-menu-item:hover {
     background: #f1f5f9;
 }
-/* ========== SIDE PANEL SLIDE EFFECT ========== */
+/* ========== SIDE PANEL - MINIMAL ICON MODE ========== */
 
 /* Side Panel Container */
 .news-sidebar {
@@ -982,39 +982,57 @@ body {
     padding: 15px;
     z-index: 100;
     overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(0);
+    transition: all 0.3s ease-in-out;
     box-shadow: -5px 0 25px rgba(0,0,0,0.05);
 }
 
-/* Collapsed State (Hidden) */
+/* Collapsed State - Sirf Icon Dikhega */
 .news-sidebar.collapsed {
-    transform: translateX(calc(100% - 45px));
+    width: 50px;
+    padding: 15px 5px;
 }
 
-/* Arrow Toggle Button */
+.news-sidebar.collapsed .news-header h3,
+.news-sidebar.collapsed .news-header button,
+.news-sidebar.collapsed .news-item,
+.news-sidebar.collapsed .loading-news {
+    display: none;
+}
+
+/* News Icon - Jab Panel Collapsed Ho */
+.news-sidebar.collapsed::after {
+    content: "📰";
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #2c7da0;
+    cursor: pointer;
+}
+
+/* Toggle Button */
 .sidebar-toggle {
     position: absolute;
-    left: -40px;
+    left: -12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 35px;
-    height: 60px;
+    width: 25px;
+    height: 50px;
     background: #2c7da0;
     border: none;
-    border-radius: 20px 0 0 20px;
+    border-radius: 15px 0 0 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 14px;
     color: white;
-    transition: 0.2s;
+    z-index: 101;
 }
 
 .sidebar-toggle:hover {
     background: #1a5a7a;
-    width: 40px;
 }
 
 /* Mobile View */
@@ -1026,17 +1044,17 @@ body {
         bottom: 0;
         right: 0;
         border-radius: 15px 15px 0 0;
-        transform: translateY(0);
     }
     .news-sidebar.collapsed {
-        transform: translateY(calc(100% - 50px));
+        width: 100%;
+        height: 50px;
     }
     .sidebar-toggle {
         left: 50%;
-        top: -30px;
+        top: -15px;
         transform: translateX(-50%);
-        width: 60px;
-        height: 30px;
-        border-radius: 15px 15px 0 0;
+        width: 50px;
+        height: 25px;
+        border-radius: 10px 10px 0 0;
     }
 }
