@@ -1092,94 +1092,118 @@ body.light-mode .news-panel .news-item {
         font-size: 20px;
     }
 }
-/* ========== SIDE PANEL - MINIMAL ICON MODE ========== */
+/* ========== SIDE PANEL - ONLY ARROW VISIBLE ========== */
 
-/* Side Panel Container */
+/* Side Panel - Hidden by default */
 .news-sidebar {
     position: fixed;
     right: 0;
-    top: 80px;
-    width: 320px;
-    height: calc(100vh - 100px);
-    background: white;
-    border-left: 2px solid #2c7da0;
-    border-radius: 15px 0 0 15px;
-    padding: 15px;
-    z-index: 100;
-    overflow-y: auto;
-    transition: all 0.3s ease-in-out;
-    box-shadow: -5px 0 25px rgba(0,0,0,0.05);
-}
-
-/* Collapsed State - Sirf Icon Dikhega */
-.news-sidebar.collapsed {
+    top: 50%;
+    transform: translateY(-50%);
     width: 50px;
-    padding: 15px 5px;
+    background: #2c7da0;
+    border-radius: 30px 0 0 30px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
 }
 
-.news-sidebar.collapsed .news-header h3,
-.news-sidebar.collapsed .news-header button,
-.news-sidebar.collapsed .news-item,
-.news-sidebar.collapsed .loading-news {
+/* Panel content - hidden by default */
+.news-sidebar .news-header,
+.news-sidebar #sideNewsList {
     display: none;
 }
 
-/* News Icon - Jab Panel Collapsed Ho */
-.news-sidebar.collapsed::after {
-    content: "📰";
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: #2c7da0;
-    cursor: pointer;
+/* When panel is open */
+.news-sidebar.open {
+    width: 320px;
+    background: white;
+    border-left: 2px solid #2c7da0;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
 }
 
-/* Toggle Button */
+.news-sidebar.open .news-header,
+.news-sidebar.open #sideNewsList {
+    display: block;
+}
+
+/* Arrow Button (Always Visible) */
 .sidebar-toggle {
-    position: absolute;
-    left: -12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 25px;
+    width: 50px;
     height: 50px;
     background: #2c7da0;
     border: none;
-    border-radius: 15px 0 0 15px;
+    border-radius: 50%;
+    font-size: 24px;
     cursor: pointer;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    color: white;
-    z-index: 101;
 }
 
-.sidebar-toggle:hover {
-    background: #1a5a7a;
+.news-sidebar.open .sidebar-toggle {
+    background: transparent;
+    color: #2c7da0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 35px;
+    height: 35px;
+}
+
+/* Header Styles */
+.news-header {
+    padding: 15px;
+    border-bottom: 1px solid #eef2f6;
+}
+
+.news-header h3 {
+    margin: 0;
+    color: #1a2c3e;
+}
+
+/* News Items */
+#sideNewsList {
+    padding: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.news-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    border-left: 3px solid #2c7da0;
+}
+
+.news-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #1a2c3e;
+}
+
+.news-source {
+    font-size: 10px;
+    color: #2c7da0;
+    margin-top: 5px;
+}
+
+.loading-news {
+    text-align: center;
+    padding: 20px;
+    color: #6c86a3;
 }
 
 /* Mobile View */
 @media (max-width: 768px) {
-    .news-sidebar {
+    .news-sidebar.open {
         width: 100%;
-        height: 300px;
-        top: auto;
-        bottom: 0;
-        right: 0;
-        border-radius: 15px 15px 0 0;
-    }
-    .news-sidebar.collapsed {
-        width: 100%;
-        height: 50px;
-    }
-    .sidebar-toggle {
-        left: 50%;
-        top: -15px;
-        transform: translateX(-50%);
-        width: 50px;
-        height: 25px;
-        border-radius: 10px 10px 0 0;
+        top: 0;
+        transform: translateY(0);
+        border-radius: 0;
     }
 }
