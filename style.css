@@ -967,3 +967,76 @@ body {
 .plus-menu-item:hover {
     background: #f1f5f9;
 }
+/* ========== SIDE PANEL SLIDE EFFECT ========== */
+
+/* Side Panel Container */
+.news-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 320px;
+    height: calc(100vh - 100px);
+    background: white;
+    border-left: 2px solid #2c7da0;
+    border-radius: 15px 0 0 15px;
+    padding: 15px;
+    z-index: 100;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    box-shadow: -5px 0 25px rgba(0,0,0,0.05);
+}
+
+/* Collapsed State (Hidden) */
+.news-sidebar.collapsed {
+    transform: translateX(calc(100% - 45px));
+}
+
+/* Arrow Toggle Button */
+.sidebar-toggle {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 60px;
+    background: #2c7da0;
+    border: none;
+    border-radius: 20px 0 0 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    transition: 0.2s;
+}
+
+.sidebar-toggle:hover {
+    background: #1a5a7a;
+    width: 40px;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .news-sidebar {
+        width: 100%;
+        height: 300px;
+        top: auto;
+        bottom: 0;
+        right: 0;
+        border-radius: 15px 15px 0 0;
+        transform: translateY(0);
+    }
+    .news-sidebar.collapsed {
+        transform: translateY(calc(100% - 50px));
+    }
+    .sidebar-toggle {
+        left: 50%;
+        top: -30px;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 30px;
+        border-radius: 15px 15px 0 0;
+    }
+}
