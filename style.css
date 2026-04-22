@@ -1129,3 +1129,128 @@ body {
 .news-sidebar.collapsed .sidebar-toggle {
     left: -12px;
 }
+/* ========== FLOATING NEWS BUTTON - ONLY ARROW ========== */
+
+/* Floating Arrow Button */
+.news-floating-btn {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: #2c7da0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.news-floating-btn:hover {
+    background: #1a5a7a;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* News Panel (Hidden by default) */
+.news-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100vh;
+    background: white;
+    border-left: 2px solid #2c7da0;
+    z-index: 1001;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+}
+
+.news-panel.open {
+    transform: translateX(0);
+}
+
+.news-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eef2f6;
+    background: #2c7da0;
+    color: white;
+}
+
+.news-panel-header h3 {
+    margin: 0;
+    color: white;
+}
+
+.close-news-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    width: auto;
+}
+
+.close-news-btn:hover {
+    opacity: 0.8;
+}
+
+.news-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* News Items */
+.news-panel .news-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    border-left: 3px solid #2c7da0;
+}
+
+.news-panel .news-title {
+    color: #1a2c3e;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.news-panel .news-source {
+    font-size: 11px;
+    color: #2c7da0;
+    margin-top: 5px;
+}
+
+/* Dark Mode Support */
+body.light-mode .news-panel {
+    background: white;
+}
+
+body.light-mode .news-panel .news-item {
+    background: #f1f5f9;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+    .news-panel {
+        width: 100%;
+    }
+    .news-floating-btn {
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+}
