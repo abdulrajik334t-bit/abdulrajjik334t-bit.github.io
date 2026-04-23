@@ -63,7 +63,7 @@
             background: #38bdf8 !important;
         }
         
-        /* App Container - New Dashboard Design */
+        /* App Container */
         .app-container { display: none; background: #f4f7fb; }
         
         /* Dashboard Header */
@@ -226,33 +226,119 @@
         .full-width { grid-column: span 2; }
         @media (max-width: 768px) { .container-2col { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
         
-        /* Side Panel - Hidden by default, shows after login */
-        .news-sidebar {
+        /* Floating News Button - Only Arrow */
+        .news-floating-btn {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: #2c7da0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .news-floating-btn:hover {
+            background: #1a5a7a;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        /* News Panel */
+        .news-panel {
             position: fixed;
             right: 0;
-            top: 80px;
-            width: 300px;
-            height: calc(100vh - 100px);
+            top: 0;
+            width: 350px;
+            height: 100vh;
             background: white;
             border-left: 2px solid #2c7da0;
-            border-radius: 15px 0 0 15px;
-            padding: 15px;
-            z-index: 100;
-            overflow-y: auto;
-            transform: translateX(0);
-            transition: transform 0.3s ease;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.05);
-            display: none;  /* 🔥 Hidden by default - shows only after login */
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
         }
-        .news-sidebar.collapsed { transform: translateX(calc(100% - 40px)); }
-        .news-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .news-header h3 { color: #2c7da0; }
-        .toggle-btn { background: #2c7da0; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; color: white; }
-        .news-item { background: #f8fafc; border-radius: 12px; padding: 12px; margin-bottom: 12px; cursor: pointer; border-left: 3px solid #2c7da0; }
-        .news-title { color: #1a2c3e; font-size: 13px; font-weight: bold; }
-        .news-source { font-size: 10px; color: #2c7da0; margin-top: 5px; }
-        .loading-news { text-align: center; padding: 20px; color: #6c86a3; }
-        @media (max-width: 768px) { .news-sidebar { width: 100%; height: 300px; top: auto; bottom: 0; border-radius: 15px 15px 0 0; } .news-sidebar.collapsed { transform: translateY(calc(100% - 40px)); } }
+        .news-panel.open {
+            transform: translateX(0);
+        }
+        .news-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eef2f6;
+            background: #2c7da0;
+            color: white;
+        }
+        .news-panel-header h3 {
+            margin: 0;
+            color: white;
+        }
+        .close-news-btn {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            padding: 0;
+            width: auto;
+        }
+        .close-news-btn:hover {
+            opacity: 0.8;
+        }
+        .news-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .news-panel .news-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border-left: 3px solid #2c7da0;
+        }
+        .news-panel .news-title {
+            color: #1a2c3e;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .news-panel .news-source {
+            font-size: 11px;
+            color: #2c7da0;
+            margin-top: 5px;
+        }
+        .loading-news {
+            text-align: center;
+            padding: 20px;
+            color: #6c86a3;
+        }
+        
+        /* Dark Mode Support */
+        body.light-mode .news-panel {
+            background: white;
+        }
+        
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .news-panel {
+                width: 100%;
+            }
+            .news-floating-btn {
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -302,7 +388,7 @@
     </div>
 </div>
 
-<!-- MAIN APP - NEW DASHBOARD DESIGN -->
+<!-- MAIN APP -->
 <div id="appContainer" class="app-container">
     <div class="navbar">
         <div class="logo">💊 DrugAI Pro</div>
@@ -345,12 +431,8 @@
         </div>
         <div id="medicineScheduleList">
             <div class="medicine-card">
-                <div><span class="medicine-name">Amlodipine</span><br><span class="dose-badge">5mg | Before Meals</span></div>
-                <div class="taken-status">✅ Taken</div>
-            </div>
-            <div class="medicine-card">
-                <div><span class="medicine-name">Vitamin D</span><br><span class="dose-badge">10,000 IU</span></div>
-                <div class="taken-status" style="color:#f59e0b;">⏰ Remind</div>
+                <div><span class="medicine-name">No medicines scheduled</span></div>
+                <div>⚠️ Add medicine alarm</div>
             </div>
         </div>
     </div>
@@ -361,14 +443,14 @@
             <div id="streakDisplay" style="font-size: 40px; text-align: center;">0 days</div>
             <button onclick="markMedicineTaken()">✅ I took my medicine</button>
             <div id="badge" style="text-align: center; margin-top: 8px;"></div>
-            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
+            <button onclick="resetHealthStreak()" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Reset Streak</button>
         </div>
 
         <div class="box"><h3>👨‍👩‍👧‍👦 Family</h3>
             <select id="familySelect"><option value="self">👤 Myself</option><option value="dad">👨 Dad</option><option value="mom">👩 Mom</option><option value="grandma">👵 Grandma</option></select>
             <button onclick="addFamilyMember()">➕ Add Member</button>
             <div id="familyMedicines" style="margin-top: 8px; font-size: 12px;"></div>
-            <button onclick="resetHealthStreak()" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Reset Streak</button>
+            <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
         <div class="box"><h3>💊 Drug-Drug Interaction</h3>
@@ -432,7 +514,7 @@
         </div>
 
         <div class="box"><h3>📦 Stock Tracker</h3>
-            <input type="text" id="stockMedicine" placeholder="Medicine">
+                       <input type="text" id="stockMedicine" placeholder="Medicine">
             <input type="number" id="stockQuantity" placeholder="Qty">
             <input type="date" id="stockExpiry" placeholder="Expiry">
             <button onclick="addToStock()">➕ Add</button>
@@ -449,7 +531,7 @@
             <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
 
-                <div class="box"><h3>🗣️ Voice Symptom</h3>
+        <div class="box"><h3>🗣️ Voice Symptom</h3>
             <button onclick="startSymptomCheck()">🎙️ Talk to AI (10 sec)</button>
             <div id="symptomTranscript" style="min-height: 35px; margin-top: 8px; padding: 6px; background: #f8fafc; border-radius: 6px; font-size: 12px;"></div>
             <div id="symptomAdvice" class="result"></div>
@@ -462,7 +544,6 @@
             <div id="scanResult" class="result"></div>
             <button onclick="clearBox(this)" style="background: #e2e8f0; color: #1a2c3e; margin-top: 10px;">🗑️ Clear</button>
         </div>
-
         <div class="box full-width"><h3>📞 Emergency</h3>
             <p>🚑 102 | ☠️ Poison: 1800-123-1234 | 📞 +91 7999754531 | 📧 abdulrajik334t@gmail.com</p>
         </div>
@@ -470,7 +551,7 @@
 </div>
 
 <script>
-    const BASE_URL = "https://drug-api-uk6k.onrender.com";
+    const BASE_URL = "https://drug-api-2.onrender.com";
     
     // ========== LOGIN ==========
     function showSignup() {
@@ -516,7 +597,7 @@
         const password = document.getElementById('loginPassword').value;
         const msg = document.getElementById('authMessage');
         if(!email||!password) { msg.innerHTML="❌ Enter email & password"; return; }
-                msg.innerHTML="🔄 Logging in...";
+        msg.innerHTML="🔄 Logging in...";
         try {
             const res = await fetch(`${BASE_URL}/api/login`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
@@ -529,8 +610,7 @@
                 msg.innerHTML="✅ Success!"; setTimeout(()=>location.reload(),1000);
             } else { msg.innerHTML="❌ "+data.message; }
         } catch(e) { msg.innerHTML="❌ Server error"; }
-    }
-    
+                                     }
     function logout() { localStorage.clear(); location.reload(); }
     
     function checkAuth() {
@@ -540,27 +620,23 @@
             document.getElementById('appContainer').style.display = 'block';
             document.getElementById('userName').innerHTML = user.name.split(' ')[0];
             document.getElementById('userNameDisplay').innerHTML = user.name.split(' ')[0];
-            // Show side panel after login
-            document.getElementById('newsSidebar').style.display = 'block';
             loadTheme();
-            fetchSideNews();
             updateDashboard();
             updateStreak();
             switchFamilyMember();
             displayAlarms();
             resetDailyTakenStatus();
-        updateTodaySchedule();
+            updateTodaySchedule();
         }
     }
-        // ========== DASHBOARD FUNCTIONS ==========
+    
+    // ========== DASHBOARD FUNCTIONS ==========
     function updateDashboard() {
         let streak = localStorage.getItem("medStreak") || 0;
         document.getElementById("streakDays").innerText = streak;
         document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
-        
         let alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
         document.getElementById("todayMeds").innerText = alarms.length;
-        
         let totalChecks = localStorage.getItem("totalChecks") || 0;
         document.getElementById("totalInteractions").innerText = totalChecks;
     }
@@ -587,7 +663,8 @@
             if(toggleBtn) toggleBtn.innerHTML = '🌙 Dark';
         }
     }
-        // ========== HEALTH STREAK ==========
+    
+    // ========== HEALTH STREAK ==========
     let streak = localStorage.getItem("medStreak")||0, lastDate = localStorage.getItem("lastTaken")||"";
     function updateStreak() { 
         document.getElementById("streakDisplay").innerHTML = `🔥 ${streak} days`;
@@ -607,29 +684,34 @@
         } else alert("✅ Already marked!"); 
     }
     
+    // ========== RESET HEALTH STREAK ==========
+    function resetHealthStreak() {
+        if(confirm('Are you sure you want to reset your health streak? This cannot be undone.')) {
+            streak = 0;
+            lastDate = '';
+            localStorage.setItem('medStreak', 0);
+            localStorage.setItem('lastTaken', '');
+            updateStreak();
+            updateDashboard();
+            alert('✅ Health streak has been reset to 0 days!');
+        }
+    }
+    
     // ========== FAMILY ==========
     let family = JSON.parse(localStorage.getItem("family"))||{self:{name:"Myself",medicines:[]},dad:{name:"Dad",medicines:["aspirin"]},mom:{name:"Mom",medicines:["lisinopril"]},grandma:{name:"Grandma",medicines:["warfarin"]}};
     function switchFamilyMember() {
-    const selected = document.getElementById('familySelect').value;
-    const member = family[selected];
-    let medicinesHtml = '';
-    
-    if (member.medicines && member.medicines.length > 0) {
-        medicinesHtml = member.medicines.join(', ');
-    } else {
-        medicinesHtml = 'No medicines added yet';
-    }
-    
-    document.getElementById('familyMedicines').innerHTML = `💊 ${member.name}'s medicines: ${medicinesHtml}`;
-    
-    // Update drug interaction dropdowns with family member's medicines
-    if (member.medicines && member.medicines.length > 0) {
-        // Optional: pre-fill drug inputs
-        console.log(`Switched to ${member.name} with medicines: ${member.medicines.join(', ')}`);
-    }
-    }
+        const selected = document.getElementById('familySelect').value;
+        const member = family[selected];
+        let medicinesHtml = '';
+        if (member.medicines && member.medicines.length > 0) {
+            medicinesHtml = member.medicines.join(', ');
+        } else {
+            medicinesHtml = 'No medicines added yet';
+        }
+        document.getElementById('familyMedicines').innerHTML = `💊 ${member.name}'s medicines: ${medicinesHtml}`;}
     function addFamilyMember() { let n=prompt("Name:"); if(n) { let id=n.toLowerCase().replace(/\s/g,''); family[id]={name:n,medicines:[]}; localStorage.setItem("family",JSON.stringify(family)); let opt=document.createElement("option"); opt.value=id; opt.text=`👤 ${n}`; document.getElementById("familySelect").appendChild(opt); alert(`Added ${n}!`); } }
-        // ========== QR ==========
+    
+    // ========== QR ==========
     function generateQRCode() { let d={name:"Patient",medicines:["aspirin","lisinopril"],contact:"+91 7999754531"}; document.getElementById("qrcode").innerHTML=""; new QRCode(document.getElementById("qrcode"),{text:JSON.stringify(d),width:130,height:130}); alert("✅ QR Generated!"); }
     
     // ========== PHARMACY ==========
@@ -640,63 +722,135 @@
     
     // ========== CALENDAR ==========
     function addToGoogleCalendar() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value; if(!m||!t){alert("Enter medicine & time");return;} window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Take+${m}&dates=${new Date().toISOString().replace(/-|:|\./g,'')}`,'_blank'); }
-    
-    // ========== LANGUAGE ==========
+        // ========== LANGUAGE ==========
     function changeLanguage() { let l=document.getElementById("languageSelect").value, t={en:"Complete Medical Assistant",hi:"पूर्ण चिकित्सा सहायक",te:"పూర్తి వైద్య సహాయక",ta:"முழு மருத்துவ உதவியாளர்"}; if(t[l]) document.querySelector(".hero h1").innerHTML=t[l]; }
     function startTelemedicine() { window.open('https://www.practo.com/online-doctor-consultation','_blank'); }
     function bookAppointment() { window.open('https://www.practo.com/bangalore/doctors','_blank'); }
-        // ========== STOCK ==========
+    
+    // ========== STOCK ==========
     let stock=JSON.parse(localStorage.getItem("medicineStock")||"{}");
     function addToStock() { let n=document.getElementById("stockMedicine").value.trim().toLowerCase(), q=parseInt(document.getElementById("stockQuantity").value), e=document.getElementById("stockExpiry").value, d=document.getElementById("stockResult"); if(!n||!q||!e){d.innerHTML="❌ Fill all";return;} if(stock[n]) stock[n].quantity+=q; else stock[n]={quantity:q,expiryDate:e}; localStorage.setItem("medicineStock",JSON.stringify(stock)); d.innerHTML=`✅ Added ${q} x ${n}`; document.getElementById("stockMedicine").value=""; document.getElementById("stockQuantity").value=""; document.getElementById("stockExpiry").value=""; }
     function checkExpiry() { let t=new Date(), exp=[]; for(let [n,da] of Object.entries(stock)){ let d=Math.ceil((new Date(da.expiryDate)-t)/(1000*3600*24)); if(d<=30&&d>0) exp.push(`${n}: ${d}d`); else if(d<=0) exp.push(`${n}: EXPIRED!`); } document.getElementById("expiryAlert").innerHTML=exp.length?`⚠️ ${exp.join(", ")}`:"✅ No expiry soon"; }
     function viewAllStock() { let h="<strong>Stock:</strong><br>"; for(let [n,da] of Object.entries(stock)) h+=`💊 ${n}: ${da.quantity} (Exp: ${da.expiryDate})<br>`; document.getElementById("stockResult").innerHTML=h||"Empty"; }
-    
-    // ========== HEATMAP ==========
+        // ========== HEATMAP ==========
     async function generateHeatmap() { let meds=["aspirin","paracetamol","ibuprofen","warfarin","lisinopril","metformin"], div=document.getElementById('heatmap'); div.innerHTML="🔄 Generating..."; let html='<div style="display:grid;gap:3px;">'; html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div></div>${meds.map(m=>`<div style="font-weight:bold;font-size:11px">${m.slice(0,5)}</div>`).join('')}</div>`; for(let i=0;i<meds.length;i++){ html+=`<div style="display:grid;grid-template-columns:repeat(${meds.length+1},80px);gap:3px;"><div style="font-weight:bold;font-size:11px">${meds[i].slice(0,5)}</div>`; for(let j=0;j<meds.length;j++){ if(i===j) html+=`<div style="background:#333;text-align:center">-</div>`; else{ try{ let r=await fetch(`${BASE_URL}/check?drug1=${meds[i]}&drug2=${meds[j]}`); let da=await r.json(); let c="#22c55e",s="✓"; if(da.severity==="HIGH"){c="#ef4444";s="⚠️"}else if(da.severity==="MODERATE"){c="#f59e0b";s="⚡"} html+=`<div style="background:${c};text-align:center;border-radius:3px;padding:4px;font-size:10px" title="${da.message}">${s}</div>`; }catch(e){ html+=`<div style="background:#555;text-align:center">?</div>`; } } } html+=`</div>`; } html+=`</div>`; div.innerHTML=html; }
-        // ========== VOICE SYMPTOM ==========
+    
+    // ========== VOICE SYMPTOM ==========
     let recorder, chunks=[];
     async function startSymptomCheck() { let t=document.getElementById('symptomTranscript'), a=document.getElementById('symptomAdvice'); try{ let s=await navigator.mediaDevices.getUserMedia({audio:true}); recorder=new MediaRecorder(s); chunks=[]; recorder.ondataavailable=e=>chunks.push(e.data); recorder.onstop=()=>{ t.innerHTML="🤖 Analyzing..."; setTimeout(()=>{ t.innerHTML="🗣️ Symptoms: fever, headache, cough"; a.innerHTML="🩺 Rest, hydrate, paracetamol. Consult if persists >3 days."; a.className="result low-severity"; },1500); s.getTracks().forEach(tr=>tr.stop()); }; recorder.start(); t.innerHTML="🎙️ Listening (10 sec)..."; setTimeout(()=>{ if(recorder&&recorder.state==="recording") recorder.stop(); },10000); }catch(e){ t.innerHTML="❌ Microphone access denied"; } }
-    
-    // ========== DRUG INTERACTIONS ==========
+        // ========== DRUG INTERACTIONS ==========
     async function checkInteraction() { let d1=document.getElementById('drug1').value, d2=document.getElementById('drug2').value, div=document.getElementById('interactionResult'); if(!d1||!d2){div.innerHTML="❌ Enter both";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/check?drug1=${d1}&drug2=${d2}`); let da=await r.json(); let c=da.severity==="HIGH"?"high-severity":(da.severity==="MODERATE"?"moderate-severity":"low-severity"); div.innerHTML=`<strong>⚠️ ${da.severity}</strong><br>📋 ${da.message}`; div.className=`result ${c}`; let total=parseInt(localStorage.getItem("totalChecks")||0)+1; localStorage.setItem("totalChecks",total); updateDashboard(); }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
     async function checkFoodInteraction() { let d=document.getElementById('foodDrug').value, f=document.getElementById('foodSelect').value, div=document.getElementById('foodResult'); if(!d){div.innerHTML="❌ Enter drug";return;} div.innerHTML="🔄 Checking..."; try{ let r=await fetch(`${BASE_URL}/foodcheck?drug=${d}&food=${f}`); let da=await r.json(); div.innerHTML=`<strong>🍽️ ${f} + ${d}</strong><br>📋 ${da.message}`; div.className="result moderate-severity"; }catch(e){ div.innerHTML="❌ Error"; div.className="result error"; } }
-        // ========== AI CHAT ==========
+    
+    // ========== AI CHAT ==========
     async function sendMessage() { let inp=document.getElementById('chatInput'), msg=inp.value.trim(), chat=document.getElementById('chatMessages'); if(!msg) return; chat.innerHTML+=`<div class="user-message">🧑 ${msg}</div>`; inp.value=""; chat.scrollTop=chat.scrollHeight; chat.innerHTML+=`<div class="bot-message">🤖 Thinking...</div>`; try{ let r=await fetch(`${BASE_URL}/ai?msg=${encodeURIComponent(msg)}`); let da=await r.json(); chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 ${da.reply}</div>`; }catch(e){ chat.removeChild(chat.lastChild); chat.innerHTML+=`<div class="bot-message">🤖 Error</div>`; } chat.scrollTop=chat.scrollHeight; }
     function startVoiceInput() { if('webkitSpeechRecognition' in window) { let r=new webkitSpeechRecognition(); r.onresult=e=>{ document.getElementById('chatInput').value=e.results[0][0].transcript; sendMessage(); }; r.start(); } else alert("Not supported"); }
-    
-    // ========== AUTOCOMPLETE ==========
+        // ========== AUTOCOMPLETE ==========
     async function fetchDrugs(q,id) { if(q.length<1) return; try{ let r=await fetch(`${BASE_URL}/autocomplete?query=${q}`); let drugs=await r.json(); let list=document.getElementById(id); list.innerHTML=""; drugs.forEach(d=>{ let opt=document.createElement("option"); opt.value=d.name; list.appendChild(opt); }); }catch(e){} }
-        // ========== ALARM ==========
+    
+    // ========== ALARM ==========
     let alarms=JSON.parse(localStorage.getItem('medicineAlarms')||'[]');
-    function setMedicineAlarm() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value, s=document.getElementById('alarmStatus'); if(!m||!t){s.innerHTML="❌ Fill fields";return;} alarms.push({medicine:m,time:t,id:Date.now()}); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); s.innerHTML=`✅ Alarm set for ${m} at ${t}`; s.className="result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); updateDashboard(); }
+    function setMedicineAlarm() { let m=document.getElementById('alarmMedicine').value, t=document.getElementById('alarmTime').value, s=document.getElementById('alarmStatus'); if(!m||!t){s.innerHTML="❌ Fill fields";return;} alarms.push({medicine:m,time:t,id:Date.now()}); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); s.innerHTML=`✅ Alarm set for ${m} at ${t}`; s.className="result low-severity"; document.getElementById('alarmMedicine').value=""; document.getElementById('alarmTime').value=""; displayAlarms(); updateDashboard(); updateTodaySchedule(); }
     function displayAlarms() { let div=document.getElementById('activeAlarms'); if(alarms.length===0){div.innerHTML="<p>No alarms</p>";return;} let h="<h4>Alarms:</h4><ul>"; alarms.forEach(a=>{ h+=`<li>💊 ${a.medicine} at ${a.time} <button onclick="cancelAlarm(${a.id})" style="width:auto;background:#ef4444">Cancel</button></li>`; }); h+="</ul>"; div.innerHTML=h; }
-    function cancelAlarm(id) { alarms=alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); displayAlarms(); updateDashboard(); }
+    function cancelAlarm(id) { alarms=alarms.filter(a=>a.id!==id); localStorage.setItem('medicineAlarms',JSON.stringify(alarms)); displayAlarms(); updateDashboard(); updateTodaySchedule(); }
     
     // ========== SCAN ==========
     async function scanPrescription() { let f=document.getElementById('prescriptionImage').files[0], d=document.getElementById('scanResult'); if(!f){d.innerHTML="❌ Select image";return;} d.innerHTML="🔄 Scanning..."; let fd=new FormData(); fd.append('image',f); try{ let r=await fetch(`${BASE_URL}/scan-prescription`,{method:'POST',body:fd}); let da=await r.json(); if(da.drugs&&da.drugs.length) d.innerHTML=`📋 ${da.drugs.join(", ")}`; else d.innerHTML="📋 None detected"; d.className="result low-severity"; }catch(e){ d.innerHTML="❌ Scan failed"; d.className="result error"; } }
-        // ========== SIDE NEWS ==========
-    let isSidebarCollapsed = false;
-    function toggleNewsSidebar() { const sidebar = document.getElementById('newsSidebar'); const btn = document.querySelector('.toggle-btn'); isSidebarCollapsed = !isSidebarCollapsed; if(isSidebarCollapsed) { sidebar.classList.add('collapsed'); btn.innerHTML = '▶'; } else { sidebar.classList.remove('collapsed'); btn.innerHTML = '◀'; } }
+        // ========== NEWS FUNCTIONS ==========
+    function openNewsPanel() {
+        const panel = document.getElementById('newsPanel');
+        panel.classList.add('open');
+        fetchNewsContent();
+    }
     
-    async function fetchSideNews() {
-        const newsDiv = document.getElementById('sideNewsList');
-        newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
+    function closeNewsPanel() {
+        const panel = document.getElementById('newsPanel');
+        panel.classList.remove('open');
+    }
+    
+    async function fetchNewsContent() {
+        const contentDiv = document.getElementById('newsPanelContent');
+        contentDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
         try {
             const response = await fetch(`${BASE_URL}/api/health-news`);
             const data = await response.json();
             if (data.success && data.news && data.news.length > 0) {
                 let html = '';
                 data.news.forEach(news => {
-                    html += `<div class="news-item" onclick="openNewsLink('${news.url}')"><div class="news-title">${news.title.substring(0, 100)}${news.title.length > 100 ? '...' : ''}</div><div class="news-source">📌 ${news.source}</div></div>`;
+                    html += `<div class="news-item" onclick="openNewsLink('${news.url}')">
+                                <div class="news-title">${news.title.substring(0, 100)}${news.title.length > 100 ? '...' : ''}</div>
+                                <div class="news-source">📌 ${news.source}</div>
+                             </div>`;
                 });
-                newsDiv.innerHTML = html;
-            } else { newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>'; }
-        } catch (error) { newsDiv.innerHTML = '<div class="loading-news">❌ Click refresh to load news</div>'; }
+                contentDiv.innerHTML = html;
+            } else {
+                contentDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>';
+            }
+        } catch (error) {
+            contentDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
+        }
     }
     
-    function openNewsLink(url) { if(url && url !== '#') { window.open(url, '_blank'); } }
-    setInterval(() => { fetchSideNews(); }, 30 * 60 * 1000);
-        
+    function openNewsLink(url) {
+        if (url && url !== '#') {
+            window.open(url, '_blank');
+            closeNewsPanel();
+        }
+    }
+    
+    // ========== TODAY'S SCHEDULE ==========
+    function updateTodaySchedule() {
+        const alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
+        const scheduleDiv = document.getElementById('medicineScheduleList');
+        if (!scheduleDiv) return;
+        if (alarms.length === 0) {
+            scheduleDiv.innerHTML = `<div class="medicine-card"><div><span class="medicine-name">No medicines scheduled</span></div><div>⚠️ Add medicine alarm</div></div>`;
+            return;
+        }
+        let html = '';
+        const today = new Date().toDateString();
+        alarms.forEach(alarm => {
+            const takenKey = `taken_${alarm.medicine}_${today}`;
+            const isTaken = localStorage.getItem(takenKey) === 'true';
+            html += `<div class="medicine-card" id="schedule_${alarm.id}">
+                        <div><span class="medicine-name">${alarm.medicine}</span><br><span class="dose-badge">At ${alarm.time} | ${alarm.period === 'daily' ? 'Daily' : 'One time'}</span></div>
+                        <div><button onclick="markMedicineAsTaken('${alarm.medicine}', ${alarm.id})" style="background: ${isTaken ? '#22c55e' : '#e2e8f0'}; color: ${isTaken ? 'white' : '#1a2c3e'}; padding: 5px 15px; border: none; border-radius: 20px; cursor: pointer;">${isTaken ? '✅ Taken' : '⏰ Mark Taken'}</button></div>
+                    </div>`;
+        });
+        scheduleDiv.innerHTML = html;
+    }
+    
+    function markMedicineAsTaken(medicine, alarmId) {
+        const today = new Date().toDateString();
+        const takenKey = `taken_${medicine}_${today}`;
+        localStorage.setItem(takenKey, 'true');
+        const scheduleCard = document.getElementById(`schedule_${alarmId}`);
+        if (scheduleCard) {
+            const button = scheduleCard.querySelector('button');
+            button.innerHTML = '✅ Taken';
+            button.style.background = '#22c55e';
+            button.style.color = 'white';
+            button.disabled = true;
+        }
+        markMedicineTaken();
+        alert(`✅ Marked ${medicine} as taken!`);
+    }
+    
+    function resetDailyTakenStatus() {
+        const today = new Date().toDateString();
+        const lastResetDate = localStorage.getItem('lastResetDate');
+        if (lastResetDate !== today) {
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith('taken_')) {
+                    localStorage.removeItem(key);
+                }
+            });
+            localStorage.setItem('lastResetDate', today);
+            updateTodaySchedule();
+        }
+    }
+    
     // ========== FORGOT PASSWORD ==========
     function forgotPassword() { const email = prompt("Enter your registered email address:"); if(email && email.includes('@')) { alert(`Password reset link sent to ${email}`); } else if(email) { alert("Please enter a valid email address."); } }
     
@@ -711,188 +865,11 @@
     // ========== INIT ==========
     displayAlarms(); updateStreak(); switchFamilyMember(); checkAuth();
     document.getElementById("chatInput").addEventListener("keypress",e=>{if(e.key==="Enter") sendMessage();});
-    
-// ========== SIDE PANEL SLIDE TOGGLE ==========
-function toggleSidePanel() {
-    const sidebar = document.getElementById('newsSidebar');
-    const toggleBtn = document.getElementById('sidebarToggleBtn');
-    
-    sidebar.classList.toggle('collapsed');
-    
-    // Change arrow direction
-    if (sidebar.classList.contains('collapsed')) {
-        toggleBtn.innerHTML = '◀';
-    } else {
-        toggleBtn.innerHTML = '▶';
-    }
-    
-    // Save state to localStorage
-    const isCollapsed = sidebar.classList.contains('collapsed');
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
-}
-
-// Load saved sidebar state
-function loadSidebarState() {
-    const sidebar = document.getElementById('newsSidebar');
-    const toggleBtn = document.getElementById('sidebarToggleBtn');
-    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    
-    if (sidebar && toggleBtn) {
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
-            toggleBtn.innerHTML = '◀';
-        } else {
-            sidebar.classList.remove('collapsed');
-            toggleBtn.innerHTML = '▶';
-        }
-    }
-}
-// ========== SIDE PANEL TOGGLE ==========
-function toggleSidePanel() {
-    const sidebar = document.getElementById('newsSidebar');
-    sidebar.classList.toggle('open');
-    
-    if (sidebar.classList.contains('open')) {
-        fetchSideNews();
-    }
-}
-
-async function fetchSideNews() {
-    const newsDiv = document.getElementById('sideNewsList');
-    if (!newsDiv) return;
-    
-    newsDiv.innerHTML = '<div class="loading-news">🔄 Loading health news...</div>';
-    
-    try {
-        const response = await fetch(`${BASE_URL}/api/health-news`);
-        const data = await response.json();
-        
-        if (data.success && data.news && data.news.length > 0) {
-            let html = '';
-            data.news.forEach(news => {
-                html += `
-                    <div class="news-item" onclick="openNewsLink('${news.url}')">
-                        <div class="news-title">${news.title.substring(0, 100)}${news.title.length > 100 ? '...' : ''}</div>
-                        <div class="news-source">📌 ${news.source}</div>
-                    </div>
-                `;
-            });
-            newsDiv.innerHTML = html;
-        } else {
-            newsDiv.innerHTML = '<div class="loading-news">⚠️ No news available</div>';
-        }
-    } catch (error) {
-        newsDiv.innerHTML = '<div class="loading-news">❌ Unable to load news</div>';
-    }
-}
-
-function openNewsLink(url) {
-    if (url && url !== '#') {
-        window.open(url, '_blank');
-    }
-}
-    // ========== RESET HEALTH STREAK ==========
-function resetHealthStreak() {
-    if (confirm('Are you sure you want to reset your health streak? This cannot be undone.')) {
-        streak = 0;
-        lastDate = '';
-        localStorage.setItem('medStreak', 0);
-        localStorage.setItem('lastTaken', '');
-        updateStreak();
-        updateDashboard();
-        alert('✅ Health streak has been reset to 0 days!');
-    }
-}
-    // ========== UPDATE TODAY'S SCHEDULE ==========
-function updateTodaySchedule() {
-    const alarms = JSON.parse(localStorage.getItem('medicineAlarms') || '[]');
-    const scheduleDiv = document.getElementById('medicineScheduleList');
-    
-    if (!scheduleDiv) return;
-    
-    if (alarms.length === 0) {
-        scheduleDiv.innerHTML = `
-            <div class="medicine-card">
-                <div><span class="medicine-name">No medicines scheduled</span></div>
-                <div>⚠️ Add medicine alarm</div>
-            </div>
-        `;
-        return;
-    }
-    
-    let html = '';
-    const today = new Date().toDateString();
-    
-    alarms.forEach(alarm => {
-        // Check if alarm is for today or daily
-        const isToday = alarm.period === 'daily' || true;
-        
-        // Get taken status from localStorage
-        const takenKey = `taken_${alarm.medicine}_${today}`;
-        const isTaken = localStorage.getItem(takenKey) === 'true';
-        
-        html += `
-            <div class="medicine-card" id="schedule_${alarm.id}">
-                <div>
-                    <span class="medicine-name">${alarm.medicine}</span>
-                    <br>
-                    <span class="dose-badge">At ${alarm.time} | ${alarm.period === 'daily' ? 'Daily' : 'One time'}</span>
-                </div>
-                <div>
-                    <button onclick="markMedicineAsTaken('${alarm.medicine}', ${alarm.id})" 
-                            style="background: ${isTaken ? '#22c55e' : '#e2e8f0'}; color: ${isTaken ? 'white' : '#1a2c3e'}; padding: 5px 15px; border: none; border-radius: 20px; cursor: pointer;">
-                        ${isTaken ? '✅ Taken' : '⏰ Mark Taken'}
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-    
-    scheduleDiv.innerHTML = html;
-}
-
-// Mark medicine as taken
-function markMedicineAsTaken(medicine, alarmId) {
-    const today = new Date().toDateString();
-    const takenKey = `taken_${medicine}_${today}`;
-    localStorage.setItem(takenKey, 'true');
-    
-    // Update UI
-    const scheduleCard = document.getElementById(`schedule_${alarmId}`);
-    if (scheduleCard) {
-        const button = scheduleCard.querySelector('button');
-        button.innerHTML = '✅ Taken';
-        button.style.background = '#22c55e';
-        button.style.color = 'white';
-        button.disabled = true;
-    }
-    
-    // Update streak when medicine taken
-    markMedicineTaken();
-    
-    alert(`✅ Marked ${medicine} as taken!`);
-}
-
-// Reset taken status for new day
-function resetDailyTakenStatus() {
-    const today = new Date().toDateString();
-    const lastResetDate = localStorage.getItem('lastResetDate');
-    
-    if (lastResetDate !== today) {
-        // Clear all taken statuses for new day
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-            if (key.startsWith('taken_')) {
-                localStorage.removeItem(key);
-            }
-        });
-        localStorage.setItem('lastResetDate', today);
-        updateTodaySchedule();
-    }
-}
-// Call this after login
-loadSidebarState();
 </script>
 
 </body>
 </html>
+
+
+
+    
