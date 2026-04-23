@@ -406,6 +406,8 @@
             <p>Stay track your health with timely reminders</p>
         </div>
     </div>
+        <!-- Circle Counter -->
+    <div class="circle" id="counter">0%</div>
 
     <!-- Stats Cards -->
     <div class="stats-container">
@@ -552,7 +554,14 @@
 
 <script>
     const BASE_URL = "https://drug-api-2.onrender.com";
-    
+        // ========== CIRCLE COUNTER ANIMATION ==========
+    let progress = 0;
+    setInterval(() => {
+        if (document.getElementById('counter')) {
+            progress = (progress + 2) % 100;
+            document.getElementById('counter').innerHTML = progress + "%";
+        }
+    }, 200);
     // ========== LOGIN ==========
     function showSignup() {
         document.getElementById('signupForm').style.display = 'block';
